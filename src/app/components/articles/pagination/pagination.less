@@ -1,0 +1,29 @@
+.pagination {
+    font-size: 20px;
+    text-align: center;
+
+    &__container {
+        display: inline-block;
+        border: 1px solid #d5dddf;
+    }
+
+    &__item {
+        font-size: 1.6rem;
+        color: #4d80aa;
+        text-decoration: none;
+        display: inline-block;
+        padding: 7px 14px;
+        &:hover {
+            text-decoration: none;
+            background: #eaeeef;
+        }
+
+        &.active {
+            background: #eee;
+        }
+
+        &:not(:last-of-type) {
+            border-right: 1px solid #d5dddf;
+        }
+    }
+}

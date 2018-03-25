@@ -1,0 +1,22 @@
+<div class="pagination">
+    <div class="pagination__container">
+        <a
+            class="pagination__item"
+            href="#"
+            ng-click=$ctrl.chengeCurrentActiveBtn(0)>
+            <i class="fa fa-angle-double-left" aria-hidden="true"></i>
+        </a>
+        <a
+            ng-class="['pagination__item', { active: $index === $ctrl.activeBtnIndex}]"
+            href="#"
+            ng-click=$ctrl.chengeCurrentActiveBtn($index)
+            ng-repeat="btn in $ctrl.btns">{{$ctrl.firstButtonValue + $index}}
+        </a>
+        <a
+            class="pagination__item"
+            href="#"
+            ng-click=$ctrl.chengeCurrentActiveBtn($ctrl.pagesAmount)>
+            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+        </a>
+    </div>
+</div>
