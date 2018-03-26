@@ -1,16 +1,17 @@
 import articlesPageMarkup from './articles.html';
 
 const ArticlesPageComponent = {
+    bindings: {
+        articles: '<',
+    },
     template: articlesPageMarkup,
     controller: class ArticlesPage {
-        constructor(ArticlesService) {
-            'ngInject';
-            this.ArticlesService = ArticlesService;
+        constructor() {
+            this.articlesPerPage = 3;
         }
-
-        $onInit() {
-            this.articles = this.ArticlesService.getArticles();
-        }
+        //
+        // $onInit() {
+        // }
         // $onChanges(changes) {
         //   if (changes.todoData) {
         //     this.todos = Object.assign({}, this.todoData);

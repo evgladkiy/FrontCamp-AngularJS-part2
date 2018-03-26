@@ -3,26 +3,39 @@ function routing($urlRouterProvider, $stateProvider, $locationProvider) {
         .state('articles', {
             url: '/articles',
             component: 'articles',
-            onEnter: function($state) {
-                console.log($state)
-            }
+            resolve: {
+                articles: function(ArticlesService) {
+                     return ArticlesService.getArticles();
+                },
+            },
         })
         .state('addArticle', {
-            url: '/addArticle',
+            url: '/add-article',
             component: 'addArticle',
-            onEnter: function($state) {
-                console.log($state)
-            }
+            resolve: {
+                articles: function(ArticlesService) {
+                     return ArticlesService.getArticles();
+                },
+            },
         })
         .state('editArticle', {
-            url: '/',
+            url: '/edit-tarticle:id',
             component: 'editArticle',
-            onEnter: function($state) {
-                console.log($state)
-            }
-    });
+            resolve: {
+                article: function($stateParams, ArticlesService) {
+                     return ArticlesService.getArticles()
+                        .then(articles => articles.find(({ _id }) => _id === $stateParams.id))
+                        .then(article => Object.assign({}, article))
+                },
+            },
+            onEnter($state, article) {
+                if (article._id === undefined) {
+                    $state.go('articles');
+                }
+            },
+        });
 
-    $urlRouterProvider.otherwise('/');
+    $urlRouterProvider.otherwise('/articles');
     $locationProvider.html5Mode(true);
 }
 

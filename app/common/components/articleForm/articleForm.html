@@ -1,11 +1,11 @@
-<form name="articleForm" class="article-form" novalidate ng-submit="$ctrl.submitHandler($event, 'sadasd')">
+<form name="articleForm" class="article-form" novalidate ng-submit="$ctrl.submit($event)">
     <div class="row">
         <div class="input-container">
             <label for="article-author" class="label-required">Article Author</label>
-            <input type="text" name="articleAuthor" id="article-author" ng-required="true" ng-minlength="2" ng-model="$ctrl.article.articleAuthor" />
+            <input type="text" name="articleAuthor" id="article-author" ng-required="true" ng-minlength="3" ng-model="$ctrl.article.articleAuthor" />
             <div class="help-block" ng-messages="articleForm.articleAuthor.$error" ng-if="$ctrl.shouldShowErrors(articleForm.articleAuthor)">
-                <p ng-message="minlength">Assignee Name must be at least 2 characters.</p>
-                <p ng-message="required">Assignee Name is required.</p>
+                <p ng-message="minlength">Article Author must be at least 3 characters.</p>
+                <p ng-message="required">Article Author is required.</p>
             </div>
         </div>
     </div>
@@ -14,8 +14,8 @@
             <label for="article-img" class="label-required">Article Image Url</label>
             <input type="text" name="articleImg" id="article-img" ng-required='true' ng-minlength="5" ng-model="$ctrl.article.articleImg" />
             <div class="help-block" ng-messages="articleForm.articleImg.$error" ng-if="$ctrl.shouldShowErrors(articleForm.articleImg)">
-                <p ng-message="minlength">Assignee Name must be at least 2 characters.</p>
-                <p ng-message="required">Assignee Name is required.</p>
+                <p ng-message="minlength">Article Image Url must be at least 5 characters.</p>
+                <p ng-message="required">Article Image Url is required.</p>
             </div>
         </div>
     </div>
@@ -23,24 +23,32 @@
     <div class="row row-flex">
         <div class="input-small-container" ng-repeat="tag in $ctrl.tags track by $index">
             <label for="{{::tag}}-checkbox">{{::tag}}</label>
-            <input type="checkbox" name="articleImg" id="{{::tag}}-checkbox" ng-model="$ctrl.articleTags[tag]" />
+            <input type="checkbox" name="{{::tag}}-checkbox" id="{{::tag}}-checkbox" ng-model="$ctrl.articleTags[tag]" />
             <label for="{{::tag}}-checkbox"></label>
         </div>
     </div>
     <div class="input-container">
+        <label for="article-title" class="label-required">Article Title</label>
+        <textarea id="article-title" name="articleTitle" ng-model="$ctrl.article.articleTitle" ng-required="true" textarea-validator="20"></textarea>
+        <div class="help-block" ng-messages="articleForm.articleTitle.$error" ng-if="$ctrl.shouldShowErrors(articleForm.articleTitle)">
+            <p ng-message="textareaValidator">Article Preview must be at least 20 characters.</p>
+            <p ng-message="required">Article Preview is required.</p>
+        </div>
+    </div>
+    <div class="input-container">
         <label for="article-preview" class="label-required">Article Preview</label>
-        <textarea id="article-preview" name="articlePreview" ng-model="$ctrl.article.articlePreview" ng-required="true" custom-validator="20"></textarea>
+        <textarea id="article-preview" name="articlePreview" ng-model="$ctrl.article.articlePreview" ng-required="true" textarea-validator="20"></textarea>
         <div class="help-block" ng-messages="articleForm.articlePreview.$error" ng-if="$ctrl.shouldShowErrors(articleForm.articlePreview)">
-            <p ng-message="customValidator">Todo must be at least 20 characters.</p>
-            <p ng-message="required">Todo is required.</p>
+            <p ng-message="textareaValidator">Article Preview must be at least 20 characters.</p>
+            <p ng-message="required">Article Preview is required.</p>
         </div>
     </div>
     <div class="input-container">
         <label for="article-text" class="label-required">Article Text</label>
-        <textarea id="article-text" name="articleText" ng-model="$ctrl.article.articleText" ng-required="true" custom-validator="20"></textarea>
+        <textarea id="article-text" name="articleText" ng-model="$ctrl.article.articleText" ng-required="true" textarea-validator="20"></textarea>
         <div class="help-block" ng-messages="articleForm.articleText.$error" ng-if="$ctrl.shouldShowErrors(articleForm.articleText)">
-            <p ng-message="customValidator">Todo must be at least 20 characters.</p>
-            <p ng-message="required">Todo is required.</p>
+            <p ng-message="textareaValidator">Article Text must be at least 20 characters.</p>
+            <p ng-message="required">Article Text is required.</p>
         </div>
     </div>
     <div class="submit-container">
@@ -48,6 +56,6 @@
             <i class="fa fa-arrow-left" aria-hidden="true"></i>
             Back
         </a>
-        <input class="btn btn-fill" type="submit" value="{{$ctrl.submitType}} Article">
+        <input class="btn btn-fill" type="submit" value="{{$ctrl.submitType}} Article" ng-disabled="articleForm.$invalid">
     </div>
 </form>

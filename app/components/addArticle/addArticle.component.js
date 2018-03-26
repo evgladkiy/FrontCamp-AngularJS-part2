@@ -3,21 +3,27 @@ import addArticleMarkup from './addArticle.html';
 const AddArticlePageComponent = {
     template: addArticleMarkup,
     controller: class AddArticlePage {
-        constructor(ArticlesService) {
+        constructor(ArticlesService, $state) {
             'ngInject';
-            this.submitType = 'Add';
             this.ArticlesService = ArticlesService;
+            this.$state = $state;
+            this.submitType = 'Add';
+            this.submitHandler = this.submitHandler.bind(this);
         }
 
         $onInit() {
-            this.article = this.ArticlesService.getArticles()[14];
+            this.article = {
+                articleAuthor: '',
+                articleImg: '',
+                articleText: '',
+                tags: []
+            };
         }
 
-        submitHandler(e, a) {
-            e.preventDefault();
-            console.log(e, a)
+        submitHandler(article) {
+            this.ArticlesService.addArticle(article);
+            this.$state.go('articles');
         }
     }
 };
 export default AddArticlePageComponent;
-

@@ -6,7 +6,12 @@
 </div>
 <h3 class="article__title">{{::$ctrl.article.articleTitle | capitalize}}</h3>
 <div class="article__tags-container">
-    <a class="article__tag" href="#" ng-repeat="tag in $ctrl.article.tags track by $index">{{tag | capitalize}}</a>
+    <div>
+        <a class="article__tag" href="#" ng-repeat="tag in $ctrl.article.tags track by $index">{{tag | capitalize}}</a>
+    </div>
+    <a class='edit-link' ui-sref="editArticle({ id: $ctrl.article._id })">
+        <i class="fa fa-pencil" aria-hidden="true"></i>
+    </a>
 </div>
 <img class="article__img" ng-src={{::$ctrl.article.articleImg}} alt="article image" />
 <div class="article__text-container">

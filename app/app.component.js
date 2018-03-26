@@ -1,6 +1,9 @@
 const AppComponent = {
   template: `
-    <header><p>Awesome App header</p></header>
+    <header>
+        <p>Awesome App header</p>
+        <a ui-sref="addArticle">Add Article</a>
+    </header>
     <div>
         <ui-view><ui-view>
     </div>

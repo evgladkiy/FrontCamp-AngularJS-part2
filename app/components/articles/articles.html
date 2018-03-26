@@ -5,4 +5,4 @@
         ng-repeat="article in $ctrl.articles | orderBy: '-articleDate' | paginationFilter track by article._id">
     </article-element>
 </div>
-<pagination articles-on-page="3"></pagination>
+<pagination articles-on-page="$ctrl.articlesPerPage"></pagination>

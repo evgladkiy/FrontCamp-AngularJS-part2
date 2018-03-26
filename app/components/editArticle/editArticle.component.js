@@ -1,25 +1,24 @@
 import  editArticleMarkup from './editArticle.html';
 
 const EditArticlePageComponent = {
-  template: editArticleMarkup,
+    bindings: {
+        article: '<'
+    },
+    template: editArticleMarkup,
     controller: class EditArticlePage {
-        constructor(ArticlesService) {
+        constructor(ArticlesService, $state) {
             'ngInject';
-            this.submitType = 'Edit';
             this.ArticlesService = ArticlesService;
+            this.$state = $state;
+            this.submitType = 'Edit';
+            this.submitHandler = this.submitHandler.bind(this);
         }
 
-        $onInit() {
-            this.article = this.ArticlesService.getArticles()[14];
-        }
-
-        submitHandler(e, a) {
-            e.preventDefault();
-            console.log('edit PAge')
+        submitHandler(article) {
+            this.ArticlesService.updateArticle(article);
+            this.$state.go('articles');
         }
     }
 };
 
 export default EditArticlePageComponent;
-
-

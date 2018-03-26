@@ -64,7 +64,7 @@ form label {
 }
 
 .input-container {
-  padding-bottom: 25px;
+  padding-bottom: 40px;
 }
 
 textarea#article-preview {
@@ -73,6 +73,9 @@ textarea#article-preview {
 
 textarea#article-text {
   min-height: 490px;
+}
+textarea#article-title {
+  min-height: 60px;
 }
 
 input[type="checkbox"] {
@@ -120,3 +123,13 @@ input[type="checkbox"]:checked + label::before {
   justify-content: space-evenly;
 }
 
+.help-block.ng-active {
+    font-size: 1.3rem;
+    margin-top: 10px;
+    color: crimson;
+    position: absolute;
+}
+input:disabled {
+    opacity: 0.8;
+    cursor: not-allowed;
+}
