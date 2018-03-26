@@ -1,8 +1,0 @@
-<div class="articles__container">
-    <article-element
-        class="article"
-        article="article"
-        ng-repeat="article in $ctrl.articles | orderBy: '-articleDate' | paginatioFilter track by article._id">
-    </article-element>
-</div>
-<pagination articles-on-page="3"></pagination>

@@ -5,7 +5,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
     entry: {
-        app: './src/index.js',
+        app: './app/app.module.js',
     },
     output: {
         path: path.resolve(__dirname, 'dist'),
@@ -59,7 +59,7 @@ module.exports = {
     },
     plugins: [
         new CleanWebpackPlugin(['dist']),
-        new CopyWebpackPlugin([{ from: './src/index.html' }]),
+        new CopyWebpackPlugin([{ from: './app/index.html' }]),
         new ExtractTextPlugin('css/styles.css'),
     ],
 };

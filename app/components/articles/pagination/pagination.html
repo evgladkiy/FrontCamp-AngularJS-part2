@@ -1,0 +1,22 @@
+<div class="pagination">
+    <div class="pagination__container">
+        <a
+            ng-class="['pagination__item', {'disabled': $ctrl.activeBtnIndex ===0}]"
+            href="#"
+            ng-click="$ctrl.setCurrentActiveBtn(1, 0)">
+            <i class="fa fa-angle-double-left" aria-hidden="true"></i>
+        </a>
+        <a
+            ng-class="['pagination__item', { active: $index === $ctrl.activeBtnIndex}]"
+            href="#"
+            ng-click="$ctrl.changeCurrentActiveBtn($index)"
+            ng-repeat="btn in $ctrl.btns">{{$ctrl.firstButtonValue + $index}}
+        </a>
+        <a
+            ng-class="['pagination__item', {'disabled': $ctrl.firstButtonValue + $ctrl.activeBtnIndex === $ctrl.pagesAmount}]"
+            href="#"
+            ng-click="$ctrl.setCurrentActiveBtn($ctrl.pagesAmount - ($ctrl.buttonsAmout -1), $ctrl.buttonsAmout -1)">
+            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+        </a>
+    </div>
+</div>
