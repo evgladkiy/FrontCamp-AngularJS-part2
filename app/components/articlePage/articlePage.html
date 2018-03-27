@@ -1,0 +1,19 @@
+<h2 class="article__title">{{::$ctrl.article.articleTitle | capitalize}}</h2>
+<img class="article__img" ng-src={{::$ctrl.article.articleImg}} alt="article image" />
+<div class="article__text-container">
+    <p class="article__text" ng-repeat="paragraph in $ctrl.article.articleText.split('\r') track by $index">{{paragraph}}</p>
+</div>
+<div class="article__tags-container">
+    <div>
+        <a class="article__tag" href="#" ng-repeat="tag in $ctrl.article.tags track by $index">{{tag | capitalize}}</a>
+    </div>
+    <div class="article__header">
+        <span class="article__date">
+            {{::$ctrl.article.articleDate | date:'dd MMMM in HH:mm'}}
+        </span>
+        <a class="article__author" href="#">{{::$ctrl.article.articleAuthor}}</a>
+    </div>
+</div>
+
+
+

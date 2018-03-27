@@ -1,4 +1,5 @@
 import angular from 'angular';
+
 import EditArticlePageComponent from './editArticle.component';
 
 const EditArticlePageModule = angular

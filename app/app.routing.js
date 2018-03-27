@@ -9,6 +9,23 @@ function routing($urlRouterProvider, $stateProvider, $locationProvider) {
                 },
             },
         })
+        .state('article', {
+            url: '/articles/:id',
+            name: 'article',
+            component: 'articlePage',
+            resolve: {
+                article: function($stateParams, ArticlesService) {
+                    return ArticlesService.getArticles()
+                        .then(articles => articles.find(({ _id }) => _id === $stateParams.id))
+                        .then(article => Object.assign({}, article))
+                },
+            },
+            onEnter($state, article) {
+                if (article._id === undefined) {
+                    $state.go('articles');
+                }
+            },
+        })
         .state('addArticle', {
             url: '/add-article',
             component: 'addArticle',
@@ -19,13 +36,12 @@ function routing($urlRouterProvider, $stateProvider, $locationProvider) {
             },
         })
         .state('editArticle', {
-            url: '/edit-tarticle:id',
+            url: '/edit-article/:id',
             component: 'editArticle',
             resolve: {
                 article: function($stateParams, ArticlesService) {
                      return ArticlesService.getArticles()
-                        .then(articles => articles.find(({ _id }) => _id === $stateParams.id))
-                        .then(article => Object.assign({}, article))
+                        .then(() => Object.assign({}, ArticlesService.getArticleById($stateParams.id)))
                 },
             },
             onEnter($state, article) {

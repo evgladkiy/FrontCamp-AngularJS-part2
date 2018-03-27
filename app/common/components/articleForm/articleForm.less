@@ -129,7 +129,11 @@ input[type="checkbox"]:checked + label::before {
     color: crimson;
     position: absolute;
 }
-input:disabled {
+
+.btn.btn-fill:disabled {
     opacity: 0.8;
     cursor: not-allowed;
+    &:hover {
+      background: #4d80aa;
+    }
 }

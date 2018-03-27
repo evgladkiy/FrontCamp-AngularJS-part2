@@ -1,0 +1,13 @@
+<header>
+    <div class="container">
+        <p>Awesome App header</p>
+        <a ng-if="$ctrl.getState() === 'articles'" ui-sref="articles">
+            <i class="fa fa-arrow-left" aria-hidden="true"></i>
+            Back
+        </a>
+        <a ng-if="$ctrl.getState() === 'addArticle'" ui-sref="addArticle">
+            Add article
+            <i class="fa fa-plus" aria-hidden="true"></i>
+        </a>
+    </div>
+</header>

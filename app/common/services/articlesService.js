@@ -1,8 +1,9 @@
 import lodash from 'lodash';
 
 class ArticlesService {
-    constructor($http, $q) {
+    constructor($http, $q, HeaderService) {
         'ngInject';
+        this.HeaderService = HeaderService;
         this.$q = $q;
         this.$http = $http;
         this.articles = null;
@@ -10,7 +11,7 @@ class ArticlesService {
     }
 
     fillArticlesTags(articles) {
-         articles.forEach((article) => {
+        articles.forEach((article) => {
             article.tags.forEach((tag) => {
                 if (this.tags.indexOf(tag) < 0) {
                     this.tags.push(tag)
@@ -23,11 +24,11 @@ class ArticlesService {
         return this.$http
             .get('http://localhost:8000/api/articles')
             .then((res) => {
+                this.HeaderService.setArticlesLoaded();
                 this.articles = res.data;
                 this.fillArticlesTags(this.articles);
                 return this.articles;
             });
-
     }
 
     getArticles() {
@@ -36,6 +37,10 @@ class ArticlesService {
         }
 
         return this.$q.resolve(this.articles);
+    }
+
+    getArticleById(id) {
+        return this.articles.find(({ _id }) => _id === id);
     }
 
     getArticlesTags() {
@@ -48,7 +53,8 @@ class ArticlesService {
             _id: String(lodash.random(0, 1000000000000000)),
             articleViews: '0',
             articleComments: [],
-        })
+        });
+
         this.articles.push(newArticle);
     }
 

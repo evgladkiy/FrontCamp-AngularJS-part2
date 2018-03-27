@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 55);
+/******/ 	return __webpack_require__(__webpack_require__.s = 56);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -631,7 +631,7 @@ exports.silentRejection = function (error) {
     return exports.silenceUncaughtInPromise(coreservices_1.services.$q.reject(error));
 };
 //# sourceMappingURL=common.js.map
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(59)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(29)))
 
 /***/ }),
 /* 1 */
@@ -959,6 +959,14 @@ exports.services = services;
 /* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
+__webpack_require__(57);
+module.exports = angular;
+
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
 "use strict";
 
 function __export(m) {
@@ -975,14 +983,6 @@ __export(__webpack_require__(23));
 __export(__webpack_require__(6));
 __export(__webpack_require__(7));
 //# sourceMappingURL=index.js.map
-
-/***/ }),
-/* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-__webpack_require__(56);
-module.exports = angular;
-
 
 /***/ }),
 /* 6 */
@@ -1400,389 +1400,6 @@ exports.trace = trace;
 
 /***/ }),
 /* 8 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var TransitionHookPhase;
-(function (TransitionHookPhase) {
-    TransitionHookPhase[TransitionHookPhase["CREATE"] = 0] = "CREATE";
-    TransitionHookPhase[TransitionHookPhase["BEFORE"] = 1] = "BEFORE";
-    TransitionHookPhase[TransitionHookPhase["RUN"] = 2] = "RUN";
-    TransitionHookPhase[TransitionHookPhase["SUCCESS"] = 3] = "SUCCESS";
-    TransitionHookPhase[TransitionHookPhase["ERROR"] = 4] = "ERROR";
-})(TransitionHookPhase = exports.TransitionHookPhase || (exports.TransitionHookPhase = {}));
-var TransitionHookScope;
-(function (TransitionHookScope) {
-    TransitionHookScope[TransitionHookScope["TRANSITION"] = 0] = "TRANSITION";
-    TransitionHookScope[TransitionHookScope["STATE"] = 1] = "STATE";
-})(TransitionHookScope = exports.TransitionHookScope || (exports.TransitionHookScope = {}));
-//# sourceMappingURL=interface.js.map
-
-/***/ }),
-/* 9 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-/**
- * @coreapi
- * @module state
- */ /** for typedoc */
-Object.defineProperty(exports, "__esModule", { value: true });
-var predicates_1 = __webpack_require__(1);
-var strings_1 = __webpack_require__(6);
-var common_1 = __webpack_require__(4);
-/**
- * Encapsulate the target (destination) state/params/options of a [[Transition]].
- *
- * This class is frequently used to redirect a transition to a new destination.
- *
- * See:
- *
- * - [[HookResult]]
- * - [[TransitionHookFn]]
- * - [[TransitionService.onStart]]
- *
- * To create a `TargetState`, use [[StateService.target]].
- *
- * ---
- *
- * This class wraps:
- *
- * 1) an identifier for a state
- * 2) a set of parameters
- * 3) and transition options
- * 4) the registered state object (the [[StateDeclaration]])
- *
- * Many UI-Router APIs such as [[StateService.go]] take a [[StateOrName]] argument which can
- * either be a *state object* (a [[StateDeclaration]] or [[StateObject]]) or a *state name* (a string).
- * The `TargetState` class normalizes those options.
- *
- * A `TargetState` may be valid (the state being targeted exists in the registry)
- * or invalid (the state being targeted is not registered).
- */
-var TargetState = /** @class */ (function () {
-    /**
-     * The TargetState constructor
-     *
-     * Note: Do not construct a `TargetState` manually.
-     * To create a `TargetState`, use the [[StateService.target]] factory method.
-     *
-     * @param _stateRegistry The StateRegistry to use to look up the _definition
-     * @param _identifier An identifier for a state.
-     *    Either a fully-qualified state name, or the object used to define the state.
-     * @param _params Parameters for the target state
-     * @param _options Transition options.
-     *
-     * @internalapi
-     */
-    function TargetState(_stateRegistry, _identifier, _params, _options) {
-        this._stateRegistry = _stateRegistry;
-        this._identifier = _identifier;
-        this._identifier = _identifier;
-        this._params = common_1.extend({}, _params || {});
-        this._options = common_1.extend({}, _options || {});
-        this._definition = _stateRegistry.matcher.find(_identifier, this._options.relative);
-    }
-    /** The name of the state this object targets */
-    TargetState.prototype.name = function () {
-        return this._definition && this._definition.name || this._identifier;
-    };
-    /** The identifier used when creating this TargetState */
-    TargetState.prototype.identifier = function () {
-        return this._identifier;
-    };
-    /** The target parameter values */
-    TargetState.prototype.params = function () {
-        return this._params;
-    };
-    /** The internal state object (if it was found) */
-    TargetState.prototype.$state = function () {
-        return this._definition;
-    };
-    /** The internal state declaration (if it was found) */
-    TargetState.prototype.state = function () {
-        return this._definition && this._definition.self;
-    };
-    /** The target options */
-    TargetState.prototype.options = function () {
-        return this._options;
-    };
-    /** True if the target state was found */
-    TargetState.prototype.exists = function () {
-        return !!(this._definition && this._definition.self);
-    };
-    /** True if the object is valid */
-    TargetState.prototype.valid = function () {
-        return !this.error();
-    };
-    /** If the object is invalid, returns the reason why */
-    TargetState.prototype.error = function () {
-        var base = this.options().relative;
-        if (!this._definition && !!base) {
-            var stateName = base.name ? base.name : base;
-            return "Could not resolve '" + this.name() + "' from state '" + stateName + "'";
-        }
-        if (!this._definition)
-            return "No such state '" + this.name() + "'";
-        if (!this._definition.self)
-            return "State '" + this.name() + "' has an invalid definition";
-    };
-    TargetState.prototype.toString = function () {
-        return "'" + this.name() + "'" + strings_1.stringify(this.params());
-    };
-    /**
-     * Returns a copy of this TargetState which targets a different state.
-     * The new TargetState has the same parameter values and transition options.
-     *
-     * @param state The new state that should be targeted
-     */
-    TargetState.prototype.withState = function (state) {
-        return new TargetState(this._stateRegistry, state, this._params, this._options);
-    };
-    /**
-     * Returns a copy of this TargetState, using the specified parameter values.
-     *
-     * @param params the new parameter values to use
-     * @param replace When false (default) the new parameter values will be merged with the current values.
-     *                When true the parameter values will be used instead of the current values.
-     */
-    TargetState.prototype.withParams = function (params, replace) {
-        if (replace === void 0) { replace = false; }
-        var newParams = replace ? params : common_1.extend({}, this._params, params);
-        return new TargetState(this._stateRegistry, this._identifier, newParams, this._options);
-    };
-    /**
-     * Returns a copy of this TargetState, using the specified Transition Options.
-     *
-     * @param options the new options to use
-     * @param replace When false (default) the new options will be merged with the current options.
-     *                When true the options will be used instead of the current options.
-     */
-    TargetState.prototype.withOptions = function (options, replace) {
-        if (replace === void 0) { replace = false; }
-        var newOpts = replace ? options : common_1.extend({}, this._options, options);
-        return new TargetState(this._stateRegistry, this._identifier, this._params, newOpts);
-    };
-    /** Returns true if the object has a state property that might be a state or state name */
-    TargetState.isDef = function (obj) {
-        return obj && obj.state && (predicates_1.isString(obj.state) || predicates_1.isString(obj.state.name));
-    };
-    return TargetState;
-}());
-exports.TargetState = TargetState;
-//# sourceMappingURL=targetState.js.map
-
-/***/ }),
-/* 10 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-/**
- * @coreapi
- * @module params
- */ /** for typedoc */
-var common_1 = __webpack_require__(0);
-var hof_1 = __webpack_require__(2);
-var predicates_1 = __webpack_require__(1);
-var coreservices_1 = __webpack_require__(3);
-var paramType_1 = __webpack_require__(26);
-/** @hidden */
-var hasOwn = Object.prototype.hasOwnProperty;
-/** @hidden */
-var isShorthand = function (cfg) {
-    return ['value', 'type', 'squash', 'array', 'dynamic'].filter(hasOwn.bind(cfg || {})).length === 0;
-};
-/** @internalapi */
-var DefType;
-(function (DefType) {
-    DefType[DefType["PATH"] = 0] = "PATH";
-    DefType[DefType["SEARCH"] = 1] = "SEARCH";
-    DefType[DefType["CONFIG"] = 2] = "CONFIG";
-})(DefType = exports.DefType || (exports.DefType = {}));
-/** @hidden */
-function unwrapShorthand(cfg) {
-    cfg = isShorthand(cfg) && { value: cfg } || cfg;
-    getStaticDefaultValue['__cacheable'] = true;
-    function getStaticDefaultValue() {
-        return cfg.value;
-    }
-    return common_1.extend(cfg, {
-        $$fn: predicates_1.isInjectable(cfg.value) ? cfg.value : getStaticDefaultValue,
-    });
-}
-/** @hidden */
-function getType(cfg, urlType, location, id, paramTypes) {
-    if (cfg.type && urlType && urlType.name !== 'string')
-        throw new Error("Param '" + id + "' has two type configurations.");
-    if (cfg.type && urlType && urlType.name === 'string' && paramTypes.type(cfg.type))
-        return paramTypes.type(cfg.type);
-    if (urlType)
-        return urlType;
-    if (!cfg.type) {
-        var type = location === DefType.CONFIG ? 'any' :
-            location === DefType.PATH ? 'path' :
-                location === DefType.SEARCH ? 'query' : 'string';
-        return paramTypes.type(type);
-    }
-    return cfg.type instanceof paramType_1.ParamType ? cfg.type : paramTypes.type(cfg.type);
-}
-/**
- * @internalapi
- * returns false, true, or the squash value to indicate the "default parameter url squash policy".
- */
-function getSquashPolicy(config, isOptional, defaultPolicy) {
-    var squash = config.squash;
-    if (!isOptional || squash === false)
-        return false;
-    if (!predicates_1.isDefined(squash) || squash == null)
-        return defaultPolicy;
-    if (squash === true || predicates_1.isString(squash))
-        return squash;
-    throw new Error("Invalid squash policy: '" + squash + "'. Valid policies: false, true, or arbitrary string");
-}
-/** @internalapi */
-function getReplace(config, arrayMode, isOptional, squash) {
-    var defaultPolicy = [
-        { from: '', to: (isOptional || arrayMode ? undefined : '') },
-        { from: null, to: (isOptional || arrayMode ? undefined : '') },
-    ];
-    var replace = predicates_1.isArray(config.replace) ? config.replace : [];
-    if (predicates_1.isString(squash))
-        replace.push({ from: squash, to: undefined });
-    var configuredKeys = common_1.map(replace, hof_1.prop('from'));
-    return common_1.filter(defaultPolicy, function (item) { return configuredKeys.indexOf(item.from) === -1; }).concat(replace);
-}
-/** @internalapi */
-var Param = /** @class */ (function () {
-    function Param(id, type, config, location, urlMatcherFactory) {
-        config = unwrapShorthand(config);
-        type = getType(config, type, location, id, urlMatcherFactory.paramTypes);
-        var arrayMode = getArrayMode();
-        type = arrayMode ? type.$asArray(arrayMode, location === DefType.SEARCH) : type;
-        var isOptional = config.value !== undefined || location === DefType.SEARCH;
-        var dynamic = predicates_1.isDefined(config.dynamic) ? !!config.dynamic : !!type.dynamic;
-        var raw = predicates_1.isDefined(config.raw) ? !!config.raw : !!type.raw;
-        var squash = getSquashPolicy(config, isOptional, urlMatcherFactory.defaultSquashPolicy());
-        var replace = getReplace(config, arrayMode, isOptional, squash);
-        var inherit = predicates_1.isDefined(config.inherit) ? !!config.inherit : !!type.inherit;
-        // array config: param name (param[]) overrides default settings.  explicit config overrides param name.
-        function getArrayMode() {
-            var arrayDefaults = { array: (location === DefType.SEARCH ? 'auto' : false) };
-            var arrayParamNomenclature = id.match(/\[\]$/) ? { array: true } : {};
-            return common_1.extend(arrayDefaults, arrayParamNomenclature, config).array;
-        }
-        common_1.extend(this, { id: id, type: type, location: location, isOptional: isOptional, dynamic: dynamic, raw: raw, squash: squash, replace: replace, inherit: inherit, array: arrayMode, config: config });
-    }
-    Param.values = function (params, values) {
-        if (values === void 0) { values = {}; }
-        var paramValues = {};
-        for (var _i = 0, params_1 = params; _i < params_1.length; _i++) {
-            var param = params_1[_i];
-            paramValues[param.id] = param.value(values[param.id]);
-        }
-        return paramValues;
-    };
-    /**
-     * Finds [[Param]] objects which have different param values
-     *
-     * Filters a list of [[Param]] objects to only those whose parameter values differ in two param value objects
-     *
-     * @param params: The list of Param objects to filter
-     * @param values1: The first set of parameter values
-     * @param values2: the second set of parameter values
-     *
-     * @returns any Param objects whose values were different between values1 and values2
-     */
-    Param.changed = function (params, values1, values2) {
-        if (values1 === void 0) { values1 = {}; }
-        if (values2 === void 0) { values2 = {}; }
-        return params.filter(function (param) { return !param.type.equals(values1[param.id], values2[param.id]); });
-    };
-    /**
-     * Checks if two param value objects are equal (for a set of [[Param]] objects)
-     *
-     * @param params The list of [[Param]] objects to check
-     * @param values1 The first set of param values
-     * @param values2 The second set of param values
-     *
-     * @returns true if the param values in values1 and values2 are equal
-     */
-    Param.equals = function (params, values1, values2) {
-        if (values1 === void 0) { values1 = {}; }
-        if (values2 === void 0) { values2 = {}; }
-        return Param.changed(params, values1, values2).length === 0;
-    };
-    /** Returns true if a the parameter values are valid, according to the Param definitions */
-    Param.validates = function (params, values) {
-        if (values === void 0) { values = {}; }
-        return params.map(function (param) { return param.validates(values[param.id]); }).reduce(common_1.allTrueR, true);
-    };
-    Param.prototype.isDefaultValue = function (value) {
-        return this.isOptional && this.type.equals(this.value(), value);
-    };
-    /**
-     * [Internal] Gets the decoded representation of a value if the value is defined, otherwise, returns the
-     * default value, which may be the result of an injectable function.
-     */
-    Param.prototype.value = function (value) {
-        var _this = this;
-        /**
-         * [Internal] Get the default value of a parameter, which may be an injectable function.
-         */
-        var getDefaultValue = function () {
-            if (_this._defaultValueCache)
-                return _this._defaultValueCache.defaultValue;
-            if (!coreservices_1.services.$injector)
-                throw new Error('Injectable functions cannot be called at configuration time');
-            var defaultValue = coreservices_1.services.$injector.invoke(_this.config.$$fn);
-            if (defaultValue !== null && defaultValue !== undefined && !_this.type.is(defaultValue))
-                throw new Error("Default value (" + defaultValue + ") for parameter '" + _this.id + "' is not an instance of ParamType (" + _this.type.name + ")");
-            if (_this.config.$$fn['__cacheable']) {
-                _this._defaultValueCache = { defaultValue: defaultValue };
-            }
-            return defaultValue;
-        };
-        var replaceSpecialValues = function (val) {
-            for (var _i = 0, _a = _this.replace; _i < _a.length; _i++) {
-                var tuple = _a[_i];
-                if (tuple.from === val)
-                    return tuple.to;
-            }
-            return val;
-        };
-        value = replaceSpecialValues(value);
-        return predicates_1.isUndefined(value) ? getDefaultValue() : this.type.$normalize(value);
-    };
-    Param.prototype.isSearch = function () {
-        return this.location === DefType.SEARCH;
-    };
-    Param.prototype.validates = function (value) {
-        // There was no parameter value, but the param is optional
-        if ((predicates_1.isUndefined(value) || value === null) && this.isOptional)
-            return true;
-        // The value was not of the correct ParamType, and could not be decoded to the correct ParamType
-        var normalized = this.type.$normalize(value);
-        if (!this.type.is(normalized))
-            return false;
-        // The value was of the correct type, but when encoded, did not match the ParamType's regexp
-        var encoded = this.type.encode(normalized);
-        return !(predicates_1.isString(encoded) && !this.type.pattern.exec(encoded));
-    };
-    Param.prototype.toString = function () {
-        return "{Param:" + this.id + " " + this.type + " squash: '" + this.squash + "' optional: " + this.isOptional + "}";
-    };
-    return Param;
-}());
-exports.Param = Param;
-//# sourceMappingURL=param.js.map
-
-/***/ }),
-/* 11 */
 /***/ (function(module, exports) {
 
 /*
@@ -1864,7 +1481,7 @@ function toComment(sourceMap) {
 
 
 /***/ }),
-/* 12 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -2236,6 +1853,389 @@ function updateLink (link, options, obj) {
 
 
 /***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var TransitionHookPhase;
+(function (TransitionHookPhase) {
+    TransitionHookPhase[TransitionHookPhase["CREATE"] = 0] = "CREATE";
+    TransitionHookPhase[TransitionHookPhase["BEFORE"] = 1] = "BEFORE";
+    TransitionHookPhase[TransitionHookPhase["RUN"] = 2] = "RUN";
+    TransitionHookPhase[TransitionHookPhase["SUCCESS"] = 3] = "SUCCESS";
+    TransitionHookPhase[TransitionHookPhase["ERROR"] = 4] = "ERROR";
+})(TransitionHookPhase = exports.TransitionHookPhase || (exports.TransitionHookPhase = {}));
+var TransitionHookScope;
+(function (TransitionHookScope) {
+    TransitionHookScope[TransitionHookScope["TRANSITION"] = 0] = "TRANSITION";
+    TransitionHookScope[TransitionHookScope["STATE"] = 1] = "STATE";
+})(TransitionHookScope = exports.TransitionHookScope || (exports.TransitionHookScope = {}));
+//# sourceMappingURL=interface.js.map
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+/**
+ * @coreapi
+ * @module state
+ */ /** for typedoc */
+Object.defineProperty(exports, "__esModule", { value: true });
+var predicates_1 = __webpack_require__(1);
+var strings_1 = __webpack_require__(6);
+var common_1 = __webpack_require__(5);
+/**
+ * Encapsulate the target (destination) state/params/options of a [[Transition]].
+ *
+ * This class is frequently used to redirect a transition to a new destination.
+ *
+ * See:
+ *
+ * - [[HookResult]]
+ * - [[TransitionHookFn]]
+ * - [[TransitionService.onStart]]
+ *
+ * To create a `TargetState`, use [[StateService.target]].
+ *
+ * ---
+ *
+ * This class wraps:
+ *
+ * 1) an identifier for a state
+ * 2) a set of parameters
+ * 3) and transition options
+ * 4) the registered state object (the [[StateDeclaration]])
+ *
+ * Many UI-Router APIs such as [[StateService.go]] take a [[StateOrName]] argument which can
+ * either be a *state object* (a [[StateDeclaration]] or [[StateObject]]) or a *state name* (a string).
+ * The `TargetState` class normalizes those options.
+ *
+ * A `TargetState` may be valid (the state being targeted exists in the registry)
+ * or invalid (the state being targeted is not registered).
+ */
+var TargetState = /** @class */ (function () {
+    /**
+     * The TargetState constructor
+     *
+     * Note: Do not construct a `TargetState` manually.
+     * To create a `TargetState`, use the [[StateService.target]] factory method.
+     *
+     * @param _stateRegistry The StateRegistry to use to look up the _definition
+     * @param _identifier An identifier for a state.
+     *    Either a fully-qualified state name, or the object used to define the state.
+     * @param _params Parameters for the target state
+     * @param _options Transition options.
+     *
+     * @internalapi
+     */
+    function TargetState(_stateRegistry, _identifier, _params, _options) {
+        this._stateRegistry = _stateRegistry;
+        this._identifier = _identifier;
+        this._identifier = _identifier;
+        this._params = common_1.extend({}, _params || {});
+        this._options = common_1.extend({}, _options || {});
+        this._definition = _stateRegistry.matcher.find(_identifier, this._options.relative);
+    }
+    /** The name of the state this object targets */
+    TargetState.prototype.name = function () {
+        return this._definition && this._definition.name || this._identifier;
+    };
+    /** The identifier used when creating this TargetState */
+    TargetState.prototype.identifier = function () {
+        return this._identifier;
+    };
+    /** The target parameter values */
+    TargetState.prototype.params = function () {
+        return this._params;
+    };
+    /** The internal state object (if it was found) */
+    TargetState.prototype.$state = function () {
+        return this._definition;
+    };
+    /** The internal state declaration (if it was found) */
+    TargetState.prototype.state = function () {
+        return this._definition && this._definition.self;
+    };
+    /** The target options */
+    TargetState.prototype.options = function () {
+        return this._options;
+    };
+    /** True if the target state was found */
+    TargetState.prototype.exists = function () {
+        return !!(this._definition && this._definition.self);
+    };
+    /** True if the object is valid */
+    TargetState.prototype.valid = function () {
+        return !this.error();
+    };
+    /** If the object is invalid, returns the reason why */
+    TargetState.prototype.error = function () {
+        var base = this.options().relative;
+        if (!this._definition && !!base) {
+            var stateName = base.name ? base.name : base;
+            return "Could not resolve '" + this.name() + "' from state '" + stateName + "'";
+        }
+        if (!this._definition)
+            return "No such state '" + this.name() + "'";
+        if (!this._definition.self)
+            return "State '" + this.name() + "' has an invalid definition";
+    };
+    TargetState.prototype.toString = function () {
+        return "'" + this.name() + "'" + strings_1.stringify(this.params());
+    };
+    /**
+     * Returns a copy of this TargetState which targets a different state.
+     * The new TargetState has the same parameter values and transition options.
+     *
+     * @param state The new state that should be targeted
+     */
+    TargetState.prototype.withState = function (state) {
+        return new TargetState(this._stateRegistry, state, this._params, this._options);
+    };
+    /**
+     * Returns a copy of this TargetState, using the specified parameter values.
+     *
+     * @param params the new parameter values to use
+     * @param replace When false (default) the new parameter values will be merged with the current values.
+     *                When true the parameter values will be used instead of the current values.
+     */
+    TargetState.prototype.withParams = function (params, replace) {
+        if (replace === void 0) { replace = false; }
+        var newParams = replace ? params : common_1.extend({}, this._params, params);
+        return new TargetState(this._stateRegistry, this._identifier, newParams, this._options);
+    };
+    /**
+     * Returns a copy of this TargetState, using the specified Transition Options.
+     *
+     * @param options the new options to use
+     * @param replace When false (default) the new options will be merged with the current options.
+     *                When true the options will be used instead of the current options.
+     */
+    TargetState.prototype.withOptions = function (options, replace) {
+        if (replace === void 0) { replace = false; }
+        var newOpts = replace ? options : common_1.extend({}, this._options, options);
+        return new TargetState(this._stateRegistry, this._identifier, this._params, newOpts);
+    };
+    /** Returns true if the object has a state property that might be a state or state name */
+    TargetState.isDef = function (obj) {
+        return obj && obj.state && (predicates_1.isString(obj.state) || predicates_1.isString(obj.state.name));
+    };
+    return TargetState;
+}());
+exports.TargetState = TargetState;
+//# sourceMappingURL=targetState.js.map
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * @coreapi
+ * @module params
+ */ /** for typedoc */
+var common_1 = __webpack_require__(0);
+var hof_1 = __webpack_require__(2);
+var predicates_1 = __webpack_require__(1);
+var coreservices_1 = __webpack_require__(3);
+var paramType_1 = __webpack_require__(26);
+/** @hidden */
+var hasOwn = Object.prototype.hasOwnProperty;
+/** @hidden */
+var isShorthand = function (cfg) {
+    return ['value', 'type', 'squash', 'array', 'dynamic'].filter(hasOwn.bind(cfg || {})).length === 0;
+};
+/** @internalapi */
+var DefType;
+(function (DefType) {
+    DefType[DefType["PATH"] = 0] = "PATH";
+    DefType[DefType["SEARCH"] = 1] = "SEARCH";
+    DefType[DefType["CONFIG"] = 2] = "CONFIG";
+})(DefType = exports.DefType || (exports.DefType = {}));
+/** @hidden */
+function unwrapShorthand(cfg) {
+    cfg = isShorthand(cfg) && { value: cfg } || cfg;
+    getStaticDefaultValue['__cacheable'] = true;
+    function getStaticDefaultValue() {
+        return cfg.value;
+    }
+    return common_1.extend(cfg, {
+        $$fn: predicates_1.isInjectable(cfg.value) ? cfg.value : getStaticDefaultValue,
+    });
+}
+/** @hidden */
+function getType(cfg, urlType, location, id, paramTypes) {
+    if (cfg.type && urlType && urlType.name !== 'string')
+        throw new Error("Param '" + id + "' has two type configurations.");
+    if (cfg.type && urlType && urlType.name === 'string' && paramTypes.type(cfg.type))
+        return paramTypes.type(cfg.type);
+    if (urlType)
+        return urlType;
+    if (!cfg.type) {
+        var type = location === DefType.CONFIG ? 'any' :
+            location === DefType.PATH ? 'path' :
+                location === DefType.SEARCH ? 'query' : 'string';
+        return paramTypes.type(type);
+    }
+    return cfg.type instanceof paramType_1.ParamType ? cfg.type : paramTypes.type(cfg.type);
+}
+/**
+ * @internalapi
+ * returns false, true, or the squash value to indicate the "default parameter url squash policy".
+ */
+function getSquashPolicy(config, isOptional, defaultPolicy) {
+    var squash = config.squash;
+    if (!isOptional || squash === false)
+        return false;
+    if (!predicates_1.isDefined(squash) || squash == null)
+        return defaultPolicy;
+    if (squash === true || predicates_1.isString(squash))
+        return squash;
+    throw new Error("Invalid squash policy: '" + squash + "'. Valid policies: false, true, or arbitrary string");
+}
+/** @internalapi */
+function getReplace(config, arrayMode, isOptional, squash) {
+    var defaultPolicy = [
+        { from: '', to: (isOptional || arrayMode ? undefined : '') },
+        { from: null, to: (isOptional || arrayMode ? undefined : '') },
+    ];
+    var replace = predicates_1.isArray(config.replace) ? config.replace : [];
+    if (predicates_1.isString(squash))
+        replace.push({ from: squash, to: undefined });
+    var configuredKeys = common_1.map(replace, hof_1.prop('from'));
+    return common_1.filter(defaultPolicy, function (item) { return configuredKeys.indexOf(item.from) === -1; }).concat(replace);
+}
+/** @internalapi */
+var Param = /** @class */ (function () {
+    function Param(id, type, config, location, urlMatcherFactory) {
+        config = unwrapShorthand(config);
+        type = getType(config, type, location, id, urlMatcherFactory.paramTypes);
+        var arrayMode = getArrayMode();
+        type = arrayMode ? type.$asArray(arrayMode, location === DefType.SEARCH) : type;
+        var isOptional = config.value !== undefined || location === DefType.SEARCH;
+        var dynamic = predicates_1.isDefined(config.dynamic) ? !!config.dynamic : !!type.dynamic;
+        var raw = predicates_1.isDefined(config.raw) ? !!config.raw : !!type.raw;
+        var squash = getSquashPolicy(config, isOptional, urlMatcherFactory.defaultSquashPolicy());
+        var replace = getReplace(config, arrayMode, isOptional, squash);
+        var inherit = predicates_1.isDefined(config.inherit) ? !!config.inherit : !!type.inherit;
+        // array config: param name (param[]) overrides default settings.  explicit config overrides param name.
+        function getArrayMode() {
+            var arrayDefaults = { array: (location === DefType.SEARCH ? 'auto' : false) };
+            var arrayParamNomenclature = id.match(/\[\]$/) ? { array: true } : {};
+            return common_1.extend(arrayDefaults, arrayParamNomenclature, config).array;
+        }
+        common_1.extend(this, { id: id, type: type, location: location, isOptional: isOptional, dynamic: dynamic, raw: raw, squash: squash, replace: replace, inherit: inherit, array: arrayMode, config: config });
+    }
+    Param.values = function (params, values) {
+        if (values === void 0) { values = {}; }
+        var paramValues = {};
+        for (var _i = 0, params_1 = params; _i < params_1.length; _i++) {
+            var param = params_1[_i];
+            paramValues[param.id] = param.value(values[param.id]);
+        }
+        return paramValues;
+    };
+    /**
+     * Finds [[Param]] objects which have different param values
+     *
+     * Filters a list of [[Param]] objects to only those whose parameter values differ in two param value objects
+     *
+     * @param params: The list of Param objects to filter
+     * @param values1: The first set of parameter values
+     * @param values2: the second set of parameter values
+     *
+     * @returns any Param objects whose values were different between values1 and values2
+     */
+    Param.changed = function (params, values1, values2) {
+        if (values1 === void 0) { values1 = {}; }
+        if (values2 === void 0) { values2 = {}; }
+        return params.filter(function (param) { return !param.type.equals(values1[param.id], values2[param.id]); });
+    };
+    /**
+     * Checks if two param value objects are equal (for a set of [[Param]] objects)
+     *
+     * @param params The list of [[Param]] objects to check
+     * @param values1 The first set of param values
+     * @param values2 The second set of param values
+     *
+     * @returns true if the param values in values1 and values2 are equal
+     */
+    Param.equals = function (params, values1, values2) {
+        if (values1 === void 0) { values1 = {}; }
+        if (values2 === void 0) { values2 = {}; }
+        return Param.changed(params, values1, values2).length === 0;
+    };
+    /** Returns true if a the parameter values are valid, according to the Param definitions */
+    Param.validates = function (params, values) {
+        if (values === void 0) { values = {}; }
+        return params.map(function (param) { return param.validates(values[param.id]); }).reduce(common_1.allTrueR, true);
+    };
+    Param.prototype.isDefaultValue = function (value) {
+        return this.isOptional && this.type.equals(this.value(), value);
+    };
+    /**
+     * [Internal] Gets the decoded representation of a value if the value is defined, otherwise, returns the
+     * default value, which may be the result of an injectable function.
+     */
+    Param.prototype.value = function (value) {
+        var _this = this;
+        /**
+         * [Internal] Get the default value of a parameter, which may be an injectable function.
+         */
+        var getDefaultValue = function () {
+            if (_this._defaultValueCache)
+                return _this._defaultValueCache.defaultValue;
+            if (!coreservices_1.services.$injector)
+                throw new Error('Injectable functions cannot be called at configuration time');
+            var defaultValue = coreservices_1.services.$injector.invoke(_this.config.$$fn);
+            if (defaultValue !== null && defaultValue !== undefined && !_this.type.is(defaultValue))
+                throw new Error("Default value (" + defaultValue + ") for parameter '" + _this.id + "' is not an instance of ParamType (" + _this.type.name + ")");
+            if (_this.config.$$fn['__cacheable']) {
+                _this._defaultValueCache = { defaultValue: defaultValue };
+            }
+            return defaultValue;
+        };
+        var replaceSpecialValues = function (val) {
+            for (var _i = 0, _a = _this.replace; _i < _a.length; _i++) {
+                var tuple = _a[_i];
+                if (tuple.from === val)
+                    return tuple.to;
+            }
+            return val;
+        };
+        value = replaceSpecialValues(value);
+        return predicates_1.isUndefined(value) ? getDefaultValue() : this.type.$normalize(value);
+    };
+    Param.prototype.isSearch = function () {
+        return this.location === DefType.SEARCH;
+    };
+    Param.prototype.validates = function (value) {
+        // There was no parameter value, but the param is optional
+        if ((predicates_1.isUndefined(value) || value === null) && this.isOptional)
+            return true;
+        // The value was not of the correct ParamType, and could not be decoded to the correct ParamType
+        var normalized = this.type.$normalize(value);
+        if (!this.type.is(normalized))
+            return false;
+        // The value was of the correct type, but when encoded, did not match the ParamType's regexp
+        var encoded = this.type.encode(normalized);
+        return !(predicates_1.isString(encoded) && !this.type.pattern.exec(encoded));
+    };
+    Param.prototype.toString = function () {
+        return "{Param:" + this.id + " " + this.type + " squash: '" + this.squash + "' optional: " + this.isOptional + "}";
+    };
+    return Param;
+}());
+exports.Param = Param;
+//# sourceMappingURL=param.js.map
+
+/***/ }),
 /* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2343,7 +2343,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * @module transition
  */
 /** for typedoc */
-var interface_1 = __webpack_require__(8);
+var interface_1 = __webpack_require__(10);
 var common_1 = __webpack_require__(0);
 var strings_1 = __webpack_require__(6);
 var predicates_1 = __webpack_require__(1);
@@ -2351,7 +2351,7 @@ var hof_1 = __webpack_require__(2);
 var trace_1 = __webpack_require__(7);
 var coreservices_1 = __webpack_require__(3);
 var rejectFactory_1 = __webpack_require__(13);
-var targetState_1 = __webpack_require__(9);
+var targetState_1 = __webpack_require__(11);
 var defaultOptions = {
     current: common_1.noop,
     transition: null,
@@ -2721,12 +2721,12 @@ var strings_1 = __webpack_require__(6);
 var common_1 = __webpack_require__(0);
 var predicates_1 = __webpack_require__(1);
 var hof_1 = __webpack_require__(2);
-var interface_1 = __webpack_require__(8); // has or is using
+var interface_1 = __webpack_require__(10); // has or is using
 var transitionHook_1 = __webpack_require__(14);
 var hookRegistry_1 = __webpack_require__(24);
-var hookBuilder_1 = __webpack_require__(29);
+var hookBuilder_1 = __webpack_require__(30);
 var pathUtils_1 = __webpack_require__(17);
-var param_1 = __webpack_require__(10);
+var param_1 = __webpack_require__(12);
 var resolvable_1 = __webpack_require__(15);
 var resolveContext_1 = __webpack_require__(18);
 /** @hidden */
@@ -3362,7 +3362,7 @@ exports.Transition = Transition;
 Object.defineProperty(exports, "__esModule", { value: true });
 var common_1 = __webpack_require__(0);
 var hof_1 = __webpack_require__(2);
-var targetState_1 = __webpack_require__(9);
+var targetState_1 = __webpack_require__(11);
 var pathNode_1 = __webpack_require__(25);
 /**
  * This class contains functions which convert TargetStates, Nodes and paths from one type to another.
@@ -3545,11 +3545,11 @@ var common_1 = __webpack_require__(0);
 var hof_1 = __webpack_require__(2);
 var trace_1 = __webpack_require__(7);
 var coreservices_1 = __webpack_require__(3);
-var interface_1 = __webpack_require__(30);
+var interface_1 = __webpack_require__(31);
 var resolvable_1 = __webpack_require__(15);
 var pathUtils_1 = __webpack_require__(17);
 var strings_1 = __webpack_require__(6);
-var common_2 = __webpack_require__(4);
+var common_2 = __webpack_require__(5);
 var whens = interface_1.resolvePolicies.when;
 var ALL_WHENS = [whens.EAGER, whens.LAZY];
 var EAGER_WHENS = [whens.EAGER];
@@ -3755,7 +3755,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var common_1 = __webpack_require__(0);
 var hof_1 = __webpack_require__(2);
 var predicates_1 = __webpack_require__(1);
-var param_1 = __webpack_require__(10);
+var param_1 = __webpack_require__(12);
 var strings_1 = __webpack_require__(6);
 /** @hidden */
 function quoteRegExp(str, param) {
@@ -4278,7 +4278,7 @@ exports.UrlMatcher = UrlMatcher;
  * @module vanilla
  */ /** */
 Object.defineProperty(exports, "__esModule", { value: true });
-var common_1 = __webpack_require__(4);
+var common_1 = __webpack_require__(5);
 var utils_1 = __webpack_require__(28);
 /** A base `LocationServices` */
 var BaseLocationServices = /** @class */ (function () {
@@ -4594,8 +4594,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * @coreapi
  * @module transition
  */ /** for typedoc */
-var common_1 = __webpack_require__(4);
-var interface_1 = __webpack_require__(8);
+var common_1 = __webpack_require__(5);
+var interface_1 = __webpack_require__(10);
 /**
  * Determines if the given state matches the matchCriteria
  *
@@ -4758,7 +4758,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /** @module path */ /** for typedoc */
 var common_1 = __webpack_require__(0);
 var hof_1 = __webpack_require__(2);
-var param_1 = __webpack_require__(10);
+var param_1 = __webpack_require__(12);
 /**
  * @internalapi
  *
@@ -4995,7 +4995,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * @module transition
  */
 /** for typedoc */
-var interface_1 = __webpack_require__(8);
+var interface_1 = __webpack_require__(10);
 var transition_1 = __webpack_require__(16);
 var hookRegistry_1 = __webpack_require__(24);
 var coreResolvables_1 = __webpack_require__(63);
@@ -5005,8 +5005,8 @@ var resolve_1 = __webpack_require__(66);
 var views_1 = __webpack_require__(67);
 var updateGlobals_1 = __webpack_require__(68);
 var url_1 = __webpack_require__(69);
-var lazyLoad_1 = __webpack_require__(46);
-var transitionEventType_1 = __webpack_require__(47);
+var lazyLoad_1 = __webpack_require__(47);
+var transitionEventType_1 = __webpack_require__(48);
 var transitionHook_1 = __webpack_require__(14);
 var predicates_1 = __webpack_require__(1);
 var common_1 = __webpack_require__(0);
@@ -5241,7 +5241,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * @module vanilla
  */
 /** */
-var common_1 = __webpack_require__(4);
+var common_1 = __webpack_require__(5);
 exports.keyValsToObjectR = function (accum, _a) {
     var key = _a[0], val = _a[1];
     if (!accum.hasOwnProperty(key)) {
@@ -5292,6 +5292,33 @@ exports.locationPluginFactory = locationPluginFactory;
 
 /***/ }),
 /* 29 */
+/***/ (function(module, exports) {
+
+var g;
+
+// This works in non-strict mode
+g = (function() {
+	return this;
+})();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || Function("return this")() || (1,eval)("this");
+} catch(e) {
+	// This works if the window reference is available
+	if(typeof window === "object")
+		g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
+
+
+/***/ }),
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5303,7 +5330,7 @@ exports.locationPluginFactory = locationPluginFactory;
 Object.defineProperty(exports, "__esModule", { value: true });
 var common_1 = __webpack_require__(0);
 var predicates_1 = __webpack_require__(1);
-var interface_1 = __webpack_require__(8);
+var interface_1 = __webpack_require__(10);
 var transitionHook_1 = __webpack_require__(14);
 /**
  * This class returns applicable TransitionHooks for a specific Transition instance.
@@ -5416,7 +5443,7 @@ function tupleSort(reverseDepthSort) {
 //# sourceMappingURL=hookBuilder.js.map
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5437,7 +5464,7 @@ exports.resolvePolicies = {
 //# sourceMappingURL=interface.js.map
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5600,7 +5627,7 @@ initDefaultTypes();
 //# sourceMappingURL=paramTypes.js.map
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5650,7 +5677,7 @@ exports.StateParams = StateParams;
 //# sourceMappingURL=stateParams.js.map
 
 /***/ }),
-/* 33 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5660,13 +5687,13 @@ function __export(m) {
 }
 Object.defineProperty(exports, "__esModule", { value: true });
 /** @module resolve */ /** for typedoc */
-__export(__webpack_require__(30));
+__export(__webpack_require__(31));
 __export(__webpack_require__(15));
 __export(__webpack_require__(18));
 //# sourceMappingURL=index.js.map
 
 /***/ }),
-/* 34 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5952,7 +5979,7 @@ exports.StateBuilder = StateBuilder;
 //# sourceMappingURL=stateBuilder.js.map
 
 /***/ }),
-/* 35 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6024,7 +6051,7 @@ exports.StateMatcher = StateMatcher;
 //# sourceMappingURL=stateMatcher.js.map
 
 /***/ }),
-/* 36 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6122,7 +6149,7 @@ exports.StateQueueManager = StateQueueManager;
 //# sourceMappingURL=stateQueueManager.js.map
 
 /***/ }),
-/* 37 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6132,9 +6159,9 @@ exports.StateQueueManager = StateQueueManager;
  * @module state
  */ /** for typedoc */
 Object.defineProperty(exports, "__esModule", { value: true });
-var stateMatcher_1 = __webpack_require__(35);
-var stateBuilder_1 = __webpack_require__(34);
-var stateQueueManager_1 = __webpack_require__(36);
+var stateMatcher_1 = __webpack_require__(36);
+var stateBuilder_1 = __webpack_require__(35);
+var stateQueueManager_1 = __webpack_require__(37);
 var common_1 = __webpack_require__(0);
 var hof_1 = __webpack_require__(2);
 var StateRegistry = /** @class */ (function () {
@@ -6284,7 +6311,7 @@ exports.StateRegistry = StateRegistry;
 //# sourceMappingURL=stateRegistry.js.map
 
 /***/ }),
-/* 38 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6303,11 +6330,11 @@ var pathUtils_1 = __webpack_require__(17);
 var pathNode_1 = __webpack_require__(25);
 var transitionService_1 = __webpack_require__(27);
 var rejectFactory_1 = __webpack_require__(13);
-var targetState_1 = __webpack_require__(9);
-var param_1 = __webpack_require__(10);
+var targetState_1 = __webpack_require__(11);
+var param_1 = __webpack_require__(12);
 var glob_1 = __webpack_require__(22);
 var resolveContext_1 = __webpack_require__(18);
-var lazyLoad_1 = __webpack_require__(46);
+var lazyLoad_1 = __webpack_require__(47);
 var hof_1 = __webpack_require__(2);
 /**
  * Provides state related service functions
@@ -6855,7 +6882,7 @@ exports.StateService = StateService;
 //# sourceMappingURL=stateService.js.map
 
 /***/ }),
-/* 39 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6865,16 +6892,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * @coreapi
  * @module core
  */ /** */
-var urlMatcherFactory_1 = __webpack_require__(40);
-var urlRouter_1 = __webpack_require__(41);
+var urlMatcherFactory_1 = __webpack_require__(41);
+var urlRouter_1 = __webpack_require__(42);
 var transitionService_1 = __webpack_require__(27);
-var view_1 = __webpack_require__(43);
-var stateRegistry_1 = __webpack_require__(37);
-var stateService_1 = __webpack_require__(38);
-var globals_1 = __webpack_require__(44);
+var view_1 = __webpack_require__(44);
+var stateRegistry_1 = __webpack_require__(38);
+var stateService_1 = __webpack_require__(39);
+var globals_1 = __webpack_require__(45);
 var common_1 = __webpack_require__(0);
 var predicates_1 = __webpack_require__(1);
-var urlService_1 = __webpack_require__(45);
+var urlService_1 = __webpack_require__(46);
 var trace_1 = __webpack_require__(7);
 /** @hidden */
 var _routerInstance = 0;
@@ -7045,7 +7072,7 @@ exports.UIRouter = UIRouter;
 //# sourceMappingURL=router.js.map
 
 /***/ }),
-/* 40 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7058,8 +7085,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var common_1 = __webpack_require__(0);
 var predicates_1 = __webpack_require__(1);
 var urlMatcher_1 = __webpack_require__(19);
-var param_1 = __webpack_require__(10);
-var paramTypes_1 = __webpack_require__(31);
+var param_1 = __webpack_require__(12);
+var paramTypes_1 = __webpack_require__(32);
 /**
  * Factory for [[UrlMatcher]] instances.
  *
@@ -7175,7 +7202,7 @@ exports.UrlMatcherFactory = UrlMatcherFactory;
 //# sourceMappingURL=urlMatcherFactory.js.map
 
 /***/ }),
-/* 41 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7190,9 +7217,9 @@ var common_1 = __webpack_require__(0);
 var predicates_1 = __webpack_require__(1);
 var urlMatcher_1 = __webpack_require__(19);
 var hof_1 = __webpack_require__(2);
-var urlRule_1 = __webpack_require__(42);
-var targetState_1 = __webpack_require__(9);
-var common_2 = __webpack_require__(4);
+var urlRule_1 = __webpack_require__(43);
+var targetState_1 = __webpack_require__(11);
+var common_2 = __webpack_require__(5);
 /** @hidden */
 function appendBasePath(url, isHtml5, absolute, baseHref) {
     if (baseHref === '/')
@@ -7493,7 +7520,7 @@ function getHandlerFn(handler) {
 //# sourceMappingURL=urlRouter.js.map
 
 /***/ }),
-/* 42 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7708,7 +7735,7 @@ exports.BaseUrlRule = BaseUrlRule;
 //# sourceMappingURL=urlRule.js.map
 
 /***/ }),
-/* 43 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8007,7 +8034,7 @@ exports.ViewService = ViewService;
 //# sourceMappingURL=view.js.map
 
 /***/ }),
-/* 44 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8017,7 +8044,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * @coreapi
  * @module core
  */ /** */
-var stateParams_1 = __webpack_require__(32);
+var stateParams_1 = __webpack_require__(33);
 var queue_1 = __webpack_require__(23);
 /**
  * Global router state
@@ -8051,7 +8078,7 @@ exports.UIRouterGlobals = UIRouterGlobals;
 //# sourceMappingURL=globals.js.map
 
 /***/ }),
-/* 45 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8133,7 +8160,7 @@ exports.UrlService = UrlService;
 //# sourceMappingURL=urlService.js.map
 
 /***/ }),
-/* 46 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8236,7 +8263,7 @@ exports.lazyLoadState = lazyLoadState;
 //# sourceMappingURL=lazyLoad.js.map
 
 /***/ }),
-/* 47 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8271,7 +8298,7 @@ exports.TransitionEventType = TransitionEventType;
 //# sourceMappingURL=transitionEventType.js.map
 
 /***/ }),
-/* 48 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8282,7 +8309,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * @module vanilla
  */
 /** */
-var index_1 = __webpack_require__(4);
+var index_1 = __webpack_require__(5);
 /**
  * An angular1-like promise api
  *
@@ -8332,7 +8359,7 @@ exports.$q = {
 //# sourceMappingURL=q.js.map
 
 /***/ }),
-/* 49 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8343,7 +8370,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * @module vanilla
  */
 /** */
-var index_1 = __webpack_require__(4);
+var index_1 = __webpack_require__(5);
 // globally available injectables
 var globals = {};
 var STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
@@ -8438,7 +8465,7 @@ exports.$injector = {
 //# sourceMappingURL=injector.js.map
 
 /***/ }),
-/* 50 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8459,7 +8486,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * @module vanilla
  */
 /** */
-var common_1 = __webpack_require__(4);
+var common_1 = __webpack_require__(5);
 var baseLocationService_1 = __webpack_require__(20);
 /** A `LocationServices` that uses the browser hash "#" to get/set the current location */
 var HashLocationService = /** @class */ (function (_super) {
@@ -8485,7 +8512,7 @@ exports.HashLocationService = HashLocationService;
 //# sourceMappingURL=hashLocationService.js.map
 
 /***/ }),
-/* 51 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8525,7 +8552,7 @@ exports.MemoryLocationService = MemoryLocationService;
 //# sourceMappingURL=memoryLocationService.js.map
 
 /***/ }),
-/* 52 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8542,7 +8569,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var baseLocationService_1 = __webpack_require__(20);
-var common_1 = __webpack_require__(4);
+var common_1 = __webpack_require__(5);
 /**
  * A `LocationServices` that gets/sets the current location using the browser's `location` and `history` apis
  *
@@ -8606,7 +8633,7 @@ exports.PushStateLocationService = PushStateLocationService;
 //# sourceMappingURL=pushStateLocationService.js.map
 
 /***/ }),
-/* 53 */
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8637,7 +8664,7 @@ exports.MemoryLocationConfig = MemoryLocationConfig;
 //# sourceMappingURL=memoryLocationConfig.js.map
 
 /***/ }),
-/* 54 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8690,17 +8717,17 @@ exports.BrowserLocationConfig = BrowserLocationConfig;
 //# sourceMappingURL=browserLocationConfig.js.map
 
 /***/ }),
-/* 55 */
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _angular = __webpack_require__(5);
+var _angular = __webpack_require__(4);
 
 var _angular2 = _interopRequireDefault(_angular);
 
-var _angularjs = __webpack_require__(57);
+var _angularjs = __webpack_require__(58);
 
 var _angularjs2 = _interopRequireDefault(_angularjs);
 
@@ -8708,28 +8735,28 @@ var _components = __webpack_require__(79);
 
 var _components2 = _interopRequireDefault(_components);
 
-var _common = __webpack_require__(106);
+var _common = __webpack_require__(111);
 
 var _common2 = _interopRequireDefault(_common);
 
-var _app = __webpack_require__(117);
+var _app = __webpack_require__(129);
 
 var _app2 = _interopRequireDefault(_app);
 
-var _app3 = __webpack_require__(118);
+var _app3 = __webpack_require__(130);
 
 var _app4 = _interopRequireDefault(_app3);
 
-__webpack_require__(119);
+__webpack_require__(131);
 
-__webpack_require__(130);
+__webpack_require__(142);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var AppModule = _angular2.default.module('articlesApp', [_components2.default, _common2.default, _angularjs2.default]).component('app', _app2.default).config(_app4.default);
 
 /***/ }),
-/* 56 */
+/* 57 */
 /***/ (function(module, exports) {
 
 /**
@@ -43093,7 +43120,7 @@ $provide.value("$locale", {
 !window.angular.$$csp().noInlineStyle && window.angular.element(document.head).prepend('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\\:form{display:block;}.ng-animate-shim{visibility:hidden;}.ng-anchor{position:absolute;}</style>');
 
 /***/ }),
-/* 57 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /**
@@ -43104,7 +43131,7 @@ $provide.value("$locale", {
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
 (function (global, factory) {
-	 true ? factory(exports, __webpack_require__(5), __webpack_require__(58)) :
+	 true ? factory(exports, __webpack_require__(4), __webpack_require__(59)) :
 	typeof define === 'function' && define.amd ? define(['exports', 'angular', '@uirouter/core'], factory) :
 	(factory((global['@uirouter/angularjs'] = {}),global.angular,global['@uirouter/core']));
 }(this, (function (exports,ng_from_import,core) { 'use strict';
@@ -45098,7 +45125,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 
 /***/ }),
-/* 58 */
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -45111,46 +45138,19 @@ function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 }
 Object.defineProperty(exports, "__esModule", { value: true });
-__export(__webpack_require__(4));
+__export(__webpack_require__(5));
 __export(__webpack_require__(60));
 __export(__webpack_require__(61));
-__export(__webpack_require__(33));
+__export(__webpack_require__(34));
 __export(__webpack_require__(62));
 __export(__webpack_require__(72));
 __export(__webpack_require__(73));
 __export(__webpack_require__(74));
-__export(__webpack_require__(44));
-__export(__webpack_require__(39));
+__export(__webpack_require__(45));
+__export(__webpack_require__(40));
 __export(__webpack_require__(75));
 __export(__webpack_require__(78));
 //# sourceMappingURL=index.js.map
-
-/***/ }),
-/* 59 */
-/***/ (function(module, exports) {
-
-var g;
-
-// This works in non-strict mode
-g = (function() {
-	return this;
-})();
-
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || Function("return this")() || (1,eval)("this");
-} catch(e) {
-	// This works if the window reference is available
-	if(typeof window === "object")
-		g = window;
-}
-
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
-
 
 /***/ }),
 /* 60 */
@@ -45162,9 +45162,9 @@ function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 }
 Object.defineProperty(exports, "__esModule", { value: true });
-__export(__webpack_require__(10));
-__export(__webpack_require__(31));
+__export(__webpack_require__(12));
 __export(__webpack_require__(32));
+__export(__webpack_require__(33));
 __export(__webpack_require__(26));
 //# sourceMappingURL=index.js.map
 
@@ -45193,13 +45193,13 @@ function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 }
 Object.defineProperty(exports, "__esModule", { value: true });
-__export(__webpack_require__(34));
-__export(__webpack_require__(21));
 __export(__webpack_require__(35));
+__export(__webpack_require__(21));
 __export(__webpack_require__(36));
 __export(__webpack_require__(37));
 __export(__webpack_require__(38));
-__export(__webpack_require__(9));
+__export(__webpack_require__(39));
+__export(__webpack_require__(11));
 //# sourceMappingURL=index.js.map
 
 /***/ }),
@@ -45211,9 +45211,9 @@ __export(__webpack_require__(9));
 Object.defineProperty(exports, "__esModule", { value: true });
 /** @module hooks */ /** */
 var transition_1 = __webpack_require__(16);
-var router_1 = __webpack_require__(39);
-var resolve_1 = __webpack_require__(33);
-var common_1 = __webpack_require__(4);
+var router_1 = __webpack_require__(40);
+var resolve_1 = __webpack_require__(34);
+var common_1 = __webpack_require__(5);
 function addCoreResolvables(trans) {
     trans.addResolvable(resolve_1.Resolvable.fromData(router_1.UIRouter, trans.router), '');
     trans.addResolvable(resolve_1.Resolvable.fromData(transition_1.Transition, trans), '');
@@ -45254,7 +45254,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /** @module hooks */ /** */
 var predicates_1 = __webpack_require__(1);
 var coreservices_1 = __webpack_require__(3);
-var targetState_1 = __webpack_require__(9);
+var targetState_1 = __webpack_require__(11);
 /**
  * A [[TransitionHookFn]] that redirects to a different state or params
  *
@@ -45629,13 +45629,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * @preferred
  * @module transition
  */ /** for typedoc */
-__export(__webpack_require__(8));
-__export(__webpack_require__(29));
+__export(__webpack_require__(10));
+__export(__webpack_require__(30));
 __export(__webpack_require__(24));
 __export(__webpack_require__(13));
 __export(__webpack_require__(16));
 __export(__webpack_require__(14));
-__export(__webpack_require__(47));
+__export(__webpack_require__(48));
 __export(__webpack_require__(27));
 //# sourceMappingURL=index.js.map
 
@@ -45650,10 +45650,10 @@ function __export(m) {
 }
 Object.defineProperty(exports, "__esModule", { value: true });
 __export(__webpack_require__(19));
-__export(__webpack_require__(40));
 __export(__webpack_require__(41));
 __export(__webpack_require__(42));
-__export(__webpack_require__(45));
+__export(__webpack_require__(43));
+__export(__webpack_require__(46));
 //# sourceMappingURL=index.js.map
 
 /***/ }),
@@ -45666,7 +45666,7 @@ function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 }
 Object.defineProperty(exports, "__esModule", { value: true });
-__export(__webpack_require__(43));
+__export(__webpack_require__(44));
 //# sourceMappingURL=index.js.map
 
 /***/ }),
@@ -45697,14 +45697,14 @@ function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 }
 Object.defineProperty(exports, "__esModule", { value: true });
-__export(__webpack_require__(48));
 __export(__webpack_require__(49));
-__export(__webpack_require__(20));
 __export(__webpack_require__(50));
+__export(__webpack_require__(20));
 __export(__webpack_require__(51));
 __export(__webpack_require__(52));
 __export(__webpack_require__(53));
 __export(__webpack_require__(54));
+__export(__webpack_require__(55));
 __export(__webpack_require__(28));
 __export(__webpack_require__(77));
 //# sourceMappingURL=index.js.map
@@ -45721,14 +45721,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * @module vanilla
  */
 /** */
-var browserLocationConfig_1 = __webpack_require__(54);
-var hashLocationService_1 = __webpack_require__(50);
+var browserLocationConfig_1 = __webpack_require__(55);
+var hashLocationService_1 = __webpack_require__(51);
 var utils_1 = __webpack_require__(28);
-var pushStateLocationService_1 = __webpack_require__(52);
-var memoryLocationService_1 = __webpack_require__(51);
-var memoryLocationConfig_1 = __webpack_require__(53);
-var injector_1 = __webpack_require__(49);
-var q_1 = __webpack_require__(48);
+var pushStateLocationService_1 = __webpack_require__(53);
+var memoryLocationService_1 = __webpack_require__(52);
+var memoryLocationConfig_1 = __webpack_require__(54);
+var injector_1 = __webpack_require__(50);
+var q_1 = __webpack_require__(49);
 var coreservices_1 = __webpack_require__(3);
 function servicesPlugin(router) {
     coreservices_1.services.$injector = injector_1.$injector;
@@ -45782,7 +45782,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _angular = __webpack_require__(5);
+var _angular = __webpack_require__(4);
 
 var _angular2 = _interopRequireDefault(_angular);
 
@@ -45798,9 +45798,13 @@ var _addArticle = __webpack_require__(101);
 
 var _addArticle2 = _interopRequireDefault(_addArticle);
 
+var _articlePage = __webpack_require__(106);
+
+var _articlePage2 = _interopRequireDefault(_articlePage);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var ComponentsModule = _angular2.default.module('app.components', [_articles2.default, _addArticle2.default, _editArticle2.default]).name;
+var ComponentsModule = _angular2.default.module('app.components', [_articles2.default, _addArticle2.default, _editArticle2.default, _articlePage2.default]).name;
 
 exports.default = ComponentsModule;
 
@@ -45815,7 +45819,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _angular = __webpack_require__(5);
+var _angular = __webpack_require__(4);
 
 var _angular2 = _interopRequireDefault(_angular);
 
@@ -45854,7 +45858,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _angular = __webpack_require__(5);
+var _angular = __webpack_require__(4);
 
 var _angular2 = _interopRequireDefault(_angular);
 
@@ -45916,7 +45920,7 @@ exports.default = ArticleComponent;
 /* 83 */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"article__header\">\r\n    <a class=\"article__author\" href=\"#\">{{::$ctrl.article.articleAuthor}}</a>\r\n    <span class=\"article__date\">\r\n        {{::$ctrl.article.articleDate | date:'dd MMMM in HH:mm'}}\r\n    </span>\r\n</div>\r\n<h3 class=\"article__title\">{{::$ctrl.article.articleTitle | capitalize}}</h3>\r\n<div class=\"article__tags-container\">\n    <div>\n        <a class=\"article__tag\" href=\"#\" ng-repeat=\"tag in $ctrl.article.tags track by $index\">{{tag | capitalize}}</a>\n    </div>\r\n    <a class='edit-link' ui-sref=\"editArticle({ id: $ctrl.article._id })\">\n        <i class=\"fa fa-pencil\" aria-hidden=\"true\"></i>\n    </a>\r\n</div>\r\n<img class=\"article__img\" ng-src={{::$ctrl.article.articleImg}} alt=\"article image\" />\r\n<div class=\"article__text-container\">\r\n    <p class=\"article__text\" ng-repeat=\"paragraph in $ctrl.article.articlePreview.split('\\r') track by $index\">{{paragraph}}</p>\r\n</div>\r\n\r\n<div class=\"article__footer\">\r\n    <a class=\"btn article__footer-link\" href=\"#\">\r\n        Read more\r\n        <i class=\"fa fa-arrow-right\" aria-hidden=\"true\"></i></a>\r\n    <div class=\"article__counters-container\">\r\n        <p class=\"article__footer-item article-footer__comment\">\r\n            <i class=\"fa fa-comments-o\" aria-hidden=\"true\"></i>\r\n            {{::$ctrl.article.articleComments.length}}\r\n            </p>\r\n        <p class=\"article__footer-item article-footer__view\">\r\n            <i class=\"fa fa-eye\" aria-hidden=\"true\"></i>\r\n            {{::$ctrl.article.articleViews}}\r\n        </p>\r\n        <p class=\"article__footer-item article-footer__rating\">\r\n            <i class=\"fa fa-long-arrow-up\" aria-hidden=\"true\"></i>\r\n            {{::$ctrl.article.articleRating}}\r\n            <i class=\"fa fa-long-arrow-down\" aria-hidden=\"true\"></i>\r\n        </p>\r\n    </div>\r\n</div>\r\n";
+module.exports = "<div class=\"article__header\">\n    <a class=\"article__author\" href=\"#\">{{::$ctrl.article.articleAuthor}}</a>\n    <span class=\"article__date\">\n        {{::$ctrl.article.articleDate | date:'dd MMMM in HH:mm'}}\n    </span>\n</div>\n<h3 class=\"article__title\">{{::$ctrl.article.articleTitle | capitalize}}</h3>\n<div class=\"article__tags-container\">\n    <div>\n        <a class=\"article__tag\" href=\"#\" ng-repeat=\"tag in $ctrl.article.tags track by $index\">{{tag | capitalize}}</a>\n    </div>\n    <a class='edit-link' ui-sref=\"editArticle({ id: $ctrl.article._id })\">\n        <i class=\"fa fa-pencil\" aria-hidden=\"true\"></i>\n    </a>\n</div>\n<img class=\"article__img\" ng-src={{::$ctrl.article.articleImg}} alt=\"article image\" />\n<div class=\"article__text-container\">\n    <p class=\"article__text\" ng-repeat=\"paragraph in $ctrl.article.articlePreview.split('\\r') track by $index\">{{paragraph}}</p>\n</div>\n\n<div class=\"article__footer\">\n    <a class=\"btn article__footer-link\" ui-sref=\"article({ id: $ctrl.article._id })\">\n        Read more\n        <i class=\"fa fa-arrow-right\" aria-hidden=\"true\"></i></a>\n    <div class=\"article__counters-container\">\n        <p class=\"article__footer-item article-footer__comment\">\n            <i class=\"fa fa-comments-o\" aria-hidden=\"true\"></i>\n            {{::$ctrl.article.articleComments.length}}\n            </p>\n        <p class=\"article__footer-item article-footer__view\">\n            <i class=\"fa fa-eye\" aria-hidden=\"true\"></i>\n            {{::$ctrl.article.articleViews}}\n        </p>\n        <p class=\"article__footer-item article-footer__rating\">\n            <i class=\"fa fa-long-arrow-up\" aria-hidden=\"true\"></i>\n            {{::$ctrl.article.articleRating}}\n            <i class=\"fa fa-long-arrow-down\" aria-hidden=\"true\"></i>\n        </p>\n    </div>\n</div>\n";
 
 /***/ }),
 /* 84 */
@@ -45933,7 +45937,7 @@ var transform;
 var options = {"hmr":true}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(12)(content, options);
+var update = __webpack_require__(9)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -45953,7 +45957,7 @@ if(false) {
 /* 85 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(11)(false);
+exports = module.exports = __webpack_require__(8)(false);
 // imports
 
 
@@ -46069,7 +46073,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _angular = __webpack_require__(5);
+var _angular = __webpack_require__(4);
 
 var _angular2 = _interopRequireDefault(_angular);
 
@@ -46196,7 +46200,7 @@ exports.default = PaginationComponent;
 /* 89 */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"pagination\">\r\n    <div class=\"pagination__container\">\r\n        <a\r\n            ng-class=\"['pagination__item', {'disabled': $ctrl.activeBtnIndex ===0}]\"\r\n            href=\"#\"\r\n            ng-click=\"$ctrl.setCurrentActiveBtn(1, 0)\">\r\n            <i class=\"fa fa-angle-double-left\" aria-hidden=\"true\"></i>\r\n        </a>\r\n        <a\r\n            ng-class=\"['pagination__item', { active: $index === $ctrl.activeBtnIndex}]\"\r\n            href=\"#\"\r\n            ng-click=\"$ctrl.changeCurrentActiveBtn($index)\"\r\n            ng-repeat=\"btn in $ctrl.btns\">{{$ctrl.firstButtonValue + $index}}\r\n        </a>\r\n        <a\r\n            ng-class=\"['pagination__item', {'disabled': $ctrl.firstButtonValue + $ctrl.activeBtnIndex === $ctrl.pagesAmount}]\"\r\n            href=\"#\"\r\n            ng-click=\"$ctrl.setCurrentActiveBtn($ctrl.pagesAmount - ($ctrl.buttonsAmout -1), $ctrl.buttonsAmout -1)\">\r\n            <i class=\"fa fa-angle-double-right\" aria-hidden=\"true\"></i>\r\n        </a>\r\n    </div>\r\n</div>\r\n";
+module.exports = "<div class=\"pagination\">\n    <div class=\"pagination__container\">\n        <a\n            ng-class=\"['pagination__item', {'disabled': $ctrl.activeBtnIndex ===0}]\"\n            href=\"#\"\n            ng-click=\"$ctrl.setCurrentActiveBtn(1, 0)\">\n            <i class=\"fa fa-angle-double-left\" aria-hidden=\"true\"></i>\n        </a>\n        <a\n            ng-class=\"['pagination__item', { active: $index === $ctrl.activeBtnIndex}]\"\n            href=\"#\"\n            ng-click=\"$ctrl.changeCurrentActiveBtn($index)\"\n            ng-repeat=\"btn in $ctrl.btns\">{{$ctrl.firstButtonValue + $index}}\n        </a>\n        <a\n            ng-class=\"['pagination__item', {'disabled': $ctrl.firstButtonValue + $ctrl.activeBtnIndex === $ctrl.pagesAmount}]\"\n            href=\"#\"\n            ng-click=\"$ctrl.setCurrentActiveBtn($ctrl.pagesAmount - ($ctrl.buttonsAmout -1), $ctrl.buttonsAmout -1)\">\n            <i class=\"fa fa-angle-double-right\" aria-hidden=\"true\"></i>\n        </a>\n    </div>\n</div>\n";
 
 /***/ }),
 /* 90 */
@@ -46283,7 +46287,7 @@ var transform;
 var options = {"hmr":true}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(12)(content, options);
+var update = __webpack_require__(9)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -46303,7 +46307,7 @@ if(false) {
 /* 92 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(11)(false);
+exports = module.exports = __webpack_require__(8)(false);
 // imports
 
 
@@ -46324,6 +46328,8 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 var _articles = __webpack_require__(94);
 
 var _articles2 = _interopRequireDefault(_articles);
@@ -46337,28 +46343,28 @@ var ArticlesPageComponent = {
         articles: '<'
     },
     template: _articles2.default,
-    controller: function ArticlesPage() {
-        _classCallCheck(this, ArticlesPage);
+    controller: function () {
+        function ArticlesPage(HeaderService) {
+            _classCallCheck(this, ArticlesPage);
 
-        this.articlesPerPage = 3;
-    }
-    //
-    // $onInit() {
-    // }
-    // $onChanges(changes) {
-    //   if (changes.todoData) {
-    //     this.todos = Object.assign({}, this.todoData);
-    //   }
-    // }
-    // addTodo({ todo }) {
-    //   if (!todo) return;
-    //   this.todos.unshift(todo);
-    //   this.newTodo = {
-    //     title: '',
-    //     selected: false
-    //   };
-    // }
+            this.articlesPerPage = 3;
+            this.HeaderService = HeaderService;
+        }
 
+        _createClass(ArticlesPage, [{
+            key: '$onInit',
+            value: function $onInit() {
+                this.HeaderService.setLinkState('addArticle');
+            }
+        }, {
+            key: '$onDestroy',
+            value: function $onDestroy() {
+                this.HeaderService.setLinkState('articles');
+            }
+        }]);
+
+        return ArticlesPage;
+    }()
 };
 
 exports.default = ArticlesPageComponent;
@@ -46367,7 +46373,7 @@ exports.default = ArticlesPageComponent;
 /* 94 */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"articles__container\">\r\n    <article-element\r\n        class=\"article\"\r\n        article=\"article\"\r\n        ng-repeat=\"article in $ctrl.articles | orderBy: '-articleDate' | paginationFilter track by article._id\">\r\n    </article-element>\r\n</div>\r\n<pagination articles-on-page=\"$ctrl.articlesPerPage\"></pagination>\r\n";
+module.exports = "<div class=\"articles__container\">\n    <article-element\n        class=\"article\"\n        article=\"article\"\n        ng-repeat=\"article in $ctrl.articles | orderBy: '-articleDate' | paginationFilter track by article._id\">\n    </article-element>\n</div>\n<pagination articles-on-page=\"$ctrl.articlesPerPage\"></pagination>\n";
 
 /***/ }),
 /* 95 */
@@ -46407,7 +46413,7 @@ var transform;
 var options = {"hmr":true}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(12)(content, options);
+var update = __webpack_require__(9)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -46427,7 +46433,7 @@ if(false) {
 /* 97 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(11)(false);
+exports = module.exports = __webpack_require__(8)(false);
 // imports
 
 
@@ -46448,7 +46454,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _angular = __webpack_require__(5);
+var _angular = __webpack_require__(4);
 
 var _angular2 = _interopRequireDefault(_angular);
 
@@ -46518,7 +46524,7 @@ exports.default = EditArticlePageComponent;
 /* 100 */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"page-container\">\r\n    <h3>Edit Article Page</h3>\r\n    <article-form\r\n            submit-type=\"$ctrl.submitType\"\r\n            submit-handler=\"$ctrl.submitHandler\"\r\n            article=\"$ctrl.article\">\r\n    </article-form>\r\n</div>\r\n\r\n";
+module.exports = "<app-header></app-header>\n<div class=\"page-container\">\n    <h3>Edit Article Page</h3>\n    <article-form\n        submit-type=\"$ctrl.submitType\"\n        submit-handler=\"$ctrl.submitHandler\"\n        article=\"$ctrl.article\">\n    </article-form>\n</div>\n\n";
 
 /***/ }),
 /* 101 */
@@ -46531,7 +46537,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _angular = __webpack_require__(5);
+var _angular = __webpack_require__(4);
 
 var _angular2 = _interopRequireDefault(_angular);
 
@@ -46609,7 +46615,7 @@ exports.default = AddArticlePageComponent;
 /* 103 */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"page-container\">\r\n    <h3>Add New Article Page</h3>\r\n    <article-form\r\n        submit-type=\"$ctrl.submitType\"\r\n        submit-handler=\"$ctrl.submitHandler\"\r\n        article=\"$ctrl.article\">\r\n    </article-form>\r\n</div>\r\n\r\n";
+module.exports = "<div class=\"page-container\">\n    <h3>Add New Article Page</h3>\n    <article-form\n        submit-type=\"$ctrl.submitType\"\n        submit-handler=\"$ctrl.submitHandler\"\n        article=\"$ctrl.article\">\n    </article-form>\n</div>\n\n";
 
 /***/ }),
 /* 104 */
@@ -46626,7 +46632,7 @@ var transform;
 var options = {"hmr":true}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(12)(content, options);
+var update = __webpack_require__(9)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -46646,7 +46652,7 @@ if(false) {
 /* 105 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(11)(false);
+exports = module.exports = __webpack_require__(8)(false);
 // imports
 
 
@@ -46667,27 +46673,21 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _angular = __webpack_require__(5);
+var _angular = __webpack_require__(4);
 
 var _angular2 = _interopRequireDefault(_angular);
 
-var _articlesService = __webpack_require__(107);
+var _articlePage = __webpack_require__(107);
 
-var _articlesService2 = _interopRequireDefault(_articlesService);
+var _articlePage2 = _interopRequireDefault(_articlePage);
 
-var _articleForm = __webpack_require__(108);
-
-var _articleForm2 = _interopRequireDefault(_articleForm);
-
-var _capitalizeFilter = __webpack_require__(116);
-
-var _capitalizeFilter2 = _interopRequireDefault(_capitalizeFilter);
+__webpack_require__(109);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var CommonModule = _angular2.default.module('app.common', [_articleForm2.default]).service('ArticlesService', _articlesService2.default).filter('capitalize', _capitalizeFilter2.default).name;
+var ArticlePageModule = _angular2.default.module('app.article', []).component('articlePage', _articlePage2.default).name;
 
-exports.default = CommonModule;
+exports.default = ArticlePageModule;
 
 /***/ }),
 /* 107 */
@@ -46702,7 +46702,157 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _lodash = __webpack_require__(145);
+var _articlePage = __webpack_require__(108);
+
+var _articlePage2 = _interopRequireDefault(_articlePage);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var ArticlePageComponent = {
+    bindings: {
+        article: '<'
+    },
+    template: _articlePage2.default,
+    controller: function () {
+        function ArticlePage() {
+            _classCallCheck(this, ArticlePage);
+
+            this.articlesPerPage = 3;
+        }
+        //
+
+
+        _createClass(ArticlePage, [{
+            key: '$onInit',
+            value: function $onInit() {
+                console.log(this);
+            }
+            // $onChanges(changes) {
+            //   if (changes.todoData) {
+            //     this.todos = Object.assign({}, this.todoData);
+            //   }
+            // }
+            // addTodo({ todo }) {
+            //   if (!todo) return;
+            //   this.todos.unshift(todo);
+            //   this.newTodo = {
+            //     title: '',
+            //     selected: false
+            //   };
+            // }
+
+        }]);
+
+        return ArticlePage;
+    }()
+};
+
+exports.default = ArticlePageComponent;
+
+/***/ }),
+/* 108 */
+/***/ (function(module, exports) {
+
+module.exports = "<h2 class=\"article__title\">{{::$ctrl.article.articleTitle | capitalize}}</h2>\n<img class=\"article__img\" ng-src={{::$ctrl.article.articleImg}} alt=\"article image\" />\n<div class=\"article__text-container\">\n    <p class=\"article__text\" ng-repeat=\"paragraph in $ctrl.article.articleText.split('\\r') track by $index\">{{paragraph}}</p>\n</div>\n<div class=\"article__tags-container\">\n    <div>\n        <a class=\"article__tag\" href=\"#\" ng-repeat=\"tag in $ctrl.article.tags track by $index\">{{tag | capitalize}}</a>\n    </div>\n    <div class=\"article__header\">\n        <span class=\"article__date\">\n            {{::$ctrl.article.articleDate | date:'dd MMMM in HH:mm'}}\n        </span>\n        <a class=\"article__author\" href=\"#\">{{::$ctrl.article.articleAuthor}}</a>\n    </div>\n</div>\n\n\n\n";
+
+/***/ }),
+/* 109 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(110);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {"hmr":true}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__(9)(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/less-loader/dist/cjs.js!./articlePage.less", function() {
+			var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/less-loader/dist/cjs.js!./articlePage.less");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 110 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(8)(false);
+// imports
+
+
+// module
+exports.push([module.i, "article-page h2 {\n  margin: 20px 0 30px;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 111 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _angular = __webpack_require__(4);
+
+var _angular2 = _interopRequireDefault(_angular);
+
+var _articlesService = __webpack_require__(112);
+
+var _articlesService2 = _interopRequireDefault(_articlesService);
+
+var _articleForm = __webpack_require__(115);
+
+var _articleForm2 = _interopRequireDefault(_articleForm);
+
+var _header = __webpack_require__(123);
+
+var _header2 = _interopRequireDefault(_header);
+
+var _capitalizeFilter = __webpack_require__(128);
+
+var _capitalizeFilter2 = _interopRequireDefault(_capitalizeFilter);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var CommonModule = _angular2.default.module('app.common', [_articleForm2.default, _header2.default]).service('ArticlesService', _articlesService2.default).filter('capitalize', _capitalizeFilter2.default).name;
+
+exports.default = CommonModule;
+
+/***/ }),
+/* 112 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _lodash = __webpack_require__(113);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
@@ -46711,11 +46861,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var ArticlesService = function () {
-    function ArticlesService($http, $q) {
+    function ArticlesService($http, $q, HeaderService) {
         'ngInject';
 
         _classCallCheck(this, ArticlesService);
 
+        this.HeaderService = HeaderService;
         this.$q = $q;
         this.$http = $http;
         this.articles = null;
@@ -46741,6 +46892,7 @@ var ArticlesService = function () {
             var _this2 = this;
 
             return this.$http.get('http://localhost:8000/api/articles').then(function (res) {
+                _this2.HeaderService.setArticlesLoaded();
                 _this2.articles = res.data;
                 _this2.fillArticlesTags(_this2.articles);
                 return _this2.articles;
@@ -46756,6 +46908,14 @@ var ArticlesService = function () {
             return this.$q.resolve(this.articles);
         }
     }, {
+        key: 'getArticleById',
+        value: function getArticleById(id) {
+            return this.articles.find(function (_ref) {
+                var _id = _ref._id;
+                return _id === id;
+            });
+        }
+    }, {
         key: 'getArticlesTags',
         value: function getArticlesTags() {
             return this.tags;
@@ -46769,6 +46929,7 @@ var ArticlesService = function () {
                 articleViews: '0',
                 articleComments: []
             });
+
             this.articles.push(newArticle);
         }
     }, {
@@ -46793,1495 +46954,7 @@ var ArticlesService = function () {
 exports.default = ArticlesService;
 
 /***/ }),
-/* 108 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _angular = __webpack_require__(5);
-
-var _angular2 = _interopRequireDefault(_angular);
-
-var _angularMessages = __webpack_require__(109);
-
-var _angularMessages2 = _interopRequireDefault(_angularMessages);
-
-var _articleForm = __webpack_require__(111);
-
-var _articleForm2 = _interopRequireDefault(_articleForm);
-
-var _articleForm3 = __webpack_require__(113);
-
-var _articleForm4 = _interopRequireDefault(_articleForm3);
-
-__webpack_require__(114);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var ArticleFormModule = _angular2.default.module('app.common.articleForm', [_angularMessages2.default]).component('articleForm', _articleForm2.default).directive('textareaValidator', _articleForm4.default).name;
-
-exports.default = ArticleFormModule;
-
-/***/ }),
-/* 109 */
-/***/ (function(module, exports, __webpack_require__) {
-
-__webpack_require__(110);
-module.exports = 'ngMessages';
-
-
-/***/ }),
-/* 110 */
-/***/ (function(module, exports) {
-
-/**
- * @license AngularJS v1.6.9
- * (c) 2010-2018 Google, Inc. http://angularjs.org
- * License: MIT
- */
-(function(window, angular) {'use strict';
-
-var forEach;
-var isArray;
-var isString;
-var jqLite;
-
-/**
- * @ngdoc module
- * @name ngMessages
- * @description
- *
- * The `ngMessages` module provides enhanced support for displaying messages within templates
- * (typically within forms or when rendering message objects that return key/value data).
- * Instead of relying on JavaScript code and/or complex ng-if statements within your form template to
- * show and hide error messages specific to the state of an input field, the `ngMessages` and
- * `ngMessage` directives are designed to handle the complexity, inheritance and priority
- * sequencing based on the order of how the messages are defined in the template.
- *
- * Currently, the ngMessages module only contains the code for the `ngMessages`, `ngMessagesInclude`
- * `ngMessage` and `ngMessageExp` directives.
- *
- * ## Usage
- * The `ngMessages` directive allows keys in a key/value collection to be associated with a child element
- * (or 'message') that will show or hide based on the truthiness of that key's value in the collection. A common use
- * case for `ngMessages` is to display error messages for inputs using the `$error` object exposed by the
- * {@link ngModel ngModel} directive.
- *
- * The child elements of the `ngMessages` directive are matched to the collection keys by a `ngMessage` or
- * `ngMessageExp` directive. The value of these attributes must match a key in the collection that is provided by
- * the `ngMessages` directive.
- *
- * Consider the following example, which illustrates a typical use case of `ngMessages`. Within the form `myForm` we
- * have a text input named `myField` which is bound to the scope variable `field` using the {@link ngModel ngModel}
- * directive.
- *
- * The `myField` field is a required input of type `email` with a maximum length of 15 characters.
- *
- * ```html
- * <form name="myForm">
- *   <label>
- *     Enter text:
- *     <input type="email" ng-model="field" name="myField" required maxlength="15" />
- *   </label>
- *   <div ng-messages="myForm.myField.$error" role="alert">
- *     <div ng-message="required">Please enter a value for this field.</div>
- *     <div ng-message="email">This field must be a valid email address.</div>
- *     <div ng-message="maxlength">This field can be at most 15 characters long.</div>
- *   </div>
- * </form>
- * ```
- *
- * In order to show error messages corresponding to `myField` we first create an element with an `ngMessages` attribute
- * set to the `$error` object owned by the `myField` input in our `myForm` form.
- *
- * Within this element we then create separate elements for each of the possible errors that `myField` could have.
- * The `ngMessage` attribute is used to declare which element(s) will appear for which error - for example,
- * setting `ng-message="required"` specifies that this particular element should be displayed when there
- * is no value present for the required field `myField` (because the key `required` will be `true` in the object
- * `myForm.myField.$error`).
- *
- * ### Message order
- *
- * By default, `ngMessages` will only display one message for a particular key/value collection at any time. If more
- * than one message (or error) key is currently true, then which message is shown is determined by the order of messages
- * in the HTML template code (messages declared first are prioritised). This mechanism means the developer does not have
- * to prioritize messages using custom JavaScript code.
- *
- * Given the following error object for our example (which informs us that the field `myField` currently has both the
- * `required` and `email` errors):
- *
- * ```javascript
- * <!-- keep in mind that ngModel automatically sets these error flags -->
- * myField.$error = { required : true, email: true, maxlength: false };
- * ```
- * The `required` message will be displayed to the user since it appears before the `email` message in the DOM.
- * Once the user types a single character, the `required` message will disappear (since the field now has a value)
- * but the `email` message will be visible because it is still applicable.
- *
- * ### Displaying multiple messages at the same time
- *
- * While `ngMessages` will by default only display one error element at a time, the `ng-messages-multiple` attribute can
- * be applied to the `ngMessages` container element to cause it to display all applicable error messages at once:
- *
- * ```html
- * <!-- attribute-style usage -->
- * <div ng-messages="myForm.myField.$error" ng-messages-multiple>...</div>
- *
- * <!-- element-style usage -->
- * <ng-messages for="myForm.myField.$error" multiple>...</ng-messages>
- * ```
- *
- * ## Reusing and Overriding Messages
- * In addition to prioritization, ngMessages also allows for including messages from a remote or an inline
- * template. This allows for generic collection of messages to be reused across multiple parts of an
- * application.
- *
- * ```html
- * <script type="text/ng-template" id="error-messages">
- *   <div ng-message="required">This field is required</div>
- *   <div ng-message="minlength">This field is too short</div>
- * </script>
- *
- * <div ng-messages="myForm.myField.$error" role="alert">
- *   <div ng-messages-include="error-messages"></div>
- * </div>
- * ```
- *
- * However, including generic messages may not be useful enough to match all input fields, therefore,
- * `ngMessages` provides the ability to override messages defined in the remote template by redefining
- * them within the directive container.
- *
- * ```html
- * <!-- a generic template of error messages known as "my-custom-messages" -->
- * <script type="text/ng-template" id="my-custom-messages">
- *   <div ng-message="required">This field is required</div>
- *   <div ng-message="minlength">This field is too short</div>
- * </script>
- *
- * <form name="myForm">
- *   <label>
- *     Email address
- *     <input type="email"
- *            id="email"
- *            name="myEmail"
- *            ng-model="email"
- *            minlength="5"
- *            required />
- *   </label>
- *   <!-- any ng-message elements that appear BEFORE the ng-messages-include will
- *        override the messages present in the ng-messages-include template -->
- *   <div ng-messages="myForm.myEmail.$error" role="alert">
- *     <!-- this required message has overridden the template message -->
- *     <div ng-message="required">You did not enter your email address</div>
- *
- *     <!-- this is a brand new message and will appear last in the prioritization -->
- *     <div ng-message="email">Your email address is invalid</div>
- *
- *     <!-- and here are the generic error messages -->
- *     <div ng-messages-include="my-custom-messages"></div>
- *   </div>
- * </form>
- * ```
- *
- * In the example HTML code above the message that is set on required will override the corresponding
- * required message defined within the remote template. Therefore, with particular input fields (such
- * email addresses, date fields, autocomplete inputs, etc...), specialized error messages can be applied
- * while more generic messages can be used to handle other, more general input errors.
- *
- * ## Dynamic Messaging
- * ngMessages also supports using expressions to dynamically change key values. Using arrays and
- * repeaters to list messages is also supported. This means that the code below will be able to
- * fully adapt itself and display the appropriate message when any of the expression data changes:
- *
- * ```html
- * <form name="myForm">
- *   <label>
- *     Email address
- *     <input type="email"
- *            name="myEmail"
- *            ng-model="email"
- *            minlength="5"
- *            required />
- *   </label>
- *   <div ng-messages="myForm.myEmail.$error" role="alert">
- *     <div ng-message="required">You did not enter your email address</div>
- *     <div ng-repeat="errorMessage in errorMessages">
- *       <!-- use ng-message-exp for a message whose key is given by an expression -->
- *       <div ng-message-exp="errorMessage.type">{{ errorMessage.text }}</div>
- *     </div>
- *   </div>
- * </form>
- * ```
- *
- * The `errorMessage.type` expression can be a string value or it can be an array so
- * that multiple errors can be associated with a single error message:
- *
- * ```html
- *   <label>
- *     Email address
- *     <input type="email"
- *            ng-model="data.email"
- *            name="myEmail"
- *            ng-minlength="5"
- *            ng-maxlength="100"
- *            required />
- *   </label>
- *   <div ng-messages="myForm.myEmail.$error" role="alert">
- *     <div ng-message-exp="'required'">You did not enter your email address</div>
- *     <div ng-message-exp="['minlength', 'maxlength']">
- *       Your email must be between 5 and 100 characters long
- *     </div>
- *   </div>
- * ```
- *
- * Feel free to use other structural directives such as ng-if and ng-switch to further control
- * what messages are active and when. Be careful, if you place ng-message on the same element
- * as these structural directives, AngularJS may not be able to determine if a message is active
- * or not. Therefore it is best to place the ng-message on a child element of the structural
- * directive.
- *
- * ```html
- * <div ng-messages="myForm.myEmail.$error" role="alert">
- *   <div ng-if="showRequiredError">
- *     <div ng-message="required">Please enter something</div>
- *   </div>
- * </div>
- * ```
- *
- * ## Animations
- * If the `ngAnimate` module is active within the application then the `ngMessages`, `ngMessage` and
- * `ngMessageExp` directives will trigger animations whenever any messages are added and removed from
- * the DOM by the `ngMessages` directive.
- *
- * Whenever the `ngMessages` directive contains one or more visible messages then the `.ng-active` CSS
- * class will be added to the element. The `.ng-inactive` CSS class will be applied when there are no
- * messages present. Therefore, CSS transitions and keyframes as well as JavaScript animations can
- * hook into the animations whenever these classes are added/removed.
- *
- * Let's say that our HTML code for our messages container looks like so:
- *
- * ```html
- * <div ng-messages="myMessages" class="my-messages" role="alert">
- *   <div ng-message="alert" class="some-message">...</div>
- *   <div ng-message="fail" class="some-message">...</div>
- * </div>
- * ```
- *
- * Then the CSS animation code for the message container looks like so:
- *
- * ```css
- * .my-messages {
- *   transition:1s linear all;
- * }
- * .my-messages.ng-active {
- *   // messages are visible
- * }
- * .my-messages.ng-inactive {
- *   // messages are hidden
- * }
- * ```
- *
- * Whenever an inner message is attached (becomes visible) or removed (becomes hidden) then the enter
- * and leave animation is triggered for each particular element bound to the `ngMessage` directive.
- *
- * Therefore, the CSS code for the inner messages looks like so:
- *
- * ```css
- * .some-message {
- *   transition:1s linear all;
- * }
- *
- * .some-message.ng-enter {}
- * .some-message.ng-enter.ng-enter-active {}
- *
- * .some-message.ng-leave {}
- * .some-message.ng-leave.ng-leave-active {}
- * ```
- *
- * {@link ngAnimate Click here} to learn how to use JavaScript animations or to learn more about ngAnimate.
- */
-angular.module('ngMessages', [], function initAngularHelpers() {
-  // Access helpers from AngularJS core.
-  // Do it inside a `config` block to ensure `window.angular` is available.
-  forEach = angular.forEach;
-  isArray = angular.isArray;
-  isString = angular.isString;
-  jqLite = angular.element;
-})
-  .info({ angularVersion: '1.6.9' })
-
-  /**
-   * @ngdoc directive
-   * @module ngMessages
-   * @name ngMessages
-   * @restrict AE
-   *
-   * @description
-   * `ngMessages` is a directive that is designed to show and hide messages based on the state
-   * of a key/value object that it listens on. The directive itself complements error message
-   * reporting with the `ngModel` $error object (which stores a key/value state of validation errors).
-   *
-   * `ngMessages` manages the state of internal messages within its container element. The internal
-   * messages use the `ngMessage` directive and will be inserted/removed from the page depending
-   * on if they're present within the key/value object. By default, only one message will be displayed
-   * at a time and this depends on the prioritization of the messages within the template. (This can
-   * be changed by using the `ng-messages-multiple` or `multiple` attribute on the directive container.)
-   *
-   * A remote template can also be used to promote message reusability and messages can also be
-   * overridden.
-   *
-   * {@link module:ngMessages Click here} to learn more about `ngMessages` and `ngMessage`.
-   *
-   * @usage
-   * ```html
-   * <!-- using attribute directives -->
-   * <ANY ng-messages="expression" role="alert">
-   *   <ANY ng-message="stringValue">...</ANY>
-   *   <ANY ng-message="stringValue1, stringValue2, ...">...</ANY>
-   *   <ANY ng-message-exp="expressionValue">...</ANY>
-   * </ANY>
-   *
-   * <!-- or by using element directives -->
-   * <ng-messages for="expression" role="alert">
-   *   <ng-message when="stringValue">...</ng-message>
-   *   <ng-message when="stringValue1, stringValue2, ...">...</ng-message>
-   *   <ng-message when-exp="expressionValue">...</ng-message>
-   * </ng-messages>
-   * ```
-   *
-   * @param {string} ngMessages an AngularJS expression evaluating to a key/value object
-   *                 (this is typically the $error object on an ngModel instance).
-   * @param {string=} ngMessagesMultiple|multiple when set, all messages will be displayed with true
-   *
-   * @example
-   * <example name="ngMessages-directive" module="ngMessagesExample"
-   *          deps="angular-messages.js"
-   *          animations="true" fixBase="true">
-   *   <file name="index.html">
-   *     <form name="myForm">
-   *       <label>
-   *         Enter your name:
-   *         <input type="text"
-   *                name="myName"
-   *                ng-model="name"
-   *                ng-minlength="5"
-   *                ng-maxlength="20"
-   *                required />
-   *       </label>
-   *       <pre>myForm.myName.$error = {{ myForm.myName.$error | json }}</pre>
-   *
-   *       <div ng-messages="myForm.myName.$error" style="color:maroon" role="alert">
-   *         <div ng-message="required">You did not enter a field</div>
-   *         <div ng-message="minlength">Your field is too short</div>
-   *         <div ng-message="maxlength">Your field is too long</div>
-   *       </div>
-   *     </form>
-   *   </file>
-   *   <file name="script.js">
-   *     angular.module('ngMessagesExample', ['ngMessages']);
-   *   </file>
-   * </example>
-   */
-  .directive('ngMessages', ['$animate', function($animate) {
-    var ACTIVE_CLASS = 'ng-active';
-    var INACTIVE_CLASS = 'ng-inactive';
-
-    return {
-      require: 'ngMessages',
-      restrict: 'AE',
-      controller: ['$element', '$scope', '$attrs', function NgMessagesCtrl($element, $scope, $attrs) {
-        var ctrl = this;
-        var latestKey = 0;
-        var nextAttachId = 0;
-
-        this.getAttachId = function getAttachId() { return nextAttachId++; };
-
-        var messages = this.messages = {};
-        var renderLater, cachedCollection;
-
-        this.render = function(collection) {
-          collection = collection || {};
-
-          renderLater = false;
-          cachedCollection = collection;
-
-          // this is true if the attribute is empty or if the attribute value is truthy
-          var multiple = isAttrTruthy($scope, $attrs.ngMessagesMultiple) ||
-                         isAttrTruthy($scope, $attrs.multiple);
-
-          var unmatchedMessages = [];
-          var matchedKeys = {};
-          var messageItem = ctrl.head;
-          var messageFound = false;
-          var totalMessages = 0;
-
-          // we use != instead of !== to allow for both undefined and null values
-          while (messageItem != null) {
-            totalMessages++;
-            var messageCtrl = messageItem.message;
-
-            var messageUsed = false;
-            if (!messageFound) {
-              forEach(collection, function(value, key) {
-                if (!messageUsed && truthy(value) && messageCtrl.test(key)) {
-                  // this is to prevent the same error name from showing up twice
-                  if (matchedKeys[key]) return;
-                  matchedKeys[key] = true;
-
-                  messageUsed = true;
-                  messageCtrl.attach();
-                }
-              });
-            }
-
-            if (messageUsed) {
-              // unless we want to display multiple messages then we should
-              // set a flag here to avoid displaying the next message in the list
-              messageFound = !multiple;
-            } else {
-              unmatchedMessages.push(messageCtrl);
-            }
-
-            messageItem = messageItem.next;
-          }
-
-          forEach(unmatchedMessages, function(messageCtrl) {
-            messageCtrl.detach();
-          });
-
-          if (unmatchedMessages.length !== totalMessages) {
-            $animate.setClass($element, ACTIVE_CLASS, INACTIVE_CLASS);
-          } else {
-            $animate.setClass($element, INACTIVE_CLASS, ACTIVE_CLASS);
-          }
-        };
-
-        $scope.$watchCollection($attrs.ngMessages || $attrs['for'], ctrl.render);
-
-        this.reRender = function() {
-          if (!renderLater) {
-            renderLater = true;
-            $scope.$evalAsync(function() {
-              if (renderLater && cachedCollection) {
-                ctrl.render(cachedCollection);
-              }
-            });
-          }
-        };
-
-        this.register = function(comment, messageCtrl) {
-          var nextKey = latestKey.toString();
-          messages[nextKey] = {
-            message: messageCtrl
-          };
-          insertMessageNode($element[0], comment, nextKey);
-          comment.$$ngMessageNode = nextKey;
-          latestKey++;
-
-          ctrl.reRender();
-        };
-
-        this.deregister = function(comment) {
-          var key = comment.$$ngMessageNode;
-          delete comment.$$ngMessageNode;
-          removeMessageNode($element[0], comment, key);
-          delete messages[key];
-          ctrl.reRender();
-        };
-
-        function findPreviousMessage(parent, comment) {
-          var prevNode = comment;
-          var parentLookup = [];
-
-          while (prevNode && prevNode !== parent) {
-            var prevKey = prevNode.$$ngMessageNode;
-            if (prevKey && prevKey.length) {
-              return messages[prevKey];
-            }
-
-            // dive deeper into the DOM and examine its children for any ngMessage
-            // comments that may be in an element that appears deeper in the list
-            if (prevNode.childNodes.length && parentLookup.indexOf(prevNode) === -1) {
-              parentLookup.push(prevNode);
-              prevNode = prevNode.childNodes[prevNode.childNodes.length - 1];
-            } else if (prevNode.previousSibling) {
-              prevNode = prevNode.previousSibling;
-            } else {
-              prevNode = prevNode.parentNode;
-              parentLookup.push(prevNode);
-            }
-          }
-        }
-
-        function insertMessageNode(parent, comment, key) {
-          var messageNode = messages[key];
-          if (!ctrl.head) {
-            ctrl.head = messageNode;
-          } else {
-            var match = findPreviousMessage(parent, comment);
-            if (match) {
-              messageNode.next = match.next;
-              match.next = messageNode;
-            } else {
-              messageNode.next = ctrl.head;
-              ctrl.head = messageNode;
-            }
-          }
-        }
-
-        function removeMessageNode(parent, comment, key) {
-          var messageNode = messages[key];
-
-          // This message node may have already been removed by a call to deregister()
-          if (!messageNode) return;
-
-          var match = findPreviousMessage(parent, comment);
-          if (match) {
-            match.next = messageNode.next;
-          } else {
-            ctrl.head = messageNode.next;
-          }
-        }
-      }]
-    };
-
-    function isAttrTruthy(scope, attr) {
-     return (isString(attr) && attr.length === 0) || //empty attribute
-            truthy(scope.$eval(attr));
-    }
-
-    function truthy(val) {
-      return isString(val) ? val.length : !!val;
-    }
-  }])
-
-  /**
-   * @ngdoc directive
-   * @name ngMessagesInclude
-   * @restrict AE
-   * @scope
-   *
-   * @description
-   * `ngMessagesInclude` is a directive with the purpose to import existing ngMessage template
-   * code from a remote template and place the downloaded template code into the exact spot
-   * that the ngMessagesInclude directive is placed within the ngMessages container. This allows
-   * for a series of pre-defined messages to be reused and also allows for the developer to
-   * determine what messages are overridden due to the placement of the ngMessagesInclude directive.
-   *
-   * @usage
-   * ```html
-   * <!-- using attribute directives -->
-   * <ANY ng-messages="expression" role="alert">
-   *   <ANY ng-messages-include="remoteTplString">...</ANY>
-   * </ANY>
-   *
-   * <!-- or by using element directives -->
-   * <ng-messages for="expression" role="alert">
-   *   <ng-messages-include src="expressionValue1">...</ng-messages-include>
-   * </ng-messages>
-   * ```
-   *
-   * {@link module:ngMessages Click here} to learn more about `ngMessages` and `ngMessage`.
-   *
-   * @param {string} ngMessagesInclude|src a string value corresponding to the remote template.
-   */
-  .directive('ngMessagesInclude',
-    ['$templateRequest', '$document', '$compile', function($templateRequest, $document, $compile) {
-
-    return {
-      restrict: 'AE',
-      require: '^^ngMessages', // we only require this for validation sake
-      link: function($scope, element, attrs) {
-        var src = attrs.ngMessagesInclude || attrs.src;
-        $templateRequest(src).then(function(html) {
-          if ($scope.$$destroyed) return;
-
-          if (isString(html) && !html.trim()) {
-            // Empty template - nothing to compile
-            replaceElementWithMarker(element, src);
-          } else {
-            // Non-empty template - compile and link
-            $compile(html)($scope, function(contents) {
-              element.after(contents);
-              replaceElementWithMarker(element, src);
-            });
-          }
-        });
-      }
-    };
-
-    // Helpers
-    function replaceElementWithMarker(element, src) {
-      // A comment marker is placed for debugging purposes
-      var comment = $compile.$$createComment ?
-          $compile.$$createComment('ngMessagesInclude', src) :
-          $document[0].createComment(' ngMessagesInclude: ' + src + ' ');
-      var marker = jqLite(comment);
-      element.after(marker);
-
-      // Don't pollute the DOM anymore by keeping an empty directive element
-      element.remove();
-    }
-  }])
-
-  /**
-   * @ngdoc directive
-   * @name ngMessage
-   * @restrict AE
-   * @scope
-   * @priority 1
-   *
-   * @description
-   * `ngMessage` is a directive with the purpose to show and hide a particular message.
-   * For `ngMessage` to operate, a parent `ngMessages` directive on a parent DOM element
-   * must be situated since it determines which messages are visible based on the state
-   * of the provided key/value map that `ngMessages` listens on.
-   *
-   * More information about using `ngMessage` can be found in the
-   * {@link module:ngMessages `ngMessages` module documentation}.
-   *
-   * @usage
-   * ```html
-   * <!-- using attribute directives -->
-   * <ANY ng-messages="expression" role="alert">
-   *   <ANY ng-message="stringValue">...</ANY>
-   *   <ANY ng-message="stringValue1, stringValue2, ...">...</ANY>
-   * </ANY>
-   *
-   * <!-- or by using element directives -->
-   * <ng-messages for="expression" role="alert">
-   *   <ng-message when="stringValue">...</ng-message>
-   *   <ng-message when="stringValue1, stringValue2, ...">...</ng-message>
-   * </ng-messages>
-   * ```
-   *
-   * @param {expression} ngMessage|when a string value corresponding to the message key.
-   */
-  .directive('ngMessage', ngMessageDirectiveFactory())
-
-
-  /**
-   * @ngdoc directive
-   * @name ngMessageExp
-   * @restrict AE
-   * @priority 1
-   * @scope
-   *
-   * @description
-   * `ngMessageExp` is the same as {@link directive:ngMessage `ngMessage`}, but instead of a static
-   * value, it accepts an expression to be evaluated for the message key.
-   *
-   * @usage
-   * ```html
-   * <!-- using attribute directives -->
-   * <ANY ng-messages="expression">
-   *   <ANY ng-message-exp="expressionValue">...</ANY>
-   * </ANY>
-   *
-   * <!-- or by using element directives -->
-   * <ng-messages for="expression">
-   *   <ng-message when-exp="expressionValue">...</ng-message>
-   * </ng-messages>
-   * ```
-   *
-   * {@link module:ngMessages Click here} to learn more about `ngMessages` and `ngMessage`.
-   *
-   * @param {expression} ngMessageExp|whenExp an expression value corresponding to the message key.
-   */
-  .directive('ngMessageExp', ngMessageDirectiveFactory());
-
-function ngMessageDirectiveFactory() {
-  return ['$animate', function($animate) {
-    return {
-      restrict: 'AE',
-      transclude: 'element',
-      priority: 1, // must run before ngBind, otherwise the text is set on the comment
-      terminal: true,
-      require: '^^ngMessages',
-      link: function(scope, element, attrs, ngMessagesCtrl, $transclude) {
-        var commentNode = element[0];
-
-        var records;
-        var staticExp = attrs.ngMessage || attrs.when;
-        var dynamicExp = attrs.ngMessageExp || attrs.whenExp;
-        var assignRecords = function(items) {
-          records = items
-              ? (isArray(items)
-                  ? items
-                  : items.split(/[\s,]+/))
-              : null;
-          ngMessagesCtrl.reRender();
-        };
-
-        if (dynamicExp) {
-          assignRecords(scope.$eval(dynamicExp));
-          scope.$watchCollection(dynamicExp, assignRecords);
-        } else {
-          assignRecords(staticExp);
-        }
-
-        var currentElement, messageCtrl;
-        ngMessagesCtrl.register(commentNode, messageCtrl = {
-          test: function(name) {
-            return contains(records, name);
-          },
-          attach: function() {
-            if (!currentElement) {
-              $transclude(function(elm, newScope) {
-                $animate.enter(elm, null, element);
-                currentElement = elm;
-
-                // Each time we attach this node to a message we get a new id that we can match
-                // when we are destroying the node later.
-                var $$attachId = currentElement.$$attachId = ngMessagesCtrl.getAttachId();
-
-                // in the event that the element or a parent element is destroyed
-                // by another structural directive then it's time
-                // to deregister the message from the controller
-                currentElement.on('$destroy', function() {
-                  // If the message element was removed via a call to `detach` then `currentElement` will be null
-                  // So this handler only handles cases where something else removed the message element.
-                  if (currentElement && currentElement.$$attachId === $$attachId) {
-                    ngMessagesCtrl.deregister(commentNode);
-                    messageCtrl.detach();
-                  }
-                  newScope.$destroy();
-                });
-              });
-            }
-          },
-          detach: function() {
-            if (currentElement) {
-              var elm = currentElement;
-              currentElement = null;
-              $animate.leave(elm);
-            }
-          }
-        });
-
-        // We need to ensure that this directive deregisters itself when it no longer exists
-        // Normally this is done when the attached element is destroyed; but if this directive
-        // gets removed before we attach the message to the DOM there is nothing to watch
-        // in which case we must deregister when the containing scope is destroyed.
-        scope.$on('$destroy', function() {
-          ngMessagesCtrl.deregister(commentNode);
-        });
-      }
-    };
-  }];
-
-  function contains(collection, key) {
-    if (collection) {
-      return isArray(collection)
-          ? collection.indexOf(key) >= 0
-          : collection.hasOwnProperty(key);
-    }
-  }
-}
-
-
-})(window, window.angular);
-
-
-/***/ }),
-/* 111 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _articleForm = __webpack_require__(112);
-
-var _articleForm2 = _interopRequireDefault(_articleForm);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var ArticleFormComponent = {
-    bindings: {
-        submitType: '<',
-        submitHandler: '<',
-        article: '<'
-    },
-    template: _articleForm2.default,
-    controller: function () {
-        function ArticlesPage(ArticlesService, $scope) {
-            'ngInject';
-
-            _classCallCheck(this, ArticlesPage);
-
-            this.ArticlesService = ArticlesService;
-            this.$scope = $scope;
-            this.tags = null;
-            this.articleTags = null;
-        }
-
-        _createClass(ArticlesPage, [{
-            key: '$onInit',
-            value: function $onInit() {
-                var _this = this;
-
-                this.tags = this.ArticlesService.getArticlesTags();
-                this.articleTags = this.tags.reduce(function (acc, item) {
-                    acc[item] = _this.article.tags.indexOf(item) >= 0;
-                    return acc;
-                }, {});
-            }
-        }, {
-            key: 'shouldShowErrors',
-            value: function shouldShowErrors(input) {
-                return input.$dirty && input.$touched || this.$scope.articleForm.$submitted;
-            }
-        }, {
-            key: 'submit',
-            value: function submit(e) {
-                var _this2 = this;
-
-                e.preventDefault();
-                if (this.$scope.articleForm.$valid) {
-                    var tags = Object.keys(this.articleTags).filter(function (tag) {
-                        return _this2.articleTags[tag];
-                    });
-
-                    this.submitHandler(Object.assign({}, this.article, { tags: tags }));
-                }
-            }
-        }]);
-
-        return ArticlesPage;
-    }()
-};
-
-exports.default = ArticleFormComponent;
-
-/***/ }),
-/* 112 */
-/***/ (function(module, exports) {
-
-module.exports = "<form name=\"articleForm\" class=\"article-form\" novalidate ng-submit=\"$ctrl.submit($event)\">\r\n    <div class=\"row\">\r\n        <div class=\"input-container\">\r\n            <label for=\"article-author\" class=\"label-required\">Article Author</label>\r\n            <input type=\"text\" name=\"articleAuthor\" id=\"article-author\" ng-required=\"true\" ng-minlength=\"3\" ng-model=\"$ctrl.article.articleAuthor\" />\r\n            <div class=\"help-block\" ng-messages=\"articleForm.articleAuthor.$error\" ng-if=\"$ctrl.shouldShowErrors(articleForm.articleAuthor)\">\r\n                <p ng-message=\"minlength\">Article Author must be at least 3 characters.</p>\r\n                <p ng-message=\"required\">Article Author is required.</p>\r\n            </div>\r\n        </div>\r\n    </div>\r\n    <div class=\"row\">\r\n        <div class=\"input-container\">\r\n            <label for=\"article-img\" class=\"label-required\">Article Image Url</label>\r\n            <input type=\"text\" name=\"articleImg\" id=\"article-img\" ng-required='true' ng-minlength=\"5\" ng-model=\"$ctrl.article.articleImg\" />\r\n            <div class=\"help-block\" ng-messages=\"articleForm.articleImg.$error\" ng-if=\"$ctrl.shouldShowErrors(articleForm.articleImg)\">\r\n                <p ng-message=\"minlength\">Article Image Url must be at least 5 characters.</p>\r\n                <p ng-message=\"required\">Article Image Url is required.</p>\r\n            </div>\r\n        </div>\r\n    </div>\r\n    <label class=\"tags-label\">Article tags:</label>\r\n    <div class=\"row row-flex\">\r\n        <div class=\"input-small-container\" ng-repeat=\"tag in $ctrl.tags track by $index\">\r\n            <label for=\"{{::tag}}-checkbox\">{{::tag}}</label>\r\n            <input type=\"checkbox\" name=\"{{::tag}}-checkbox\" id=\"{{::tag}}-checkbox\" ng-model=\"$ctrl.articleTags[tag]\" />\r\n            <label for=\"{{::tag}}-checkbox\"></label>\r\n        </div>\r\n    </div>\n    <div class=\"input-container\">\n        <label for=\"article-title\" class=\"label-required\">Article Title</label>\n        <textarea id=\"article-title\" name=\"articleTitle\" ng-model=\"$ctrl.article.articleTitle\" ng-required=\"true\" textarea-validator=\"20\"></textarea>\n        <div class=\"help-block\" ng-messages=\"articleForm.articleTitle.$error\" ng-if=\"$ctrl.shouldShowErrors(articleForm.articleTitle)\">\n            <p ng-message=\"textareaValidator\">Article Preview must be at least 20 characters.</p>\n            <p ng-message=\"required\">Article Preview is required.</p>\n        </div>\n    </div>\r\n    <div class=\"input-container\">\r\n        <label for=\"article-preview\" class=\"label-required\">Article Preview</label>\r\n        <textarea id=\"article-preview\" name=\"articlePreview\" ng-model=\"$ctrl.article.articlePreview\" ng-required=\"true\" textarea-validator=\"20\"></textarea>\r\n        <div class=\"help-block\" ng-messages=\"articleForm.articlePreview.$error\" ng-if=\"$ctrl.shouldShowErrors(articleForm.articlePreview)\">\r\n            <p ng-message=\"textareaValidator\">Article Preview must be at least 20 characters.</p>\r\n            <p ng-message=\"required\">Article Preview is required.</p>\r\n        </div>\r\n    </div>\r\n    <div class=\"input-container\">\r\n        <label for=\"article-text\" class=\"label-required\">Article Text</label>\r\n        <textarea id=\"article-text\" name=\"articleText\" ng-model=\"$ctrl.article.articleText\" ng-required=\"true\" textarea-validator=\"20\"></textarea>\r\n        <div class=\"help-block\" ng-messages=\"articleForm.articleText.$error\" ng-if=\"$ctrl.shouldShowErrors(articleForm.articleText)\">\r\n            <p ng-message=\"textareaValidator\">Article Text must be at least 20 characters.</p>\r\n            <p ng-message=\"required\">Article Text is required.</p>\r\n        </div>\r\n    </div>\r\n    <div class=\"submit-container\">\r\n        <a class=\"btn btn_link\" ui-sref=\"home\">\r\n            <i class=\"fa fa-arrow-left\" aria-hidden=\"true\"></i>\r\n            Back\r\n        </a>\r\n        <input class=\"btn btn-fill\" type=\"submit\" value=\"{{$ctrl.submitType}} Article\" ng-disabled=\"articleForm.$invalid\">\r\n    </div>\r\n</form>\r\n";
-
-/***/ }),
 /* 113 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-var textareaValidator = function textareaValidator() {
-    return {
-        require: 'ngModel',
-        link: function link(scope, element, attributes, control) {
-            control.$validators.textareaValidator = function (modelValue) {
-                return control.$isEmpty(modelValue) || modelValue.length >= Number(attributes.textareaValidator);
-            };
-        }
-    };
-};
-
-exports.default = textareaValidator;
-
-/***/ }),
-/* 114 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(115);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// Prepare cssTransformation
-var transform;
-
-var options = {"hmr":true}
-options.transform = transform
-// add the styles to the DOM
-var update = __webpack_require__(12)(content, options);
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/less-loader/dist/cjs.js!./articleForm.less", function() {
-			var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/less-loader/dist/cjs.js!./articleForm.less");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 115 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(11)(false);
-// imports
-
-
-// module
-exports.push([module.i, "form label {\n  display: block;\n}\ninput[type=\"text\"],\ninput[type=\"search\"],\ninput[type=\"number\"],\ntextarea {\n  width: 100%;\n  height: 30px;\n  padding: 4px 10px 2px 10px;\n  border: none;\n  border-bottom: 1px solid rgba(0, 0, 0, 0.15);\n  outline: 0;\n  color: #343f6a;\n  font-size: 1.8rem;\n  line-height: 1.5;\n}\ninput[type=\"text\"]:focus,\ninput[type=\"search\"]:focus,\ninput[type=\"number\"]:focus,\ntextarea:focus {\n  border-bottom: 2px solid #343f6a;\n  padding-bottom: 1px;\n}\ntextarea {\n  font-family: 'Open Sans', Helvetica, sans-serif;\n  resize: none;\n}\ninput[type=\"search\"] {\n  padding-left: 30px;\n  background: none;\n  letter-spacing: 0.5px;\n}\nform label {\n  font-size: 1.6rem;\n  margin-bottom: 10px;\n  display: inline-block;\n}\n.tags-label {\n  margin-bottom: 20px;\n}\n.label-required::after {\n  content: \"*\";\n  padding-left: 5px;\n  color: crimson;\n}\n.row.row-flex {\n  display: flex;\n  justify-content: space-between;\n  margin-bottom: 20px;\n}\n.input-small-container label:first-of-type {\n  margin-right: 10px;\n}\n.input-container {\n  padding-bottom: 40px;\n}\ntextarea#article-preview {\n  min-height: 140px;\n}\ntextarea#article-text {\n  min-height: 490px;\n}\ntextarea#article-title {\n  min-height: 60px;\n}\ninput[type=\"checkbox\"] {\n  display: none;\n}\ninput[type=\"checkbox\"] + label {\n  display: inline-block;\n  border: 2px solid #4d80aa;\n  height: 24px;\n  width: 24px;\n  border-radius: 3px;\n  position: relative;\n}\ninput[type=\"checkbox\"]:checked + label {\n  background: #4d80aa;\n}\ninput {\n  background: none;\n}\ninput[type=\"checkbox\"] + label::before {\n  content: '';\n  position: absolute;\n}\ninput[type=\"checkbox\"]:checked + label::before {\n  font-family: \"FontAwesome\";\n  content: \"\\F00C\";\n  font-size: 1.6rem;\n  color: white;\n  left: 2px;\n  top: 2px;\n}\n.input-small-container {\n  display: flex;\n  align-items: center;\n}\n.submit-container {\n  display: flex;\n  justify-content: space-evenly;\n}\n.help-block.ng-active {\n  font-size: 1.3rem;\n  margin-top: 10px;\n  color: crimson;\n  position: absolute;\n}\ninput:disabled {\n  opacity: 0.8;\n  cursor: not-allowed;\n}\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 116 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-var capitalizeFilter = function capitalizeFilter() {
-    return function (text) {
-        return text.charAt(0).toUpperCase() + text.slice(1);
-    };
-};
-
-exports.default = capitalizeFilter;
-
-/***/ }),
-/* 117 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-var AppComponent = {
-    template: "\n    <header>\n        <p>Awesome App header</p>\n        <a ui-sref=\"addArticle\">Add Article</a>\n    </header>\n    <div>\n        <ui-view><ui-view>\n    </div>\n    <footer>\n        <p>Awesome footer, Copyright FrontCamp 2018.</p>\n    </footer>\n  "
-};
-
-exports.default = AppComponent;
-
-/***/ }),
-/* 118 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-function routing($urlRouterProvider, $stateProvider, $locationProvider) {
-    $stateProvider.state('articles', {
-        url: '/articles',
-        component: 'articles',
-        resolve: {
-            articles: function articles(ArticlesService) {
-                return ArticlesService.getArticles();
-            }
-        }
-    }).state('addArticle', {
-        url: '/add-article',
-        component: 'addArticle',
-        resolve: {
-            articles: function articles(ArticlesService) {
-                return ArticlesService.getArticles();
-            }
-        }
-    }).state('editArticle', {
-        url: '/edit-tarticle:id',
-        component: 'editArticle',
-        resolve: {
-            article: function article($stateParams, ArticlesService) {
-                return ArticlesService.getArticles().then(function (articles) {
-                    return articles.find(function (_ref) {
-                        var _id = _ref._id;
-                        return _id === $stateParams.id;
-                    });
-                }).then(function (article) {
-                    return Object.assign({}, article);
-                });
-            }
-        },
-        onEnter: function onEnter($state, article) {
-            if (article._id === undefined) {
-                $state.go('articles');
-            }
-        }
-    });
-
-    $urlRouterProvider.otherwise('/articles');
-    $locationProvider.html5Mode(true);
-}
-
-routing.$inject = ['$urlRouterProvider', '$stateProvider', '$locationProvider'];
-
-exports.default = routing;
-
-/***/ }),
-/* 119 */
-/***/ (function(module, exports, __webpack_require__) {
-
-__webpack_require__(120);
-
-
-/***/ }),
-/* 120 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(121);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// add the styles to the DOM
-var update = __webpack_require__(129)(content, {});
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!./node_modules/css-loader/index.js!./node_modules/less-loader/index.js!./font-awesome-styles.loader.js!./font-awesome.config.js", function() {
-			var newContent = require("!!./node_modules/css-loader/index.js!./node_modules/less-loader/index.js!./font-awesome-styles.loader.js!./font-awesome.config.js");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 121 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(122)();
-// imports
-
-
-// module
-exports.push([module.i, ".fa-border {\n  padding: .2em .25em .15em;\n  border: solid 0.08em #eee;\n  border-radius: .1em;\n}\n.fa-pull-left {\n  float: left;\n}\n.fa-pull-right {\n  float: right;\n}\n.fa.fa-pull-left {\n  margin-right: .3em;\n}\n.fa.fa-pull-right {\n  margin-left: .3em;\n}\n/* Deprecated as of 4.4.0 */\n.pull-right {\n  float: right;\n}\n.pull-left {\n  float: left;\n}\n.fa.pull-left {\n  margin-right: .3em;\n}\n.fa.pull-right {\n  margin-left: .3em;\n}\n.fa {\n  display: inline-block;\n  font: normal normal normal 14px/1 FontAwesome;\n  font-size: inherit;\n  text-rendering: auto;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n}\n.fa-fw {\n  width: 1.28571429em;\n  text-align: center;\n}\n/* Font Awesome uses the Unicode Private Use Area (PUA) to ensure screen\n   readers do not read off random characters that represent icons */\n.fa-glass:before {\n  content: \"\\F000\";\n}\n.fa-music:before {\n  content: \"\\F001\";\n}\n.fa-search:before {\n  content: \"\\F002\";\n}\n.fa-envelope-o:before {\n  content: \"\\F003\";\n}\n.fa-heart:before {\n  content: \"\\F004\";\n}\n.fa-star:before {\n  content: \"\\F005\";\n}\n.fa-star-o:before {\n  content: \"\\F006\";\n}\n.fa-user:before {\n  content: \"\\F007\";\n}\n.fa-film:before {\n  content: \"\\F008\";\n}\n.fa-th-large:before {\n  content: \"\\F009\";\n}\n.fa-th:before {\n  content: \"\\F00A\";\n}\n.fa-th-list:before {\n  content: \"\\F00B\";\n}\n.fa-check:before {\n  content: \"\\F00C\";\n}\n.fa-remove:before,\n.fa-close:before,\n.fa-times:before {\n  content: \"\\F00D\";\n}\n.fa-search-plus:before {\n  content: \"\\F00E\";\n}\n.fa-search-minus:before {\n  content: \"\\F010\";\n}\n.fa-power-off:before {\n  content: \"\\F011\";\n}\n.fa-signal:before {\n  content: \"\\F012\";\n}\n.fa-gear:before,\n.fa-cog:before {\n  content: \"\\F013\";\n}\n.fa-trash-o:before {\n  content: \"\\F014\";\n}\n.fa-home:before {\n  content: \"\\F015\";\n}\n.fa-file-o:before {\n  content: \"\\F016\";\n}\n.fa-clock-o:before {\n  content: \"\\F017\";\n}\n.fa-road:before {\n  content: \"\\F018\";\n}\n.fa-download:before {\n  content: \"\\F019\";\n}\n.fa-arrow-circle-o-down:before {\n  content: \"\\F01A\";\n}\n.fa-arrow-circle-o-up:before {\n  content: \"\\F01B\";\n}\n.fa-inbox:before {\n  content: \"\\F01C\";\n}\n.fa-play-circle-o:before {\n  content: \"\\F01D\";\n}\n.fa-rotate-right:before,\n.fa-repeat:before {\n  content: \"\\F01E\";\n}\n.fa-refresh:before {\n  content: \"\\F021\";\n}\n.fa-list-alt:before {\n  content: \"\\F022\";\n}\n.fa-lock:before {\n  content: \"\\F023\";\n}\n.fa-flag:before {\n  content: \"\\F024\";\n}\n.fa-headphones:before {\n  content: \"\\F025\";\n}\n.fa-volume-off:before {\n  content: \"\\F026\";\n}\n.fa-volume-down:before {\n  content: \"\\F027\";\n}\n.fa-volume-up:before {\n  content: \"\\F028\";\n}\n.fa-qrcode:before {\n  content: \"\\F029\";\n}\n.fa-barcode:before {\n  content: \"\\F02A\";\n}\n.fa-tag:before {\n  content: \"\\F02B\";\n}\n.fa-tags:before {\n  content: \"\\F02C\";\n}\n.fa-book:before {\n  content: \"\\F02D\";\n}\n.fa-bookmark:before {\n  content: \"\\F02E\";\n}\n.fa-print:before {\n  content: \"\\F02F\";\n}\n.fa-camera:before {\n  content: \"\\F030\";\n}\n.fa-font:before {\n  content: \"\\F031\";\n}\n.fa-bold:before {\n  content: \"\\F032\";\n}\n.fa-italic:before {\n  content: \"\\F033\";\n}\n.fa-text-height:before {\n  content: \"\\F034\";\n}\n.fa-text-width:before {\n  content: \"\\F035\";\n}\n.fa-align-left:before {\n  content: \"\\F036\";\n}\n.fa-align-center:before {\n  content: \"\\F037\";\n}\n.fa-align-right:before {\n  content: \"\\F038\";\n}\n.fa-align-justify:before {\n  content: \"\\F039\";\n}\n.fa-list:before {\n  content: \"\\F03A\";\n}\n.fa-dedent:before,\n.fa-outdent:before {\n  content: \"\\F03B\";\n}\n.fa-indent:before {\n  content: \"\\F03C\";\n}\n.fa-video-camera:before {\n  content: \"\\F03D\";\n}\n.fa-photo:before,\n.fa-image:before,\n.fa-picture-o:before {\n  content: \"\\F03E\";\n}\n.fa-pencil:before {\n  content: \"\\F040\";\n}\n.fa-map-marker:before {\n  content: \"\\F041\";\n}\n.fa-adjust:before {\n  content: \"\\F042\";\n}\n.fa-tint:before {\n  content: \"\\F043\";\n}\n.fa-edit:before,\n.fa-pencil-square-o:before {\n  content: \"\\F044\";\n}\n.fa-share-square-o:before {\n  content: \"\\F045\";\n}\n.fa-check-square-o:before {\n  content: \"\\F046\";\n}\n.fa-arrows:before {\n  content: \"\\F047\";\n}\n.fa-step-backward:before {\n  content: \"\\F048\";\n}\n.fa-fast-backward:before {\n  content: \"\\F049\";\n}\n.fa-backward:before {\n  content: \"\\F04A\";\n}\n.fa-play:before {\n  content: \"\\F04B\";\n}\n.fa-pause:before {\n  content: \"\\F04C\";\n}\n.fa-stop:before {\n  content: \"\\F04D\";\n}\n.fa-forward:before {\n  content: \"\\F04E\";\n}\n.fa-fast-forward:before {\n  content: \"\\F050\";\n}\n.fa-step-forward:before {\n  content: \"\\F051\";\n}\n.fa-eject:before {\n  content: \"\\F052\";\n}\n.fa-chevron-left:before {\n  content: \"\\F053\";\n}\n.fa-chevron-right:before {\n  content: \"\\F054\";\n}\n.fa-plus-circle:before {\n  content: \"\\F055\";\n}\n.fa-minus-circle:before {\n  content: \"\\F056\";\n}\n.fa-times-circle:before {\n  content: \"\\F057\";\n}\n.fa-check-circle:before {\n  content: \"\\F058\";\n}\n.fa-question-circle:before {\n  content: \"\\F059\";\n}\n.fa-info-circle:before {\n  content: \"\\F05A\";\n}\n.fa-crosshairs:before {\n  content: \"\\F05B\";\n}\n.fa-times-circle-o:before {\n  content: \"\\F05C\";\n}\n.fa-check-circle-o:before {\n  content: \"\\F05D\";\n}\n.fa-ban:before {\n  content: \"\\F05E\";\n}\n.fa-arrow-left:before {\n  content: \"\\F060\";\n}\n.fa-arrow-right:before {\n  content: \"\\F061\";\n}\n.fa-arrow-up:before {\n  content: \"\\F062\";\n}\n.fa-arrow-down:before {\n  content: \"\\F063\";\n}\n.fa-mail-forward:before,\n.fa-share:before {\n  content: \"\\F064\";\n}\n.fa-expand:before {\n  content: \"\\F065\";\n}\n.fa-compress:before {\n  content: \"\\F066\";\n}\n.fa-plus:before {\n  content: \"\\F067\";\n}\n.fa-minus:before {\n  content: \"\\F068\";\n}\n.fa-asterisk:before {\n  content: \"\\F069\";\n}\n.fa-exclamation-circle:before {\n  content: \"\\F06A\";\n}\n.fa-gift:before {\n  content: \"\\F06B\";\n}\n.fa-leaf:before {\n  content: \"\\F06C\";\n}\n.fa-fire:before {\n  content: \"\\F06D\";\n}\n.fa-eye:before {\n  content: \"\\F06E\";\n}\n.fa-eye-slash:before {\n  content: \"\\F070\";\n}\n.fa-warning:before,\n.fa-exclamation-triangle:before {\n  content: \"\\F071\";\n}\n.fa-plane:before {\n  content: \"\\F072\";\n}\n.fa-calendar:before {\n  content: \"\\F073\";\n}\n.fa-random:before {\n  content: \"\\F074\";\n}\n.fa-comment:before {\n  content: \"\\F075\";\n}\n.fa-magnet:before {\n  content: \"\\F076\";\n}\n.fa-chevron-up:before {\n  content: \"\\F077\";\n}\n.fa-chevron-down:before {\n  content: \"\\F078\";\n}\n.fa-retweet:before {\n  content: \"\\F079\";\n}\n.fa-shopping-cart:before {\n  content: \"\\F07A\";\n}\n.fa-folder:before {\n  content: \"\\F07B\";\n}\n.fa-folder-open:before {\n  content: \"\\F07C\";\n}\n.fa-arrows-v:before {\n  content: \"\\F07D\";\n}\n.fa-arrows-h:before {\n  content: \"\\F07E\";\n}\n.fa-bar-chart-o:before,\n.fa-bar-chart:before {\n  content: \"\\F080\";\n}\n.fa-twitter-square:before {\n  content: \"\\F081\";\n}\n.fa-facebook-square:before {\n  content: \"\\F082\";\n}\n.fa-camera-retro:before {\n  content: \"\\F083\";\n}\n.fa-key:before {\n  content: \"\\F084\";\n}\n.fa-gears:before,\n.fa-cogs:before {\n  content: \"\\F085\";\n}\n.fa-comments:before {\n  content: \"\\F086\";\n}\n.fa-thumbs-o-up:before {\n  content: \"\\F087\";\n}\n.fa-thumbs-o-down:before {\n  content: \"\\F088\";\n}\n.fa-star-half:before {\n  content: \"\\F089\";\n}\n.fa-heart-o:before {\n  content: \"\\F08A\";\n}\n.fa-sign-out:before {\n  content: \"\\F08B\";\n}\n.fa-linkedin-square:before {\n  content: \"\\F08C\";\n}\n.fa-thumb-tack:before {\n  content: \"\\F08D\";\n}\n.fa-external-link:before {\n  content: \"\\F08E\";\n}\n.fa-sign-in:before {\n  content: \"\\F090\";\n}\n.fa-trophy:before {\n  content: \"\\F091\";\n}\n.fa-github-square:before {\n  content: \"\\F092\";\n}\n.fa-upload:before {\n  content: \"\\F093\";\n}\n.fa-lemon-o:before {\n  content: \"\\F094\";\n}\n.fa-phone:before {\n  content: \"\\F095\";\n}\n.fa-square-o:before {\n  content: \"\\F096\";\n}\n.fa-bookmark-o:before {\n  content: \"\\F097\";\n}\n.fa-phone-square:before {\n  content: \"\\F098\";\n}\n.fa-twitter:before {\n  content: \"\\F099\";\n}\n.fa-facebook-f:before,\n.fa-facebook:before {\n  content: \"\\F09A\";\n}\n.fa-github:before {\n  content: \"\\F09B\";\n}\n.fa-unlock:before {\n  content: \"\\F09C\";\n}\n.fa-credit-card:before {\n  content: \"\\F09D\";\n}\n.fa-feed:before,\n.fa-rss:before {\n  content: \"\\F09E\";\n}\n.fa-hdd-o:before {\n  content: \"\\F0A0\";\n}\n.fa-bullhorn:before {\n  content: \"\\F0A1\";\n}\n.fa-bell:before {\n  content: \"\\F0F3\";\n}\n.fa-certificate:before {\n  content: \"\\F0A3\";\n}\n.fa-hand-o-right:before {\n  content: \"\\F0A4\";\n}\n.fa-hand-o-left:before {\n  content: \"\\F0A5\";\n}\n.fa-hand-o-up:before {\n  content: \"\\F0A6\";\n}\n.fa-hand-o-down:before {\n  content: \"\\F0A7\";\n}\n.fa-arrow-circle-left:before {\n  content: \"\\F0A8\";\n}\n.fa-arrow-circle-right:before {\n  content: \"\\F0A9\";\n}\n.fa-arrow-circle-up:before {\n  content: \"\\F0AA\";\n}\n.fa-arrow-circle-down:before {\n  content: \"\\F0AB\";\n}\n.fa-globe:before {\n  content: \"\\F0AC\";\n}\n.fa-wrench:before {\n  content: \"\\F0AD\";\n}\n.fa-tasks:before {\n  content: \"\\F0AE\";\n}\n.fa-filter:before {\n  content: \"\\F0B0\";\n}\n.fa-briefcase:before {\n  content: \"\\F0B1\";\n}\n.fa-arrows-alt:before {\n  content: \"\\F0B2\";\n}\n.fa-group:before,\n.fa-users:before {\n  content: \"\\F0C0\";\n}\n.fa-chain:before,\n.fa-link:before {\n  content: \"\\F0C1\";\n}\n.fa-cloud:before {\n  content: \"\\F0C2\";\n}\n.fa-flask:before {\n  content: \"\\F0C3\";\n}\n.fa-cut:before,\n.fa-scissors:before {\n  content: \"\\F0C4\";\n}\n.fa-copy:before,\n.fa-files-o:before {\n  content: \"\\F0C5\";\n}\n.fa-paperclip:before {\n  content: \"\\F0C6\";\n}\n.fa-save:before,\n.fa-floppy-o:before {\n  content: \"\\F0C7\";\n}\n.fa-square:before {\n  content: \"\\F0C8\";\n}\n.fa-navicon:before,\n.fa-reorder:before,\n.fa-bars:before {\n  content: \"\\F0C9\";\n}\n.fa-list-ul:before {\n  content: \"\\F0CA\";\n}\n.fa-list-ol:before {\n  content: \"\\F0CB\";\n}\n.fa-strikethrough:before {\n  content: \"\\F0CC\";\n}\n.fa-underline:before {\n  content: \"\\F0CD\";\n}\n.fa-table:before {\n  content: \"\\F0CE\";\n}\n.fa-magic:before {\n  content: \"\\F0D0\";\n}\n.fa-truck:before {\n  content: \"\\F0D1\";\n}\n.fa-pinterest:before {\n  content: \"\\F0D2\";\n}\n.fa-pinterest-square:before {\n  content: \"\\F0D3\";\n}\n.fa-google-plus-square:before {\n  content: \"\\F0D4\";\n}\n.fa-google-plus:before {\n  content: \"\\F0D5\";\n}\n.fa-money:before {\n  content: \"\\F0D6\";\n}\n.fa-caret-down:before {\n  content: \"\\F0D7\";\n}\n.fa-caret-up:before {\n  content: \"\\F0D8\";\n}\n.fa-caret-left:before {\n  content: \"\\F0D9\";\n}\n.fa-caret-right:before {\n  content: \"\\F0DA\";\n}\n.fa-columns:before {\n  content: \"\\F0DB\";\n}\n.fa-unsorted:before,\n.fa-sort:before {\n  content: \"\\F0DC\";\n}\n.fa-sort-down:before,\n.fa-sort-desc:before {\n  content: \"\\F0DD\";\n}\n.fa-sort-up:before,\n.fa-sort-asc:before {\n  content: \"\\F0DE\";\n}\n.fa-envelope:before {\n  content: \"\\F0E0\";\n}\n.fa-linkedin:before {\n  content: \"\\F0E1\";\n}\n.fa-rotate-left:before,\n.fa-undo:before {\n  content: \"\\F0E2\";\n}\n.fa-legal:before,\n.fa-gavel:before {\n  content: \"\\F0E3\";\n}\n.fa-dashboard:before,\n.fa-tachometer:before {\n  content: \"\\F0E4\";\n}\n.fa-comment-o:before {\n  content: \"\\F0E5\";\n}\n.fa-comments-o:before {\n  content: \"\\F0E6\";\n}\n.fa-flash:before,\n.fa-bolt:before {\n  content: \"\\F0E7\";\n}\n.fa-sitemap:before {\n  content: \"\\F0E8\";\n}\n.fa-umbrella:before {\n  content: \"\\F0E9\";\n}\n.fa-paste:before,\n.fa-clipboard:before {\n  content: \"\\F0EA\";\n}\n.fa-lightbulb-o:before {\n  content: \"\\F0EB\";\n}\n.fa-exchange:before {\n  content: \"\\F0EC\";\n}\n.fa-cloud-download:before {\n  content: \"\\F0ED\";\n}\n.fa-cloud-upload:before {\n  content: \"\\F0EE\";\n}\n.fa-user-md:before {\n  content: \"\\F0F0\";\n}\n.fa-stethoscope:before {\n  content: \"\\F0F1\";\n}\n.fa-suitcase:before {\n  content: \"\\F0F2\";\n}\n.fa-bell-o:before {\n  content: \"\\F0A2\";\n}\n.fa-coffee:before {\n  content: \"\\F0F4\";\n}\n.fa-cutlery:before {\n  content: \"\\F0F5\";\n}\n.fa-file-text-o:before {\n  content: \"\\F0F6\";\n}\n.fa-building-o:before {\n  content: \"\\F0F7\";\n}\n.fa-hospital-o:before {\n  content: \"\\F0F8\";\n}\n.fa-ambulance:before {\n  content: \"\\F0F9\";\n}\n.fa-medkit:before {\n  content: \"\\F0FA\";\n}\n.fa-fighter-jet:before {\n  content: \"\\F0FB\";\n}\n.fa-beer:before {\n  content: \"\\F0FC\";\n}\n.fa-h-square:before {\n  content: \"\\F0FD\";\n}\n.fa-plus-square:before {\n  content: \"\\F0FE\";\n}\n.fa-angle-double-left:before {\n  content: \"\\F100\";\n}\n.fa-angle-double-right:before {\n  content: \"\\F101\";\n}\n.fa-angle-double-up:before {\n  content: \"\\F102\";\n}\n.fa-angle-double-down:before {\n  content: \"\\F103\";\n}\n.fa-angle-left:before {\n  content: \"\\F104\";\n}\n.fa-angle-right:before {\n  content: \"\\F105\";\n}\n.fa-angle-up:before {\n  content: \"\\F106\";\n}\n.fa-angle-down:before {\n  content: \"\\F107\";\n}\n.fa-desktop:before {\n  content: \"\\F108\";\n}\n.fa-laptop:before {\n  content: \"\\F109\";\n}\n.fa-tablet:before {\n  content: \"\\F10A\";\n}\n.fa-mobile-phone:before,\n.fa-mobile:before {\n  content: \"\\F10B\";\n}\n.fa-circle-o:before {\n  content: \"\\F10C\";\n}\n.fa-quote-left:before {\n  content: \"\\F10D\";\n}\n.fa-quote-right:before {\n  content: \"\\F10E\";\n}\n.fa-spinner:before {\n  content: \"\\F110\";\n}\n.fa-circle:before {\n  content: \"\\F111\";\n}\n.fa-mail-reply:before,\n.fa-reply:before {\n  content: \"\\F112\";\n}\n.fa-github-alt:before {\n  content: \"\\F113\";\n}\n.fa-folder-o:before {\n  content: \"\\F114\";\n}\n.fa-folder-open-o:before {\n  content: \"\\F115\";\n}\n.fa-smile-o:before {\n  content: \"\\F118\";\n}\n.fa-frown-o:before {\n  content: \"\\F119\";\n}\n.fa-meh-o:before {\n  content: \"\\F11A\";\n}\n.fa-gamepad:before {\n  content: \"\\F11B\";\n}\n.fa-keyboard-o:before {\n  content: \"\\F11C\";\n}\n.fa-flag-o:before {\n  content: \"\\F11D\";\n}\n.fa-flag-checkered:before {\n  content: \"\\F11E\";\n}\n.fa-terminal:before {\n  content: \"\\F120\";\n}\n.fa-code:before {\n  content: \"\\F121\";\n}\n.fa-mail-reply-all:before,\n.fa-reply-all:before {\n  content: \"\\F122\";\n}\n.fa-star-half-empty:before,\n.fa-star-half-full:before,\n.fa-star-half-o:before {\n  content: \"\\F123\";\n}\n.fa-location-arrow:before {\n  content: \"\\F124\";\n}\n.fa-crop:before {\n  content: \"\\F125\";\n}\n.fa-code-fork:before {\n  content: \"\\F126\";\n}\n.fa-unlink:before,\n.fa-chain-broken:before {\n  content: \"\\F127\";\n}\n.fa-question:before {\n  content: \"\\F128\";\n}\n.fa-info:before {\n  content: \"\\F129\";\n}\n.fa-exclamation:before {\n  content: \"\\F12A\";\n}\n.fa-superscript:before {\n  content: \"\\F12B\";\n}\n.fa-subscript:before {\n  content: \"\\F12C\";\n}\n.fa-eraser:before {\n  content: \"\\F12D\";\n}\n.fa-puzzle-piece:before {\n  content: \"\\F12E\";\n}\n.fa-microphone:before {\n  content: \"\\F130\";\n}\n.fa-microphone-slash:before {\n  content: \"\\F131\";\n}\n.fa-shield:before {\n  content: \"\\F132\";\n}\n.fa-calendar-o:before {\n  content: \"\\F133\";\n}\n.fa-fire-extinguisher:before {\n  content: \"\\F134\";\n}\n.fa-rocket:before {\n  content: \"\\F135\";\n}\n.fa-maxcdn:before {\n  content: \"\\F136\";\n}\n.fa-chevron-circle-left:before {\n  content: \"\\F137\";\n}\n.fa-chevron-circle-right:before {\n  content: \"\\F138\";\n}\n.fa-chevron-circle-up:before {\n  content: \"\\F139\";\n}\n.fa-chevron-circle-down:before {\n  content: \"\\F13A\";\n}\n.fa-html5:before {\n  content: \"\\F13B\";\n}\n.fa-css3:before {\n  content: \"\\F13C\";\n}\n.fa-anchor:before {\n  content: \"\\F13D\";\n}\n.fa-unlock-alt:before {\n  content: \"\\F13E\";\n}\n.fa-bullseye:before {\n  content: \"\\F140\";\n}\n.fa-ellipsis-h:before {\n  content: \"\\F141\";\n}\n.fa-ellipsis-v:before {\n  content: \"\\F142\";\n}\n.fa-rss-square:before {\n  content: \"\\F143\";\n}\n.fa-play-circle:before {\n  content: \"\\F144\";\n}\n.fa-ticket:before {\n  content: \"\\F145\";\n}\n.fa-minus-square:before {\n  content: \"\\F146\";\n}\n.fa-minus-square-o:before {\n  content: \"\\F147\";\n}\n.fa-level-up:before {\n  content: \"\\F148\";\n}\n.fa-level-down:before {\n  content: \"\\F149\";\n}\n.fa-check-square:before {\n  content: \"\\F14A\";\n}\n.fa-pencil-square:before {\n  content: \"\\F14B\";\n}\n.fa-external-link-square:before {\n  content: \"\\F14C\";\n}\n.fa-share-square:before {\n  content: \"\\F14D\";\n}\n.fa-compass:before {\n  content: \"\\F14E\";\n}\n.fa-toggle-down:before,\n.fa-caret-square-o-down:before {\n  content: \"\\F150\";\n}\n.fa-toggle-up:before,\n.fa-caret-square-o-up:before {\n  content: \"\\F151\";\n}\n.fa-toggle-right:before,\n.fa-caret-square-o-right:before {\n  content: \"\\F152\";\n}\n.fa-euro:before,\n.fa-eur:before {\n  content: \"\\F153\";\n}\n.fa-gbp:before {\n  content: \"\\F154\";\n}\n.fa-dollar:before,\n.fa-usd:before {\n  content: \"\\F155\";\n}\n.fa-rupee:before,\n.fa-inr:before {\n  content: \"\\F156\";\n}\n.fa-cny:before,\n.fa-rmb:before,\n.fa-yen:before,\n.fa-jpy:before {\n  content: \"\\F157\";\n}\n.fa-ruble:before,\n.fa-rouble:before,\n.fa-rub:before {\n  content: \"\\F158\";\n}\n.fa-won:before,\n.fa-krw:before {\n  content: \"\\F159\";\n}\n.fa-bitcoin:before,\n.fa-btc:before {\n  content: \"\\F15A\";\n}\n.fa-file:before {\n  content: \"\\F15B\";\n}\n.fa-file-text:before {\n  content: \"\\F15C\";\n}\n.fa-sort-alpha-asc:before {\n  content: \"\\F15D\";\n}\n.fa-sort-alpha-desc:before {\n  content: \"\\F15E\";\n}\n.fa-sort-amount-asc:before {\n  content: \"\\F160\";\n}\n.fa-sort-amount-desc:before {\n  content: \"\\F161\";\n}\n.fa-sort-numeric-asc:before {\n  content: \"\\F162\";\n}\n.fa-sort-numeric-desc:before {\n  content: \"\\F163\";\n}\n.fa-thumbs-up:before {\n  content: \"\\F164\";\n}\n.fa-thumbs-down:before {\n  content: \"\\F165\";\n}\n.fa-youtube-square:before {\n  content: \"\\F166\";\n}\n.fa-youtube:before {\n  content: \"\\F167\";\n}\n.fa-xing:before {\n  content: \"\\F168\";\n}\n.fa-xing-square:before {\n  content: \"\\F169\";\n}\n.fa-youtube-play:before {\n  content: \"\\F16A\";\n}\n.fa-dropbox:before {\n  content: \"\\F16B\";\n}\n.fa-stack-overflow:before {\n  content: \"\\F16C\";\n}\n.fa-instagram:before {\n  content: \"\\F16D\";\n}\n.fa-flickr:before {\n  content: \"\\F16E\";\n}\n.fa-adn:before {\n  content: \"\\F170\";\n}\n.fa-bitbucket:before {\n  content: \"\\F171\";\n}\n.fa-bitbucket-square:before {\n  content: \"\\F172\";\n}\n.fa-tumblr:before {\n  content: \"\\F173\";\n}\n.fa-tumblr-square:before {\n  content: \"\\F174\";\n}\n.fa-long-arrow-down:before {\n  content: \"\\F175\";\n}\n.fa-long-arrow-up:before {\n  content: \"\\F176\";\n}\n.fa-long-arrow-left:before {\n  content: \"\\F177\";\n}\n.fa-long-arrow-right:before {\n  content: \"\\F178\";\n}\n.fa-apple:before {\n  content: \"\\F179\";\n}\n.fa-windows:before {\n  content: \"\\F17A\";\n}\n.fa-android:before {\n  content: \"\\F17B\";\n}\n.fa-linux:before {\n  content: \"\\F17C\";\n}\n.fa-dribbble:before {\n  content: \"\\F17D\";\n}\n.fa-skype:before {\n  content: \"\\F17E\";\n}\n.fa-foursquare:before {\n  content: \"\\F180\";\n}\n.fa-trello:before {\n  content: \"\\F181\";\n}\n.fa-female:before {\n  content: \"\\F182\";\n}\n.fa-male:before {\n  content: \"\\F183\";\n}\n.fa-gittip:before,\n.fa-gratipay:before {\n  content: \"\\F184\";\n}\n.fa-sun-o:before {\n  content: \"\\F185\";\n}\n.fa-moon-o:before {\n  content: \"\\F186\";\n}\n.fa-archive:before {\n  content: \"\\F187\";\n}\n.fa-bug:before {\n  content: \"\\F188\";\n}\n.fa-vk:before {\n  content: \"\\F189\";\n}\n.fa-weibo:before {\n  content: \"\\F18A\";\n}\n.fa-renren:before {\n  content: \"\\F18B\";\n}\n.fa-pagelines:before {\n  content: \"\\F18C\";\n}\n.fa-stack-exchange:before {\n  content: \"\\F18D\";\n}\n.fa-arrow-circle-o-right:before {\n  content: \"\\F18E\";\n}\n.fa-arrow-circle-o-left:before {\n  content: \"\\F190\";\n}\n.fa-toggle-left:before,\n.fa-caret-square-o-left:before {\n  content: \"\\F191\";\n}\n.fa-dot-circle-o:before {\n  content: \"\\F192\";\n}\n.fa-wheelchair:before {\n  content: \"\\F193\";\n}\n.fa-vimeo-square:before {\n  content: \"\\F194\";\n}\n.fa-turkish-lira:before,\n.fa-try:before {\n  content: \"\\F195\";\n}\n.fa-plus-square-o:before {\n  content: \"\\F196\";\n}\n.fa-space-shuttle:before {\n  content: \"\\F197\";\n}\n.fa-slack:before {\n  content: \"\\F198\";\n}\n.fa-envelope-square:before {\n  content: \"\\F199\";\n}\n.fa-wordpress:before {\n  content: \"\\F19A\";\n}\n.fa-openid:before {\n  content: \"\\F19B\";\n}\n.fa-institution:before,\n.fa-bank:before,\n.fa-university:before {\n  content: \"\\F19C\";\n}\n.fa-mortar-board:before,\n.fa-graduation-cap:before {\n  content: \"\\F19D\";\n}\n.fa-yahoo:before {\n  content: \"\\F19E\";\n}\n.fa-google:before {\n  content: \"\\F1A0\";\n}\n.fa-reddit:before {\n  content: \"\\F1A1\";\n}\n.fa-reddit-square:before {\n  content: \"\\F1A2\";\n}\n.fa-stumbleupon-circle:before {\n  content: \"\\F1A3\";\n}\n.fa-stumbleupon:before {\n  content: \"\\F1A4\";\n}\n.fa-delicious:before {\n  content: \"\\F1A5\";\n}\n.fa-digg:before {\n  content: \"\\F1A6\";\n}\n.fa-pied-piper-pp:before {\n  content: \"\\F1A7\";\n}\n.fa-pied-piper-alt:before {\n  content: \"\\F1A8\";\n}\n.fa-drupal:before {\n  content: \"\\F1A9\";\n}\n.fa-joomla:before {\n  content: \"\\F1AA\";\n}\n.fa-language:before {\n  content: \"\\F1AB\";\n}\n.fa-fax:before {\n  content: \"\\F1AC\";\n}\n.fa-building:before {\n  content: \"\\F1AD\";\n}\n.fa-child:before {\n  content: \"\\F1AE\";\n}\n.fa-paw:before {\n  content: \"\\F1B0\";\n}\n.fa-spoon:before {\n  content: \"\\F1B1\";\n}\n.fa-cube:before {\n  content: \"\\F1B2\";\n}\n.fa-cubes:before {\n  content: \"\\F1B3\";\n}\n.fa-behance:before {\n  content: \"\\F1B4\";\n}\n.fa-behance-square:before {\n  content: \"\\F1B5\";\n}\n.fa-steam:before {\n  content: \"\\F1B6\";\n}\n.fa-steam-square:before {\n  content: \"\\F1B7\";\n}\n.fa-recycle:before {\n  content: \"\\F1B8\";\n}\n.fa-automobile:before,\n.fa-car:before {\n  content: \"\\F1B9\";\n}\n.fa-cab:before,\n.fa-taxi:before {\n  content: \"\\F1BA\";\n}\n.fa-tree:before {\n  content: \"\\F1BB\";\n}\n.fa-spotify:before {\n  content: \"\\F1BC\";\n}\n.fa-deviantart:before {\n  content: \"\\F1BD\";\n}\n.fa-soundcloud:before {\n  content: \"\\F1BE\";\n}\n.fa-database:before {\n  content: \"\\F1C0\";\n}\n.fa-file-pdf-o:before {\n  content: \"\\F1C1\";\n}\n.fa-file-word-o:before {\n  content: \"\\F1C2\";\n}\n.fa-file-excel-o:before {\n  content: \"\\F1C3\";\n}\n.fa-file-powerpoint-o:before {\n  content: \"\\F1C4\";\n}\n.fa-file-photo-o:before,\n.fa-file-picture-o:before,\n.fa-file-image-o:before {\n  content: \"\\F1C5\";\n}\n.fa-file-zip-o:before,\n.fa-file-archive-o:before {\n  content: \"\\F1C6\";\n}\n.fa-file-sound-o:before,\n.fa-file-audio-o:before {\n  content: \"\\F1C7\";\n}\n.fa-file-movie-o:before,\n.fa-file-video-o:before {\n  content: \"\\F1C8\";\n}\n.fa-file-code-o:before {\n  content: \"\\F1C9\";\n}\n.fa-vine:before {\n  content: \"\\F1CA\";\n}\n.fa-codepen:before {\n  content: \"\\F1CB\";\n}\n.fa-jsfiddle:before {\n  content: \"\\F1CC\";\n}\n.fa-life-bouy:before,\n.fa-life-buoy:before,\n.fa-life-saver:before,\n.fa-support:before,\n.fa-life-ring:before {\n  content: \"\\F1CD\";\n}\n.fa-circle-o-notch:before {\n  content: \"\\F1CE\";\n}\n.fa-ra:before,\n.fa-resistance:before,\n.fa-rebel:before {\n  content: \"\\F1D0\";\n}\n.fa-ge:before,\n.fa-empire:before {\n  content: \"\\F1D1\";\n}\n.fa-git-square:before {\n  content: \"\\F1D2\";\n}\n.fa-git:before {\n  content: \"\\F1D3\";\n}\n.fa-y-combinator-square:before,\n.fa-yc-square:before,\n.fa-hacker-news:before {\n  content: \"\\F1D4\";\n}\n.fa-tencent-weibo:before {\n  content: \"\\F1D5\";\n}\n.fa-qq:before {\n  content: \"\\F1D6\";\n}\n.fa-wechat:before,\n.fa-weixin:before {\n  content: \"\\F1D7\";\n}\n.fa-send:before,\n.fa-paper-plane:before {\n  content: \"\\F1D8\";\n}\n.fa-send-o:before,\n.fa-paper-plane-o:before {\n  content: \"\\F1D9\";\n}\n.fa-history:before {\n  content: \"\\F1DA\";\n}\n.fa-circle-thin:before {\n  content: \"\\F1DB\";\n}\n.fa-header:before {\n  content: \"\\F1DC\";\n}\n.fa-paragraph:before {\n  content: \"\\F1DD\";\n}\n.fa-sliders:before {\n  content: \"\\F1DE\";\n}\n.fa-share-alt:before {\n  content: \"\\F1E0\";\n}\n.fa-share-alt-square:before {\n  content: \"\\F1E1\";\n}\n.fa-bomb:before {\n  content: \"\\F1E2\";\n}\n.fa-soccer-ball-o:before,\n.fa-futbol-o:before {\n  content: \"\\F1E3\";\n}\n.fa-tty:before {\n  content: \"\\F1E4\";\n}\n.fa-binoculars:before {\n  content: \"\\F1E5\";\n}\n.fa-plug:before {\n  content: \"\\F1E6\";\n}\n.fa-slideshare:before {\n  content: \"\\F1E7\";\n}\n.fa-twitch:before {\n  content: \"\\F1E8\";\n}\n.fa-yelp:before {\n  content: \"\\F1E9\";\n}\n.fa-newspaper-o:before {\n  content: \"\\F1EA\";\n}\n.fa-wifi:before {\n  content: \"\\F1EB\";\n}\n.fa-calculator:before {\n  content: \"\\F1EC\";\n}\n.fa-paypal:before {\n  content: \"\\F1ED\";\n}\n.fa-google-wallet:before {\n  content: \"\\F1EE\";\n}\n.fa-cc-visa:before {\n  content: \"\\F1F0\";\n}\n.fa-cc-mastercard:before {\n  content: \"\\F1F1\";\n}\n.fa-cc-discover:before {\n  content: \"\\F1F2\";\n}\n.fa-cc-amex:before {\n  content: \"\\F1F3\";\n}\n.fa-cc-paypal:before {\n  content: \"\\F1F4\";\n}\n.fa-cc-stripe:before {\n  content: \"\\F1F5\";\n}\n.fa-bell-slash:before {\n  content: \"\\F1F6\";\n}\n.fa-bell-slash-o:before {\n  content: \"\\F1F7\";\n}\n.fa-trash:before {\n  content: \"\\F1F8\";\n}\n.fa-copyright:before {\n  content: \"\\F1F9\";\n}\n.fa-at:before {\n  content: \"\\F1FA\";\n}\n.fa-eyedropper:before {\n  content: \"\\F1FB\";\n}\n.fa-paint-brush:before {\n  content: \"\\F1FC\";\n}\n.fa-birthday-cake:before {\n  content: \"\\F1FD\";\n}\n.fa-area-chart:before {\n  content: \"\\F1FE\";\n}\n.fa-pie-chart:before {\n  content: \"\\F200\";\n}\n.fa-line-chart:before {\n  content: \"\\F201\";\n}\n.fa-lastfm:before {\n  content: \"\\F202\";\n}\n.fa-lastfm-square:before {\n  content: \"\\F203\";\n}\n.fa-toggle-off:before {\n  content: \"\\F204\";\n}\n.fa-toggle-on:before {\n  content: \"\\F205\";\n}\n.fa-bicycle:before {\n  content: \"\\F206\";\n}\n.fa-bus:before {\n  content: \"\\F207\";\n}\n.fa-ioxhost:before {\n  content: \"\\F208\";\n}\n.fa-angellist:before {\n  content: \"\\F209\";\n}\n.fa-cc:before {\n  content: \"\\F20A\";\n}\n.fa-shekel:before,\n.fa-sheqel:before,\n.fa-ils:before {\n  content: \"\\F20B\";\n}\n.fa-meanpath:before {\n  content: \"\\F20C\";\n}\n.fa-buysellads:before {\n  content: \"\\F20D\";\n}\n.fa-connectdevelop:before {\n  content: \"\\F20E\";\n}\n.fa-dashcube:before {\n  content: \"\\F210\";\n}\n.fa-forumbee:before {\n  content: \"\\F211\";\n}\n.fa-leanpub:before {\n  content: \"\\F212\";\n}\n.fa-sellsy:before {\n  content: \"\\F213\";\n}\n.fa-shirtsinbulk:before {\n  content: \"\\F214\";\n}\n.fa-simplybuilt:before {\n  content: \"\\F215\";\n}\n.fa-skyatlas:before {\n  content: \"\\F216\";\n}\n.fa-cart-plus:before {\n  content: \"\\F217\";\n}\n.fa-cart-arrow-down:before {\n  content: \"\\F218\";\n}\n.fa-diamond:before {\n  content: \"\\F219\";\n}\n.fa-ship:before {\n  content: \"\\F21A\";\n}\n.fa-user-secret:before {\n  content: \"\\F21B\";\n}\n.fa-motorcycle:before {\n  content: \"\\F21C\";\n}\n.fa-street-view:before {\n  content: \"\\F21D\";\n}\n.fa-heartbeat:before {\n  content: \"\\F21E\";\n}\n.fa-venus:before {\n  content: \"\\F221\";\n}\n.fa-mars:before {\n  content: \"\\F222\";\n}\n.fa-mercury:before {\n  content: \"\\F223\";\n}\n.fa-intersex:before,\n.fa-transgender:before {\n  content: \"\\F224\";\n}\n.fa-transgender-alt:before {\n  content: \"\\F225\";\n}\n.fa-venus-double:before {\n  content: \"\\F226\";\n}\n.fa-mars-double:before {\n  content: \"\\F227\";\n}\n.fa-venus-mars:before {\n  content: \"\\F228\";\n}\n.fa-mars-stroke:before {\n  content: \"\\F229\";\n}\n.fa-mars-stroke-v:before {\n  content: \"\\F22A\";\n}\n.fa-mars-stroke-h:before {\n  content: \"\\F22B\";\n}\n.fa-neuter:before {\n  content: \"\\F22C\";\n}\n.fa-genderless:before {\n  content: \"\\F22D\";\n}\n.fa-facebook-official:before {\n  content: \"\\F230\";\n}\n.fa-pinterest-p:before {\n  content: \"\\F231\";\n}\n.fa-whatsapp:before {\n  content: \"\\F232\";\n}\n.fa-server:before {\n  content: \"\\F233\";\n}\n.fa-user-plus:before {\n  content: \"\\F234\";\n}\n.fa-user-times:before {\n  content: \"\\F235\";\n}\n.fa-hotel:before,\n.fa-bed:before {\n  content: \"\\F236\";\n}\n.fa-viacoin:before {\n  content: \"\\F237\";\n}\n.fa-train:before {\n  content: \"\\F238\";\n}\n.fa-subway:before {\n  content: \"\\F239\";\n}\n.fa-medium:before {\n  content: \"\\F23A\";\n}\n.fa-yc:before,\n.fa-y-combinator:before {\n  content: \"\\F23B\";\n}\n.fa-optin-monster:before {\n  content: \"\\F23C\";\n}\n.fa-opencart:before {\n  content: \"\\F23D\";\n}\n.fa-expeditedssl:before {\n  content: \"\\F23E\";\n}\n.fa-battery-4:before,\n.fa-battery:before,\n.fa-battery-full:before {\n  content: \"\\F240\";\n}\n.fa-battery-3:before,\n.fa-battery-three-quarters:before {\n  content: \"\\F241\";\n}\n.fa-battery-2:before,\n.fa-battery-half:before {\n  content: \"\\F242\";\n}\n.fa-battery-1:before,\n.fa-battery-quarter:before {\n  content: \"\\F243\";\n}\n.fa-battery-0:before,\n.fa-battery-empty:before {\n  content: \"\\F244\";\n}\n.fa-mouse-pointer:before {\n  content: \"\\F245\";\n}\n.fa-i-cursor:before {\n  content: \"\\F246\";\n}\n.fa-object-group:before {\n  content: \"\\F247\";\n}\n.fa-object-ungroup:before {\n  content: \"\\F248\";\n}\n.fa-sticky-note:before {\n  content: \"\\F249\";\n}\n.fa-sticky-note-o:before {\n  content: \"\\F24A\";\n}\n.fa-cc-jcb:before {\n  content: \"\\F24B\";\n}\n.fa-cc-diners-club:before {\n  content: \"\\F24C\";\n}\n.fa-clone:before {\n  content: \"\\F24D\";\n}\n.fa-balance-scale:before {\n  content: \"\\F24E\";\n}\n.fa-hourglass-o:before {\n  content: \"\\F250\";\n}\n.fa-hourglass-1:before,\n.fa-hourglass-start:before {\n  content: \"\\F251\";\n}\n.fa-hourglass-2:before,\n.fa-hourglass-half:before {\n  content: \"\\F252\";\n}\n.fa-hourglass-3:before,\n.fa-hourglass-end:before {\n  content: \"\\F253\";\n}\n.fa-hourglass:before {\n  content: \"\\F254\";\n}\n.fa-hand-grab-o:before,\n.fa-hand-rock-o:before {\n  content: \"\\F255\";\n}\n.fa-hand-stop-o:before,\n.fa-hand-paper-o:before {\n  content: \"\\F256\";\n}\n.fa-hand-scissors-o:before {\n  content: \"\\F257\";\n}\n.fa-hand-lizard-o:before {\n  content: \"\\F258\";\n}\n.fa-hand-spock-o:before {\n  content: \"\\F259\";\n}\n.fa-hand-pointer-o:before {\n  content: \"\\F25A\";\n}\n.fa-hand-peace-o:before {\n  content: \"\\F25B\";\n}\n.fa-trademark:before {\n  content: \"\\F25C\";\n}\n.fa-registered:before {\n  content: \"\\F25D\";\n}\n.fa-creative-commons:before {\n  content: \"\\F25E\";\n}\n.fa-gg:before {\n  content: \"\\F260\";\n}\n.fa-gg-circle:before {\n  content: \"\\F261\";\n}\n.fa-tripadvisor:before {\n  content: \"\\F262\";\n}\n.fa-odnoklassniki:before {\n  content: \"\\F263\";\n}\n.fa-odnoklassniki-square:before {\n  content: \"\\F264\";\n}\n.fa-get-pocket:before {\n  content: \"\\F265\";\n}\n.fa-wikipedia-w:before {\n  content: \"\\F266\";\n}\n.fa-safari:before {\n  content: \"\\F267\";\n}\n.fa-chrome:before {\n  content: \"\\F268\";\n}\n.fa-firefox:before {\n  content: \"\\F269\";\n}\n.fa-opera:before {\n  content: \"\\F26A\";\n}\n.fa-internet-explorer:before {\n  content: \"\\F26B\";\n}\n.fa-tv:before,\n.fa-television:before {\n  content: \"\\F26C\";\n}\n.fa-contao:before {\n  content: \"\\F26D\";\n}\n.fa-500px:before {\n  content: \"\\F26E\";\n}\n.fa-amazon:before {\n  content: \"\\F270\";\n}\n.fa-calendar-plus-o:before {\n  content: \"\\F271\";\n}\n.fa-calendar-minus-o:before {\n  content: \"\\F272\";\n}\n.fa-calendar-times-o:before {\n  content: \"\\F273\";\n}\n.fa-calendar-check-o:before {\n  content: \"\\F274\";\n}\n.fa-industry:before {\n  content: \"\\F275\";\n}\n.fa-map-pin:before {\n  content: \"\\F276\";\n}\n.fa-map-signs:before {\n  content: \"\\F277\";\n}\n.fa-map-o:before {\n  content: \"\\F278\";\n}\n.fa-map:before {\n  content: \"\\F279\";\n}\n.fa-commenting:before {\n  content: \"\\F27A\";\n}\n.fa-commenting-o:before {\n  content: \"\\F27B\";\n}\n.fa-houzz:before {\n  content: \"\\F27C\";\n}\n.fa-vimeo:before {\n  content: \"\\F27D\";\n}\n.fa-black-tie:before {\n  content: \"\\F27E\";\n}\n.fa-fonticons:before {\n  content: \"\\F280\";\n}\n.fa-reddit-alien:before {\n  content: \"\\F281\";\n}\n.fa-edge:before {\n  content: \"\\F282\";\n}\n.fa-credit-card-alt:before {\n  content: \"\\F283\";\n}\n.fa-codiepie:before {\n  content: \"\\F284\";\n}\n.fa-modx:before {\n  content: \"\\F285\";\n}\n.fa-fort-awesome:before {\n  content: \"\\F286\";\n}\n.fa-usb:before {\n  content: \"\\F287\";\n}\n.fa-product-hunt:before {\n  content: \"\\F288\";\n}\n.fa-mixcloud:before {\n  content: \"\\F289\";\n}\n.fa-scribd:before {\n  content: \"\\F28A\";\n}\n.fa-pause-circle:before {\n  content: \"\\F28B\";\n}\n.fa-pause-circle-o:before {\n  content: \"\\F28C\";\n}\n.fa-stop-circle:before {\n  content: \"\\F28D\";\n}\n.fa-stop-circle-o:before {\n  content: \"\\F28E\";\n}\n.fa-shopping-bag:before {\n  content: \"\\F290\";\n}\n.fa-shopping-basket:before {\n  content: \"\\F291\";\n}\n.fa-hashtag:before {\n  content: \"\\F292\";\n}\n.fa-bluetooth:before {\n  content: \"\\F293\";\n}\n.fa-bluetooth-b:before {\n  content: \"\\F294\";\n}\n.fa-percent:before {\n  content: \"\\F295\";\n}\n.fa-gitlab:before {\n  content: \"\\F296\";\n}\n.fa-wpbeginner:before {\n  content: \"\\F297\";\n}\n.fa-wpforms:before {\n  content: \"\\F298\";\n}\n.fa-envira:before {\n  content: \"\\F299\";\n}\n.fa-universal-access:before {\n  content: \"\\F29A\";\n}\n.fa-wheelchair-alt:before {\n  content: \"\\F29B\";\n}\n.fa-question-circle-o:before {\n  content: \"\\F29C\";\n}\n.fa-blind:before {\n  content: \"\\F29D\";\n}\n.fa-audio-description:before {\n  content: \"\\F29E\";\n}\n.fa-volume-control-phone:before {\n  content: \"\\F2A0\";\n}\n.fa-braille:before {\n  content: \"\\F2A1\";\n}\n.fa-assistive-listening-systems:before {\n  content: \"\\F2A2\";\n}\n.fa-asl-interpreting:before,\n.fa-american-sign-language-interpreting:before {\n  content: \"\\F2A3\";\n}\n.fa-deafness:before,\n.fa-hard-of-hearing:before,\n.fa-deaf:before {\n  content: \"\\F2A4\";\n}\n.fa-glide:before {\n  content: \"\\F2A5\";\n}\n.fa-glide-g:before {\n  content: \"\\F2A6\";\n}\n.fa-signing:before,\n.fa-sign-language:before {\n  content: \"\\F2A7\";\n}\n.fa-low-vision:before {\n  content: \"\\F2A8\";\n}\n.fa-viadeo:before {\n  content: \"\\F2A9\";\n}\n.fa-viadeo-square:before {\n  content: \"\\F2AA\";\n}\n.fa-snapchat:before {\n  content: \"\\F2AB\";\n}\n.fa-snapchat-ghost:before {\n  content: \"\\F2AC\";\n}\n.fa-snapchat-square:before {\n  content: \"\\F2AD\";\n}\n.fa-pied-piper:before {\n  content: \"\\F2AE\";\n}\n.fa-first-order:before {\n  content: \"\\F2B0\";\n}\n.fa-yoast:before {\n  content: \"\\F2B1\";\n}\n.fa-themeisle:before {\n  content: \"\\F2B2\";\n}\n.fa-google-plus-circle:before,\n.fa-google-plus-official:before {\n  content: \"\\F2B3\";\n}\n.fa-fa:before,\n.fa-font-awesome:before {\n  content: \"\\F2B4\";\n}\n.fa-handshake-o:before {\n  content: \"\\F2B5\";\n}\n.fa-envelope-open:before {\n  content: \"\\F2B6\";\n}\n.fa-envelope-open-o:before {\n  content: \"\\F2B7\";\n}\n.fa-linode:before {\n  content: \"\\F2B8\";\n}\n.fa-address-book:before {\n  content: \"\\F2B9\";\n}\n.fa-address-book-o:before {\n  content: \"\\F2BA\";\n}\n.fa-vcard:before,\n.fa-address-card:before {\n  content: \"\\F2BB\";\n}\n.fa-vcard-o:before,\n.fa-address-card-o:before {\n  content: \"\\F2BC\";\n}\n.fa-user-circle:before {\n  content: \"\\F2BD\";\n}\n.fa-user-circle-o:before {\n  content: \"\\F2BE\";\n}\n.fa-user-o:before {\n  content: \"\\F2C0\";\n}\n.fa-id-badge:before {\n  content: \"\\F2C1\";\n}\n.fa-drivers-license:before,\n.fa-id-card:before {\n  content: \"\\F2C2\";\n}\n.fa-drivers-license-o:before,\n.fa-id-card-o:before {\n  content: \"\\F2C3\";\n}\n.fa-quora:before {\n  content: \"\\F2C4\";\n}\n.fa-free-code-camp:before {\n  content: \"\\F2C5\";\n}\n.fa-telegram:before {\n  content: \"\\F2C6\";\n}\n.fa-thermometer-4:before,\n.fa-thermometer:before,\n.fa-thermometer-full:before {\n  content: \"\\F2C7\";\n}\n.fa-thermometer-3:before,\n.fa-thermometer-three-quarters:before {\n  content: \"\\F2C8\";\n}\n.fa-thermometer-2:before,\n.fa-thermometer-half:before {\n  content: \"\\F2C9\";\n}\n.fa-thermometer-1:before,\n.fa-thermometer-quarter:before {\n  content: \"\\F2CA\";\n}\n.fa-thermometer-0:before,\n.fa-thermometer-empty:before {\n  content: \"\\F2CB\";\n}\n.fa-shower:before {\n  content: \"\\F2CC\";\n}\n.fa-bathtub:before,\n.fa-s15:before,\n.fa-bath:before {\n  content: \"\\F2CD\";\n}\n.fa-podcast:before {\n  content: \"\\F2CE\";\n}\n.fa-window-maximize:before {\n  content: \"\\F2D0\";\n}\n.fa-window-minimize:before {\n  content: \"\\F2D1\";\n}\n.fa-window-restore:before {\n  content: \"\\F2D2\";\n}\n.fa-times-rectangle:before,\n.fa-window-close:before {\n  content: \"\\F2D3\";\n}\n.fa-times-rectangle-o:before,\n.fa-window-close-o:before {\n  content: \"\\F2D4\";\n}\n.fa-bandcamp:before {\n  content: \"\\F2D5\";\n}\n.fa-grav:before {\n  content: \"\\F2D6\";\n}\n.fa-etsy:before {\n  content: \"\\F2D7\";\n}\n.fa-imdb:before {\n  content: \"\\F2D8\";\n}\n.fa-ravelry:before {\n  content: \"\\F2D9\";\n}\n.fa-eercast:before {\n  content: \"\\F2DA\";\n}\n.fa-microchip:before {\n  content: \"\\F2DB\";\n}\n.fa-snowflake-o:before {\n  content: \"\\F2DC\";\n}\n.fa-superpowers:before {\n  content: \"\\F2DD\";\n}\n.fa-wpexplorer:before {\n  content: \"\\F2DE\";\n}\n.fa-meetup:before {\n  content: \"\\F2E0\";\n}\n/* makes the font 33% larger relative to the icon container */\n.fa-lg {\n  font-size: 1.33333333em;\n  line-height: 0.75em;\n  vertical-align: -15%;\n}\n.fa-2x {\n  font-size: 2em;\n}\n.fa-3x {\n  font-size: 3em;\n}\n.fa-4x {\n  font-size: 4em;\n}\n.fa-5x {\n  font-size: 5em;\n}\n.fa-ul {\n  padding-left: 0;\n  margin-left: 2.14285714em;\n  list-style-type: none;\n}\n.fa-ul > li {\n  position: relative;\n}\n.fa-li {\n  position: absolute;\n  left: -2.14285714em;\n  width: 2.14285714em;\n  top: 0.14285714em;\n  text-align: center;\n}\n.fa-li.fa-lg {\n  left: -1.85714286em;\n}\n/* FONT PATH\n * -------------------------- */\n@font-face {\n  font-family: 'FontAwesome';\n  src: url(" + __webpack_require__(123) + ");\n  src: url(" + __webpack_require__(124) + "?#iefix&v=4.7.0) format('embedded-opentype'), url(" + __webpack_require__(125) + ") format('woff2'), url(" + __webpack_require__(126) + ") format('woff'), url(" + __webpack_require__(127) + ") format('truetype'), url(" + __webpack_require__(128) + "#fontawesomeregular) format('svg');\n  font-weight: normal;\n  font-style: normal;\n}\n.fa-rotate-90 {\n  -ms-filter: \"progid:DXImageTransform.Microsoft.BasicImage(rotation=1)\";\n  -webkit-transform: rotate(90deg);\n  -ms-transform: rotate(90deg);\n  transform: rotate(90deg);\n}\n.fa-rotate-180 {\n  -ms-filter: \"progid:DXImageTransform.Microsoft.BasicImage(rotation=2)\";\n  -webkit-transform: rotate(180deg);\n  -ms-transform: rotate(180deg);\n  transform: rotate(180deg);\n}\n.fa-rotate-270 {\n  -ms-filter: \"progid:DXImageTransform.Microsoft.BasicImage(rotation=3)\";\n  -webkit-transform: rotate(270deg);\n  -ms-transform: rotate(270deg);\n  transform: rotate(270deg);\n}\n.fa-flip-horizontal {\n  -ms-filter: \"progid:DXImageTransform.Microsoft.BasicImage(rotation=0, mirror=1)\";\n  -webkit-transform: scale(-1, 1);\n  -ms-transform: scale(-1, 1);\n  transform: scale(-1, 1);\n}\n.fa-flip-vertical {\n  -ms-filter: \"progid:DXImageTransform.Microsoft.BasicImage(rotation=2, mirror=1)\";\n  -webkit-transform: scale(1, -1);\n  -ms-transform: scale(1, -1);\n  transform: scale(1, -1);\n}\n:root .fa-rotate-90,\n:root .fa-rotate-180,\n:root .fa-rotate-270,\n:root .fa-flip-horizontal,\n:root .fa-flip-vertical {\n  filter: none;\n}\n.fa-spin {\n  -webkit-animation: fa-spin 2s infinite linear;\n  animation: fa-spin 2s infinite linear;\n}\n.fa-pulse {\n  -webkit-animation: fa-spin 1s infinite steps(8);\n  animation: fa-spin 1s infinite steps(8);\n}\n@-webkit-keyframes fa-spin {\n  0% {\n    -webkit-transform: rotate(0deg);\n    transform: rotate(0deg);\n  }\n  100% {\n    -webkit-transform: rotate(359deg);\n    transform: rotate(359deg);\n  }\n}\n@keyframes fa-spin {\n  0% {\n    -webkit-transform: rotate(0deg);\n    transform: rotate(0deg);\n  }\n  100% {\n    -webkit-transform: rotate(359deg);\n    transform: rotate(359deg);\n  }\n}\n.fa-stack {\n  position: relative;\n  display: inline-block;\n  width: 2em;\n  height: 2em;\n  line-height: 2em;\n  vertical-align: middle;\n}\n.fa-stack-1x,\n.fa-stack-2x {\n  position: absolute;\n  left: 0;\n  width: 100%;\n  text-align: center;\n}\n.fa-stack-1x {\n  line-height: inherit;\n}\n.fa-stack-2x {\n  font-size: 2em;\n}\n.fa-inverse {\n  color: #fff;\n}\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 122 */
-/***/ (function(module, exports) {
-
-/*
-	MIT License http://www.opensource.org/licenses/mit-license.php
-	Author Tobias Koppers @sokra
-*/
-// css base code, injected by the css-loader
-module.exports = function() {
-	var list = [];
-
-	// return the list of modules as css string
-	list.toString = function toString() {
-		var result = [];
-		for(var i = 0; i < this.length; i++) {
-			var item = this[i];
-			if(item[2]) {
-				result.push("@media " + item[2] + "{" + item[1] + "}");
-			} else {
-				result.push(item[1]);
-			}
-		}
-		return result.join("");
-	};
-
-	// import a list of modules into the list
-	list.i = function(modules, mediaQuery) {
-		if(typeof modules === "string")
-			modules = [[null, modules, ""]];
-		var alreadyImportedModules = {};
-		for(var i = 0; i < this.length; i++) {
-			var id = this[i][0];
-			if(typeof id === "number")
-				alreadyImportedModules[id] = true;
-		}
-		for(i = 0; i < modules.length; i++) {
-			var item = modules[i];
-			// skip already imported module
-			// this implementation is not 100% perfect for weird media query combinations
-			//  when a module is imported multiple times with different media queries.
-			//  I hope this will never occur (Hey this way we have smaller bundles)
-			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
-				if(mediaQuery && !item[2]) {
-					item[2] = mediaQuery;
-				} else if(mediaQuery) {
-					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
-				}
-				list.push(item);
-			}
-		}
-	};
-	return list;
-};
-
-
-/***/ }),
-/* 123 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__.p + "674f50d287a8c48dc19ba404d20fe713.eot";
-
-/***/ }),
-/* 124 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__.p + "674f50d287a8c48dc19ba404d20fe713.eot";
-
-/***/ }),
-/* 125 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__.p + "af7ae505a9eed503f8b8e6982036873e.woff2";
-
-/***/ }),
-/* 126 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__.p + "fee66e712a8a08eef5805a46892932ad.woff";
-
-/***/ }),
-/* 127 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__.p + "b06871f281fee6b241d60582ae9369b9.ttf";
-
-/***/ }),
-/* 128 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__.p + "912ec66d7572ff821749319396470bde.svg";
-
-/***/ }),
-/* 129 */
-/***/ (function(module, exports) {
-
-/*
-	MIT License http://www.opensource.org/licenses/mit-license.php
-	Author Tobias Koppers @sokra
-*/
-var stylesInDom = {},
-	memoize = function(fn) {
-		var memo;
-		return function () {
-			if (typeof memo === "undefined") memo = fn.apply(this, arguments);
-			return memo;
-		};
-	},
-	isOldIE = memoize(function() {
-		return /msie [6-9]\b/.test(self.navigator.userAgent.toLowerCase());
-	}),
-	getHeadElement = memoize(function () {
-		return document.head || document.getElementsByTagName("head")[0];
-	}),
-	singletonElement = null,
-	singletonCounter = 0,
-	styleElementsInsertedAtTop = [];
-
-module.exports = function(list, options) {
-	if(typeof DEBUG !== "undefined" && DEBUG) {
-		if(typeof document !== "object") throw new Error("The style-loader cannot be used in a non-browser environment");
-	}
-
-	options = options || {};
-	// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
-	// tags it will allow on a page
-	if (typeof options.singleton === "undefined") options.singleton = isOldIE();
-
-	// By default, add <style> tags to the bottom of <head>.
-	if (typeof options.insertAt === "undefined") options.insertAt = "bottom";
-
-	var styles = listToStyles(list);
-	addStylesToDom(styles, options);
-
-	return function update(newList) {
-		var mayRemove = [];
-		for(var i = 0; i < styles.length; i++) {
-			var item = styles[i];
-			var domStyle = stylesInDom[item.id];
-			domStyle.refs--;
-			mayRemove.push(domStyle);
-		}
-		if(newList) {
-			var newStyles = listToStyles(newList);
-			addStylesToDom(newStyles, options);
-		}
-		for(var i = 0; i < mayRemove.length; i++) {
-			var domStyle = mayRemove[i];
-			if(domStyle.refs === 0) {
-				for(var j = 0; j < domStyle.parts.length; j++)
-					domStyle.parts[j]();
-				delete stylesInDom[domStyle.id];
-			}
-		}
-	};
-}
-
-function addStylesToDom(styles, options) {
-	for(var i = 0; i < styles.length; i++) {
-		var item = styles[i];
-		var domStyle = stylesInDom[item.id];
-		if(domStyle) {
-			domStyle.refs++;
-			for(var j = 0; j < domStyle.parts.length; j++) {
-				domStyle.parts[j](item.parts[j]);
-			}
-			for(; j < item.parts.length; j++) {
-				domStyle.parts.push(addStyle(item.parts[j], options));
-			}
-		} else {
-			var parts = [];
-			for(var j = 0; j < item.parts.length; j++) {
-				parts.push(addStyle(item.parts[j], options));
-			}
-			stylesInDom[item.id] = {id: item.id, refs: 1, parts: parts};
-		}
-	}
-}
-
-function listToStyles(list) {
-	var styles = [];
-	var newStyles = {};
-	for(var i = 0; i < list.length; i++) {
-		var item = list[i];
-		var id = item[0];
-		var css = item[1];
-		var media = item[2];
-		var sourceMap = item[3];
-		var part = {css: css, media: media, sourceMap: sourceMap};
-		if(!newStyles[id])
-			styles.push(newStyles[id] = {id: id, parts: [part]});
-		else
-			newStyles[id].parts.push(part);
-	}
-	return styles;
-}
-
-function insertStyleElement(options, styleElement) {
-	var head = getHeadElement();
-	var lastStyleElementInsertedAtTop = styleElementsInsertedAtTop[styleElementsInsertedAtTop.length - 1];
-	if (options.insertAt === "top") {
-		if(!lastStyleElementInsertedAtTop) {
-			head.insertBefore(styleElement, head.firstChild);
-		} else if(lastStyleElementInsertedAtTop.nextSibling) {
-			head.insertBefore(styleElement, lastStyleElementInsertedAtTop.nextSibling);
-		} else {
-			head.appendChild(styleElement);
-		}
-		styleElementsInsertedAtTop.push(styleElement);
-	} else if (options.insertAt === "bottom") {
-		head.appendChild(styleElement);
-	} else {
-		throw new Error("Invalid value for parameter 'insertAt'. Must be 'top' or 'bottom'.");
-	}
-}
-
-function removeStyleElement(styleElement) {
-	styleElement.parentNode.removeChild(styleElement);
-	var idx = styleElementsInsertedAtTop.indexOf(styleElement);
-	if(idx >= 0) {
-		styleElementsInsertedAtTop.splice(idx, 1);
-	}
-}
-
-function createStyleElement(options) {
-	var styleElement = document.createElement("style");
-	styleElement.type = "text/css";
-	insertStyleElement(options, styleElement);
-	return styleElement;
-}
-
-function createLinkElement(options) {
-	var linkElement = document.createElement("link");
-	linkElement.rel = "stylesheet";
-	insertStyleElement(options, linkElement);
-	return linkElement;
-}
-
-function addStyle(obj, options) {
-	var styleElement, update, remove;
-
-	if (options.singleton) {
-		var styleIndex = singletonCounter++;
-		styleElement = singletonElement || (singletonElement = createStyleElement(options));
-		update = applyToSingletonTag.bind(null, styleElement, styleIndex, false);
-		remove = applyToSingletonTag.bind(null, styleElement, styleIndex, true);
-	} else if(obj.sourceMap &&
-		typeof URL === "function" &&
-		typeof URL.createObjectURL === "function" &&
-		typeof URL.revokeObjectURL === "function" &&
-		typeof Blob === "function" &&
-		typeof btoa === "function") {
-		styleElement = createLinkElement(options);
-		update = updateLink.bind(null, styleElement);
-		remove = function() {
-			removeStyleElement(styleElement);
-			if(styleElement.href)
-				URL.revokeObjectURL(styleElement.href);
-		};
-	} else {
-		styleElement = createStyleElement(options);
-		update = applyToTag.bind(null, styleElement);
-		remove = function() {
-			removeStyleElement(styleElement);
-		};
-	}
-
-	update(obj);
-
-	return function updateStyle(newObj) {
-		if(newObj) {
-			if(newObj.css === obj.css && newObj.media === obj.media && newObj.sourceMap === obj.sourceMap)
-				return;
-			update(obj = newObj);
-		} else {
-			remove();
-		}
-	};
-}
-
-var replaceText = (function () {
-	var textStore = [];
-
-	return function (index, replacement) {
-		textStore[index] = replacement;
-		return textStore.filter(Boolean).join('\n');
-	};
-})();
-
-function applyToSingletonTag(styleElement, index, remove, obj) {
-	var css = remove ? "" : obj.css;
-
-	if (styleElement.styleSheet) {
-		styleElement.styleSheet.cssText = replaceText(index, css);
-	} else {
-		var cssNode = document.createTextNode(css);
-		var childNodes = styleElement.childNodes;
-		if (childNodes[index]) styleElement.removeChild(childNodes[index]);
-		if (childNodes.length) {
-			styleElement.insertBefore(cssNode, childNodes[index]);
-		} else {
-			styleElement.appendChild(cssNode);
-		}
-	}
-}
-
-function applyToTag(styleElement, obj) {
-	var css = obj.css;
-	var media = obj.media;
-
-	if(media) {
-		styleElement.setAttribute("media", media)
-	}
-
-	if(styleElement.styleSheet) {
-		styleElement.styleSheet.cssText = css;
-	} else {
-		while(styleElement.firstChild) {
-			styleElement.removeChild(styleElement.firstChild);
-		}
-		styleElement.appendChild(document.createTextNode(css));
-	}
-}
-
-function updateLink(linkElement, obj) {
-	var css = obj.css;
-	var sourceMap = obj.sourceMap;
-
-	if(sourceMap) {
-		// http://stackoverflow.com/a/26603875
-		css += "\n/*# sourceMappingURL=data:application/json;base64," + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + " */";
-	}
-
-	var blob = new Blob([css], { type: "text/css" });
-
-	var oldSrc = linkElement.href;
-
-	linkElement.href = URL.createObjectURL(blob);
-
-	if(oldSrc)
-		URL.revokeObjectURL(oldSrc);
-}
-
-
-/***/ }),
-/* 130 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(131);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// Prepare cssTransformation
-var transform;
-
-var options = {"hmr":true}
-options.transform = transform
-// add the styles to the DOM
-var update = __webpack_require__(12)(content, options);
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../node_modules/css-loader/index.js!../node_modules/less-loader/dist/cjs.js!./app.less", function() {
-			var newContent = require("!!../node_modules/css-loader/index.js!../node_modules/less-loader/dist/cjs.js!./app.less");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 131 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(11)(false);
-// imports
-
-
-// module
-exports.push([module.i, "/* ===== reset.css ===== */\ntable,\ntbody,\ntfoot,\nthead,\ntr,\nth,\ntd {\n  background: transparent;\n  font-size: 100%;\n  margin: 0;\n  outline: 0;\n  vertical-align: baseline;\n}\nhtml,\nbody,\ndiv,\nspan,\napplet,\nobject,\niframe,\nh1,\nh2,\nh3,\nh4,\nh5,\nh6,\np,\nblockquote,\npre,\na,\nabbr,\nacronym,\naddress,\nbig,\ncite,\ncode,\ndel,\ndfn,\nem,\nfont,\nimg,\nins,\nkbd,\nq,\ns,\nsamp,\nsmall,\nstrike,\nstrong,\nsub,\nsup,\ntt,\nvar,\nb,\nu,\ni,\ncenter,\ndl,\ndt,\ndd,\nol,\nul,\nli,\nfieldset,\nform,\nlabel,\nlegend,\ncaption {\n  background: transparent;\n  border: 0;\n  font-size: 100%;\n  margin: 0;\n  outline: 0;\n  padding: 0;\n  vertical-align: baseline;\n}\nbody {\n  line-height: 1;\n}\nol,\nul {\n  list-style: none;\n}\nblockquote,\nq {\n  quotes: none;\n}\nblockquote:before,\nblockquote:after,\nq:before,\nq:after {\n  content: none;\n}\n:focus {\n  outline: 0;\n}\nins {\n  text-decoration: none;\n}\ndel {\n  text-decoration: line-through;\n}\ntable {\n  border-collapse: collapse;\n  border-spacing: 0;\n}\nh1,\nh2,\nh3,\nh4,\nh5,\nh6 {\n  font-weight: normal;\n}\ninput[type=\"search\"]::-webkit-search-decoration,\ninput[type=\"search\"]::-webkit-search-cancel-button,\ninput[type=\"search\"]::-webkit-search-results-button,\ninput[type=\"search\"]::-webkit-search-results-decoration {\n  display: none;\n}\nbody:not(.cq-wcm-edit) input,\nbody:not(.cq-wcm-edit) input[type=\"text\"],\nbody:not(.cq-wcm-edit) input[type=\"email\"],\nbody:not(.cq-wcm-edit) input[type=\"search\"],\nbody:not(.cq-wcm-edit) input[type=\"password\"],\nbody:not(.cq-wcm-edit) textarea {\n  box-shadow: 0;\n  background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(255, 255, 255, 0)), to(rgba(255, 255, 255, 0))) !important;\n  background-image: -webkit-linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0)) !important;\n}\n::-ms-clear,\n::-ms-reveal {\n  display: none;\n  width: 0;\n  height: 0;\n  visibility: hidden;\n}\nbutton {\n  border: none;\n  background: none;\n  cursor: pointer;\n}\n* {\n  box-sizing: border-box;\n}\n/* ===== commmon styles ===== */\nhtml {\n  font-size: 10px;\n  height: 100%;\n}\nbody {\n  font-family: 'Muli', sans-serif;\n  display: flex;\n  flex-direction: column;\n  position: relative;\n  margin: 0 auto;\n  color: #333333;\n  min-height: 100%;\n}\nheader,\nfooter {\n  left: 0;\n  font-size: 2.2rem;\n  text-align: center;\n  width: 100%;\n  background: #4d80aa;\n  color: white;\n  height: 50px;\n  line-height: 50px;\n}\nheader p,\nfooter p {\n  margin: 0 auto;\n  max-width: 876px;\n}\nfooter {\n  position: absolute;\n  bottom: 0;\n}\nheader {\n  position: fixed;\n  top: 0;\n  z-index: 1;\n}\na {\n  color: #4d80aa;\n  text-decoration: none;\n  font-size: 1.6rem;\n}\na:hover {\n  color: #4d80aa;\n  text-decoration: underline;\n}\n.btn {\n  color: #4d80aa;\n  padding: 8px 16px;\n  border: 2px solid #4d80aa;\n  border-radius: 3px;\n  transition: all 0.2s ease;\n  font-size: 1.4rem;\n  cursor: pointer;\n}\n.btn i {\n  font-size: 1.6rem;\n}\n.btn.btn-fill {\n  background: #4d80aa;\n  color: white;\n}\n.btn.btn-fill:hover {\n  background: #3f729c;\n}\n.btn:hover {\n  color: white;\n  background: #4d80aa;\n  text-decoration: none;\n}\napp > div {\n  max-width: 876px;\n  margin: 0 auto;\n  padding: 80px 0;\n}\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 132 */,
-/* 133 */,
-/* 134 */,
-/* 135 */,
-/* 136 */,
-/* 137 */,
-/* 138 */,
-/* 139 */,
-/* 140 */,
-/* 141 */,
-/* 142 */,
-/* 143 */,
-/* 144 */,
-/* 145 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, module) {var __WEBPACK_AMD_DEFINE_RESULT__;/**
@@ -65383,10 +64056,10 @@ exports.push([module.i, "/* ===== reset.css ===== */\ntable,\ntbody,\ntfoot,\nth
   }
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(59), __webpack_require__(146)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(29), __webpack_require__(114)(module)))
 
 /***/ }),
-/* 146 */
+/* 114 */
 /***/ (function(module, exports) {
 
 module.exports = function(module) {
@@ -65412,6 +64085,1684 @@ module.exports = function(module) {
 	return module;
 };
 
+
+/***/ }),
+/* 115 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _angular = __webpack_require__(4);
+
+var _angular2 = _interopRequireDefault(_angular);
+
+var _angularMessages = __webpack_require__(116);
+
+var _angularMessages2 = _interopRequireDefault(_angularMessages);
+
+var _articleForm = __webpack_require__(118);
+
+var _articleForm2 = _interopRequireDefault(_articleForm);
+
+var _articleForm3 = __webpack_require__(120);
+
+var _articleForm4 = _interopRequireDefault(_articleForm3);
+
+__webpack_require__(121);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var ArticleFormModule = _angular2.default.module('app.common.articleForm', [_angularMessages2.default]).component('articleForm', _articleForm2.default).directive('textareaValidator', _articleForm4.default).name;
+
+exports.default = ArticleFormModule;
+
+/***/ }),
+/* 116 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(117);
+module.exports = 'ngMessages';
+
+
+/***/ }),
+/* 117 */
+/***/ (function(module, exports) {
+
+/**
+ * @license AngularJS v1.6.9
+ * (c) 2010-2018 Google, Inc. http://angularjs.org
+ * License: MIT
+ */
+(function(window, angular) {'use strict';
+
+var forEach;
+var isArray;
+var isString;
+var jqLite;
+
+/**
+ * @ngdoc module
+ * @name ngMessages
+ * @description
+ *
+ * The `ngMessages` module provides enhanced support for displaying messages within templates
+ * (typically within forms or when rendering message objects that return key/value data).
+ * Instead of relying on JavaScript code and/or complex ng-if statements within your form template to
+ * show and hide error messages specific to the state of an input field, the `ngMessages` and
+ * `ngMessage` directives are designed to handle the complexity, inheritance and priority
+ * sequencing based on the order of how the messages are defined in the template.
+ *
+ * Currently, the ngMessages module only contains the code for the `ngMessages`, `ngMessagesInclude`
+ * `ngMessage` and `ngMessageExp` directives.
+ *
+ * ## Usage
+ * The `ngMessages` directive allows keys in a key/value collection to be associated with a child element
+ * (or 'message') that will show or hide based on the truthiness of that key's value in the collection. A common use
+ * case for `ngMessages` is to display error messages for inputs using the `$error` object exposed by the
+ * {@link ngModel ngModel} directive.
+ *
+ * The child elements of the `ngMessages` directive are matched to the collection keys by a `ngMessage` or
+ * `ngMessageExp` directive. The value of these attributes must match a key in the collection that is provided by
+ * the `ngMessages` directive.
+ *
+ * Consider the following example, which illustrates a typical use case of `ngMessages`. Within the form `myForm` we
+ * have a text input named `myField` which is bound to the scope variable `field` using the {@link ngModel ngModel}
+ * directive.
+ *
+ * The `myField` field is a required input of type `email` with a maximum length of 15 characters.
+ *
+ * ```html
+ * <form name="myForm">
+ *   <label>
+ *     Enter text:
+ *     <input type="email" ng-model="field" name="myField" required maxlength="15" />
+ *   </label>
+ *   <div ng-messages="myForm.myField.$error" role="alert">
+ *     <div ng-message="required">Please enter a value for this field.</div>
+ *     <div ng-message="email">This field must be a valid email address.</div>
+ *     <div ng-message="maxlength">This field can be at most 15 characters long.</div>
+ *   </div>
+ * </form>
+ * ```
+ *
+ * In order to show error messages corresponding to `myField` we first create an element with an `ngMessages` attribute
+ * set to the `$error` object owned by the `myField` input in our `myForm` form.
+ *
+ * Within this element we then create separate elements for each of the possible errors that `myField` could have.
+ * The `ngMessage` attribute is used to declare which element(s) will appear for which error - for example,
+ * setting `ng-message="required"` specifies that this particular element should be displayed when there
+ * is no value present for the required field `myField` (because the key `required` will be `true` in the object
+ * `myForm.myField.$error`).
+ *
+ * ### Message order
+ *
+ * By default, `ngMessages` will only display one message for a particular key/value collection at any time. If more
+ * than one message (or error) key is currently true, then which message is shown is determined by the order of messages
+ * in the HTML template code (messages declared first are prioritised). This mechanism means the developer does not have
+ * to prioritize messages using custom JavaScript code.
+ *
+ * Given the following error object for our example (which informs us that the field `myField` currently has both the
+ * `required` and `email` errors):
+ *
+ * ```javascript
+ * <!-- keep in mind that ngModel automatically sets these error flags -->
+ * myField.$error = { required : true, email: true, maxlength: false };
+ * ```
+ * The `required` message will be displayed to the user since it appears before the `email` message in the DOM.
+ * Once the user types a single character, the `required` message will disappear (since the field now has a value)
+ * but the `email` message will be visible because it is still applicable.
+ *
+ * ### Displaying multiple messages at the same time
+ *
+ * While `ngMessages` will by default only display one error element at a time, the `ng-messages-multiple` attribute can
+ * be applied to the `ngMessages` container element to cause it to display all applicable error messages at once:
+ *
+ * ```html
+ * <!-- attribute-style usage -->
+ * <div ng-messages="myForm.myField.$error" ng-messages-multiple>...</div>
+ *
+ * <!-- element-style usage -->
+ * <ng-messages for="myForm.myField.$error" multiple>...</ng-messages>
+ * ```
+ *
+ * ## Reusing and Overriding Messages
+ * In addition to prioritization, ngMessages also allows for including messages from a remote or an inline
+ * template. This allows for generic collection of messages to be reused across multiple parts of an
+ * application.
+ *
+ * ```html
+ * <script type="text/ng-template" id="error-messages">
+ *   <div ng-message="required">This field is required</div>
+ *   <div ng-message="minlength">This field is too short</div>
+ * </script>
+ *
+ * <div ng-messages="myForm.myField.$error" role="alert">
+ *   <div ng-messages-include="error-messages"></div>
+ * </div>
+ * ```
+ *
+ * However, including generic messages may not be useful enough to match all input fields, therefore,
+ * `ngMessages` provides the ability to override messages defined in the remote template by redefining
+ * them within the directive container.
+ *
+ * ```html
+ * <!-- a generic template of error messages known as "my-custom-messages" -->
+ * <script type="text/ng-template" id="my-custom-messages">
+ *   <div ng-message="required">This field is required</div>
+ *   <div ng-message="minlength">This field is too short</div>
+ * </script>
+ *
+ * <form name="myForm">
+ *   <label>
+ *     Email address
+ *     <input type="email"
+ *            id="email"
+ *            name="myEmail"
+ *            ng-model="email"
+ *            minlength="5"
+ *            required />
+ *   </label>
+ *   <!-- any ng-message elements that appear BEFORE the ng-messages-include will
+ *        override the messages present in the ng-messages-include template -->
+ *   <div ng-messages="myForm.myEmail.$error" role="alert">
+ *     <!-- this required message has overridden the template message -->
+ *     <div ng-message="required">You did not enter your email address</div>
+ *
+ *     <!-- this is a brand new message and will appear last in the prioritization -->
+ *     <div ng-message="email">Your email address is invalid</div>
+ *
+ *     <!-- and here are the generic error messages -->
+ *     <div ng-messages-include="my-custom-messages"></div>
+ *   </div>
+ * </form>
+ * ```
+ *
+ * In the example HTML code above the message that is set on required will override the corresponding
+ * required message defined within the remote template. Therefore, with particular input fields (such
+ * email addresses, date fields, autocomplete inputs, etc...), specialized error messages can be applied
+ * while more generic messages can be used to handle other, more general input errors.
+ *
+ * ## Dynamic Messaging
+ * ngMessages also supports using expressions to dynamically change key values. Using arrays and
+ * repeaters to list messages is also supported. This means that the code below will be able to
+ * fully adapt itself and display the appropriate message when any of the expression data changes:
+ *
+ * ```html
+ * <form name="myForm">
+ *   <label>
+ *     Email address
+ *     <input type="email"
+ *            name="myEmail"
+ *            ng-model="email"
+ *            minlength="5"
+ *            required />
+ *   </label>
+ *   <div ng-messages="myForm.myEmail.$error" role="alert">
+ *     <div ng-message="required">You did not enter your email address</div>
+ *     <div ng-repeat="errorMessage in errorMessages">
+ *       <!-- use ng-message-exp for a message whose key is given by an expression -->
+ *       <div ng-message-exp="errorMessage.type">{{ errorMessage.text }}</div>
+ *     </div>
+ *   </div>
+ * </form>
+ * ```
+ *
+ * The `errorMessage.type` expression can be a string value or it can be an array so
+ * that multiple errors can be associated with a single error message:
+ *
+ * ```html
+ *   <label>
+ *     Email address
+ *     <input type="email"
+ *            ng-model="data.email"
+ *            name="myEmail"
+ *            ng-minlength="5"
+ *            ng-maxlength="100"
+ *            required />
+ *   </label>
+ *   <div ng-messages="myForm.myEmail.$error" role="alert">
+ *     <div ng-message-exp="'required'">You did not enter your email address</div>
+ *     <div ng-message-exp="['minlength', 'maxlength']">
+ *       Your email must be between 5 and 100 characters long
+ *     </div>
+ *   </div>
+ * ```
+ *
+ * Feel free to use other structural directives such as ng-if and ng-switch to further control
+ * what messages are active and when. Be careful, if you place ng-message on the same element
+ * as these structural directives, AngularJS may not be able to determine if a message is active
+ * or not. Therefore it is best to place the ng-message on a child element of the structural
+ * directive.
+ *
+ * ```html
+ * <div ng-messages="myForm.myEmail.$error" role="alert">
+ *   <div ng-if="showRequiredError">
+ *     <div ng-message="required">Please enter something</div>
+ *   </div>
+ * </div>
+ * ```
+ *
+ * ## Animations
+ * If the `ngAnimate` module is active within the application then the `ngMessages`, `ngMessage` and
+ * `ngMessageExp` directives will trigger animations whenever any messages are added and removed from
+ * the DOM by the `ngMessages` directive.
+ *
+ * Whenever the `ngMessages` directive contains one or more visible messages then the `.ng-active` CSS
+ * class will be added to the element. The `.ng-inactive` CSS class will be applied when there are no
+ * messages present. Therefore, CSS transitions and keyframes as well as JavaScript animations can
+ * hook into the animations whenever these classes are added/removed.
+ *
+ * Let's say that our HTML code for our messages container looks like so:
+ *
+ * ```html
+ * <div ng-messages="myMessages" class="my-messages" role="alert">
+ *   <div ng-message="alert" class="some-message">...</div>
+ *   <div ng-message="fail" class="some-message">...</div>
+ * </div>
+ * ```
+ *
+ * Then the CSS animation code for the message container looks like so:
+ *
+ * ```css
+ * .my-messages {
+ *   transition:1s linear all;
+ * }
+ * .my-messages.ng-active {
+ *   // messages are visible
+ * }
+ * .my-messages.ng-inactive {
+ *   // messages are hidden
+ * }
+ * ```
+ *
+ * Whenever an inner message is attached (becomes visible) or removed (becomes hidden) then the enter
+ * and leave animation is triggered for each particular element bound to the `ngMessage` directive.
+ *
+ * Therefore, the CSS code for the inner messages looks like so:
+ *
+ * ```css
+ * .some-message {
+ *   transition:1s linear all;
+ * }
+ *
+ * .some-message.ng-enter {}
+ * .some-message.ng-enter.ng-enter-active {}
+ *
+ * .some-message.ng-leave {}
+ * .some-message.ng-leave.ng-leave-active {}
+ * ```
+ *
+ * {@link ngAnimate Click here} to learn how to use JavaScript animations or to learn more about ngAnimate.
+ */
+angular.module('ngMessages', [], function initAngularHelpers() {
+  // Access helpers from AngularJS core.
+  // Do it inside a `config` block to ensure `window.angular` is available.
+  forEach = angular.forEach;
+  isArray = angular.isArray;
+  isString = angular.isString;
+  jqLite = angular.element;
+})
+  .info({ angularVersion: '1.6.9' })
+
+  /**
+   * @ngdoc directive
+   * @module ngMessages
+   * @name ngMessages
+   * @restrict AE
+   *
+   * @description
+   * `ngMessages` is a directive that is designed to show and hide messages based on the state
+   * of a key/value object that it listens on. The directive itself complements error message
+   * reporting with the `ngModel` $error object (which stores a key/value state of validation errors).
+   *
+   * `ngMessages` manages the state of internal messages within its container element. The internal
+   * messages use the `ngMessage` directive and will be inserted/removed from the page depending
+   * on if they're present within the key/value object. By default, only one message will be displayed
+   * at a time and this depends on the prioritization of the messages within the template. (This can
+   * be changed by using the `ng-messages-multiple` or `multiple` attribute on the directive container.)
+   *
+   * A remote template can also be used to promote message reusability and messages can also be
+   * overridden.
+   *
+   * {@link module:ngMessages Click here} to learn more about `ngMessages` and `ngMessage`.
+   *
+   * @usage
+   * ```html
+   * <!-- using attribute directives -->
+   * <ANY ng-messages="expression" role="alert">
+   *   <ANY ng-message="stringValue">...</ANY>
+   *   <ANY ng-message="stringValue1, stringValue2, ...">...</ANY>
+   *   <ANY ng-message-exp="expressionValue">...</ANY>
+   * </ANY>
+   *
+   * <!-- or by using element directives -->
+   * <ng-messages for="expression" role="alert">
+   *   <ng-message when="stringValue">...</ng-message>
+   *   <ng-message when="stringValue1, stringValue2, ...">...</ng-message>
+   *   <ng-message when-exp="expressionValue">...</ng-message>
+   * </ng-messages>
+   * ```
+   *
+   * @param {string} ngMessages an AngularJS expression evaluating to a key/value object
+   *                 (this is typically the $error object on an ngModel instance).
+   * @param {string=} ngMessagesMultiple|multiple when set, all messages will be displayed with true
+   *
+   * @example
+   * <example name="ngMessages-directive" module="ngMessagesExample"
+   *          deps="angular-messages.js"
+   *          animations="true" fixBase="true">
+   *   <file name="index.html">
+   *     <form name="myForm">
+   *       <label>
+   *         Enter your name:
+   *         <input type="text"
+   *                name="myName"
+   *                ng-model="name"
+   *                ng-minlength="5"
+   *                ng-maxlength="20"
+   *                required />
+   *       </label>
+   *       <pre>myForm.myName.$error = {{ myForm.myName.$error | json }}</pre>
+   *
+   *       <div ng-messages="myForm.myName.$error" style="color:maroon" role="alert">
+   *         <div ng-message="required">You did not enter a field</div>
+   *         <div ng-message="minlength">Your field is too short</div>
+   *         <div ng-message="maxlength">Your field is too long</div>
+   *       </div>
+   *     </form>
+   *   </file>
+   *   <file name="script.js">
+   *     angular.module('ngMessagesExample', ['ngMessages']);
+   *   </file>
+   * </example>
+   */
+  .directive('ngMessages', ['$animate', function($animate) {
+    var ACTIVE_CLASS = 'ng-active';
+    var INACTIVE_CLASS = 'ng-inactive';
+
+    return {
+      require: 'ngMessages',
+      restrict: 'AE',
+      controller: ['$element', '$scope', '$attrs', function NgMessagesCtrl($element, $scope, $attrs) {
+        var ctrl = this;
+        var latestKey = 0;
+        var nextAttachId = 0;
+
+        this.getAttachId = function getAttachId() { return nextAttachId++; };
+
+        var messages = this.messages = {};
+        var renderLater, cachedCollection;
+
+        this.render = function(collection) {
+          collection = collection || {};
+
+          renderLater = false;
+          cachedCollection = collection;
+
+          // this is true if the attribute is empty or if the attribute value is truthy
+          var multiple = isAttrTruthy($scope, $attrs.ngMessagesMultiple) ||
+                         isAttrTruthy($scope, $attrs.multiple);
+
+          var unmatchedMessages = [];
+          var matchedKeys = {};
+          var messageItem = ctrl.head;
+          var messageFound = false;
+          var totalMessages = 0;
+
+          // we use != instead of !== to allow for both undefined and null values
+          while (messageItem != null) {
+            totalMessages++;
+            var messageCtrl = messageItem.message;
+
+            var messageUsed = false;
+            if (!messageFound) {
+              forEach(collection, function(value, key) {
+                if (!messageUsed && truthy(value) && messageCtrl.test(key)) {
+                  // this is to prevent the same error name from showing up twice
+                  if (matchedKeys[key]) return;
+                  matchedKeys[key] = true;
+
+                  messageUsed = true;
+                  messageCtrl.attach();
+                }
+              });
+            }
+
+            if (messageUsed) {
+              // unless we want to display multiple messages then we should
+              // set a flag here to avoid displaying the next message in the list
+              messageFound = !multiple;
+            } else {
+              unmatchedMessages.push(messageCtrl);
+            }
+
+            messageItem = messageItem.next;
+          }
+
+          forEach(unmatchedMessages, function(messageCtrl) {
+            messageCtrl.detach();
+          });
+
+          if (unmatchedMessages.length !== totalMessages) {
+            $animate.setClass($element, ACTIVE_CLASS, INACTIVE_CLASS);
+          } else {
+            $animate.setClass($element, INACTIVE_CLASS, ACTIVE_CLASS);
+          }
+        };
+
+        $scope.$watchCollection($attrs.ngMessages || $attrs['for'], ctrl.render);
+
+        this.reRender = function() {
+          if (!renderLater) {
+            renderLater = true;
+            $scope.$evalAsync(function() {
+              if (renderLater && cachedCollection) {
+                ctrl.render(cachedCollection);
+              }
+            });
+          }
+        };
+
+        this.register = function(comment, messageCtrl) {
+          var nextKey = latestKey.toString();
+          messages[nextKey] = {
+            message: messageCtrl
+          };
+          insertMessageNode($element[0], comment, nextKey);
+          comment.$$ngMessageNode = nextKey;
+          latestKey++;
+
+          ctrl.reRender();
+        };
+
+        this.deregister = function(comment) {
+          var key = comment.$$ngMessageNode;
+          delete comment.$$ngMessageNode;
+          removeMessageNode($element[0], comment, key);
+          delete messages[key];
+          ctrl.reRender();
+        };
+
+        function findPreviousMessage(parent, comment) {
+          var prevNode = comment;
+          var parentLookup = [];
+
+          while (prevNode && prevNode !== parent) {
+            var prevKey = prevNode.$$ngMessageNode;
+            if (prevKey && prevKey.length) {
+              return messages[prevKey];
+            }
+
+            // dive deeper into the DOM and examine its children for any ngMessage
+            // comments that may be in an element that appears deeper in the list
+            if (prevNode.childNodes.length && parentLookup.indexOf(prevNode) === -1) {
+              parentLookup.push(prevNode);
+              prevNode = prevNode.childNodes[prevNode.childNodes.length - 1];
+            } else if (prevNode.previousSibling) {
+              prevNode = prevNode.previousSibling;
+            } else {
+              prevNode = prevNode.parentNode;
+              parentLookup.push(prevNode);
+            }
+          }
+        }
+
+        function insertMessageNode(parent, comment, key) {
+          var messageNode = messages[key];
+          if (!ctrl.head) {
+            ctrl.head = messageNode;
+          } else {
+            var match = findPreviousMessage(parent, comment);
+            if (match) {
+              messageNode.next = match.next;
+              match.next = messageNode;
+            } else {
+              messageNode.next = ctrl.head;
+              ctrl.head = messageNode;
+            }
+          }
+        }
+
+        function removeMessageNode(parent, comment, key) {
+          var messageNode = messages[key];
+
+          // This message node may have already been removed by a call to deregister()
+          if (!messageNode) return;
+
+          var match = findPreviousMessage(parent, comment);
+          if (match) {
+            match.next = messageNode.next;
+          } else {
+            ctrl.head = messageNode.next;
+          }
+        }
+      }]
+    };
+
+    function isAttrTruthy(scope, attr) {
+     return (isString(attr) && attr.length === 0) || //empty attribute
+            truthy(scope.$eval(attr));
+    }
+
+    function truthy(val) {
+      return isString(val) ? val.length : !!val;
+    }
+  }])
+
+  /**
+   * @ngdoc directive
+   * @name ngMessagesInclude
+   * @restrict AE
+   * @scope
+   *
+   * @description
+   * `ngMessagesInclude` is a directive with the purpose to import existing ngMessage template
+   * code from a remote template and place the downloaded template code into the exact spot
+   * that the ngMessagesInclude directive is placed within the ngMessages container. This allows
+   * for a series of pre-defined messages to be reused and also allows for the developer to
+   * determine what messages are overridden due to the placement of the ngMessagesInclude directive.
+   *
+   * @usage
+   * ```html
+   * <!-- using attribute directives -->
+   * <ANY ng-messages="expression" role="alert">
+   *   <ANY ng-messages-include="remoteTplString">...</ANY>
+   * </ANY>
+   *
+   * <!-- or by using element directives -->
+   * <ng-messages for="expression" role="alert">
+   *   <ng-messages-include src="expressionValue1">...</ng-messages-include>
+   * </ng-messages>
+   * ```
+   *
+   * {@link module:ngMessages Click here} to learn more about `ngMessages` and `ngMessage`.
+   *
+   * @param {string} ngMessagesInclude|src a string value corresponding to the remote template.
+   */
+  .directive('ngMessagesInclude',
+    ['$templateRequest', '$document', '$compile', function($templateRequest, $document, $compile) {
+
+    return {
+      restrict: 'AE',
+      require: '^^ngMessages', // we only require this for validation sake
+      link: function($scope, element, attrs) {
+        var src = attrs.ngMessagesInclude || attrs.src;
+        $templateRequest(src).then(function(html) {
+          if ($scope.$$destroyed) return;
+
+          if (isString(html) && !html.trim()) {
+            // Empty template - nothing to compile
+            replaceElementWithMarker(element, src);
+          } else {
+            // Non-empty template - compile and link
+            $compile(html)($scope, function(contents) {
+              element.after(contents);
+              replaceElementWithMarker(element, src);
+            });
+          }
+        });
+      }
+    };
+
+    // Helpers
+    function replaceElementWithMarker(element, src) {
+      // A comment marker is placed for debugging purposes
+      var comment = $compile.$$createComment ?
+          $compile.$$createComment('ngMessagesInclude', src) :
+          $document[0].createComment(' ngMessagesInclude: ' + src + ' ');
+      var marker = jqLite(comment);
+      element.after(marker);
+
+      // Don't pollute the DOM anymore by keeping an empty directive element
+      element.remove();
+    }
+  }])
+
+  /**
+   * @ngdoc directive
+   * @name ngMessage
+   * @restrict AE
+   * @scope
+   * @priority 1
+   *
+   * @description
+   * `ngMessage` is a directive with the purpose to show and hide a particular message.
+   * For `ngMessage` to operate, a parent `ngMessages` directive on a parent DOM element
+   * must be situated since it determines which messages are visible based on the state
+   * of the provided key/value map that `ngMessages` listens on.
+   *
+   * More information about using `ngMessage` can be found in the
+   * {@link module:ngMessages `ngMessages` module documentation}.
+   *
+   * @usage
+   * ```html
+   * <!-- using attribute directives -->
+   * <ANY ng-messages="expression" role="alert">
+   *   <ANY ng-message="stringValue">...</ANY>
+   *   <ANY ng-message="stringValue1, stringValue2, ...">...</ANY>
+   * </ANY>
+   *
+   * <!-- or by using element directives -->
+   * <ng-messages for="expression" role="alert">
+   *   <ng-message when="stringValue">...</ng-message>
+   *   <ng-message when="stringValue1, stringValue2, ...">...</ng-message>
+   * </ng-messages>
+   * ```
+   *
+   * @param {expression} ngMessage|when a string value corresponding to the message key.
+   */
+  .directive('ngMessage', ngMessageDirectiveFactory())
+
+
+  /**
+   * @ngdoc directive
+   * @name ngMessageExp
+   * @restrict AE
+   * @priority 1
+   * @scope
+   *
+   * @description
+   * `ngMessageExp` is the same as {@link directive:ngMessage `ngMessage`}, but instead of a static
+   * value, it accepts an expression to be evaluated for the message key.
+   *
+   * @usage
+   * ```html
+   * <!-- using attribute directives -->
+   * <ANY ng-messages="expression">
+   *   <ANY ng-message-exp="expressionValue">...</ANY>
+   * </ANY>
+   *
+   * <!-- or by using element directives -->
+   * <ng-messages for="expression">
+   *   <ng-message when-exp="expressionValue">...</ng-message>
+   * </ng-messages>
+   * ```
+   *
+   * {@link module:ngMessages Click here} to learn more about `ngMessages` and `ngMessage`.
+   *
+   * @param {expression} ngMessageExp|whenExp an expression value corresponding to the message key.
+   */
+  .directive('ngMessageExp', ngMessageDirectiveFactory());
+
+function ngMessageDirectiveFactory() {
+  return ['$animate', function($animate) {
+    return {
+      restrict: 'AE',
+      transclude: 'element',
+      priority: 1, // must run before ngBind, otherwise the text is set on the comment
+      terminal: true,
+      require: '^^ngMessages',
+      link: function(scope, element, attrs, ngMessagesCtrl, $transclude) {
+        var commentNode = element[0];
+
+        var records;
+        var staticExp = attrs.ngMessage || attrs.when;
+        var dynamicExp = attrs.ngMessageExp || attrs.whenExp;
+        var assignRecords = function(items) {
+          records = items
+              ? (isArray(items)
+                  ? items
+                  : items.split(/[\s,]+/))
+              : null;
+          ngMessagesCtrl.reRender();
+        };
+
+        if (dynamicExp) {
+          assignRecords(scope.$eval(dynamicExp));
+          scope.$watchCollection(dynamicExp, assignRecords);
+        } else {
+          assignRecords(staticExp);
+        }
+
+        var currentElement, messageCtrl;
+        ngMessagesCtrl.register(commentNode, messageCtrl = {
+          test: function(name) {
+            return contains(records, name);
+          },
+          attach: function() {
+            if (!currentElement) {
+              $transclude(function(elm, newScope) {
+                $animate.enter(elm, null, element);
+                currentElement = elm;
+
+                // Each time we attach this node to a message we get a new id that we can match
+                // when we are destroying the node later.
+                var $$attachId = currentElement.$$attachId = ngMessagesCtrl.getAttachId();
+
+                // in the event that the element or a parent element is destroyed
+                // by another structural directive then it's time
+                // to deregister the message from the controller
+                currentElement.on('$destroy', function() {
+                  // If the message element was removed via a call to `detach` then `currentElement` will be null
+                  // So this handler only handles cases where something else removed the message element.
+                  if (currentElement && currentElement.$$attachId === $$attachId) {
+                    ngMessagesCtrl.deregister(commentNode);
+                    messageCtrl.detach();
+                  }
+                  newScope.$destroy();
+                });
+              });
+            }
+          },
+          detach: function() {
+            if (currentElement) {
+              var elm = currentElement;
+              currentElement = null;
+              $animate.leave(elm);
+            }
+          }
+        });
+
+        // We need to ensure that this directive deregisters itself when it no longer exists
+        // Normally this is done when the attached element is destroyed; but if this directive
+        // gets removed before we attach the message to the DOM there is nothing to watch
+        // in which case we must deregister when the containing scope is destroyed.
+        scope.$on('$destroy', function() {
+          ngMessagesCtrl.deregister(commentNode);
+        });
+      }
+    };
+  }];
+
+  function contains(collection, key) {
+    if (collection) {
+      return isArray(collection)
+          ? collection.indexOf(key) >= 0
+          : collection.hasOwnProperty(key);
+    }
+  }
+}
+
+
+})(window, window.angular);
+
+
+/***/ }),
+/* 118 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _articleForm = __webpack_require__(119);
+
+var _articleForm2 = _interopRequireDefault(_articleForm);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var ArticleFormComponent = {
+    bindings: {
+        submitType: '<',
+        submitHandler: '<',
+        article: '<'
+    },
+    template: _articleForm2.default,
+    controller: function () {
+        function ArticlesPage(ArticlesService, $scope) {
+            'ngInject';
+
+            _classCallCheck(this, ArticlesPage);
+
+            this.ArticlesService = ArticlesService;
+            this.$scope = $scope;
+            this.tags = null;
+            this.articleTags = null;
+        }
+
+        _createClass(ArticlesPage, [{
+            key: '$onInit',
+            value: function $onInit() {
+                var _this = this;
+
+                this.tags = this.ArticlesService.getArticlesTags();
+                this.articleTags = this.tags.reduce(function (acc, item) {
+                    acc[item] = _this.article.tags.indexOf(item) >= 0;
+                    return acc;
+                }, {});
+            }
+        }, {
+            key: 'shouldShowErrors',
+            value: function shouldShowErrors(input) {
+                return input.$dirty && input.$touched || this.$scope.articleForm.$submitted;
+            }
+        }, {
+            key: 'submit',
+            value: function submit(e) {
+                var _this2 = this;
+
+                e.preventDefault();
+                if (this.$scope.articleForm.$valid) {
+                    var tags = Object.keys(this.articleTags).filter(function (tag) {
+                        return _this2.articleTags[tag];
+                    });
+
+                    this.submitHandler(Object.assign({}, this.article, { tags: tags }));
+                }
+            }
+        }]);
+
+        return ArticlesPage;
+    }()
+};
+
+exports.default = ArticleFormComponent;
+
+/***/ }),
+/* 119 */
+/***/ (function(module, exports) {
+
+module.exports = "<form name=\"articleForm\" class=\"article-form\" novalidate ng-submit=\"$ctrl.submit($event)\">\n    <div class=\"row\">\n        <div class=\"input-container\">\n            <label for=\"article-author\" class=\"label-required\">Article Author</label>\n            <input type=\"text\" name=\"articleAuthor\" id=\"article-author\" ng-required=\"true\" ng-minlength=\"3\" ng-model=\"$ctrl.article.articleAuthor\" />\n            <div class=\"help-block\" ng-messages=\"articleForm.articleAuthor.$error\" ng-if=\"$ctrl.shouldShowErrors(articleForm.articleAuthor)\">\n                <p ng-message=\"minlength\">Article Author must be at least 3 characters.</p>\n                <p ng-message=\"required\">Article Author is required.</p>\n            </div>\n        </div>\n    </div>\n    <div class=\"row\">\n        <div class=\"input-container\">\n            <label for=\"article-img\" class=\"label-required\">Article Image Url</label>\n            <input type=\"text\" name=\"articleImg\" id=\"article-img\" ng-required='true' ng-minlength=\"5\" ng-model=\"$ctrl.article.articleImg\" />\n            <div class=\"help-block\" ng-messages=\"articleForm.articleImg.$error\" ng-if=\"$ctrl.shouldShowErrors(articleForm.articleImg)\">\n                <p ng-message=\"minlength\">Article Image Url must be at least 5 characters.</p>\n                <p ng-message=\"required\">Article Image Url is required.</p>\n            </div>\n        </div>\n    </div>\n    <label class=\"tags-label\">Article tags:</label>\n    <div class=\"row row-flex\">\n        <div class=\"input-small-container\" ng-repeat=\"tag in $ctrl.tags track by $index\">\n            <label for=\"{{::tag}}-checkbox\">{{::tag}}</label>\n            <input type=\"checkbox\" name=\"{{::tag}}-checkbox\" id=\"{{::tag}}-checkbox\" ng-model=\"$ctrl.articleTags[tag]\" />\n            <label for=\"{{::tag}}-checkbox\"></label>\n        </div>\n    </div>\n    <div class=\"input-container\">\n        <label for=\"article-title\" class=\"label-required\">Article Title</label>\n        <textarea id=\"article-title\" name=\"articleTitle\" ng-model=\"$ctrl.article.articleTitle\" ng-required=\"true\" textarea-validator=\"20\"></textarea>\n        <div class=\"help-block\" ng-messages=\"articleForm.articleTitle.$error\" ng-if=\"$ctrl.shouldShowErrors(articleForm.articleTitle)\">\n            <p ng-message=\"textareaValidator\">Article Preview must be at least 20 characters.</p>\n            <p ng-message=\"required\">Article Preview is required.</p>\n        </div>\n    </div>\n    <div class=\"input-container\">\n        <label for=\"article-preview\" class=\"label-required\">Article Preview</label>\n        <textarea id=\"article-preview\" name=\"articlePreview\" ng-model=\"$ctrl.article.articlePreview\" ng-required=\"true\" textarea-validator=\"20\"></textarea>\n        <div class=\"help-block\" ng-messages=\"articleForm.articlePreview.$error\" ng-if=\"$ctrl.shouldShowErrors(articleForm.articlePreview)\">\n            <p ng-message=\"textareaValidator\">Article Preview must be at least 20 characters.</p>\n            <p ng-message=\"required\">Article Preview is required.</p>\n        </div>\n    </div>\n    <div class=\"input-container\">\n        <label for=\"article-text\" class=\"label-required\">Article Text</label>\n        <textarea id=\"article-text\" name=\"articleText\" ng-model=\"$ctrl.article.articleText\" ng-required=\"true\" textarea-validator=\"20\"></textarea>\n        <div class=\"help-block\" ng-messages=\"articleForm.articleText.$error\" ng-if=\"$ctrl.shouldShowErrors(articleForm.articleText)\">\n            <p ng-message=\"textareaValidator\">Article Text must be at least 20 characters.</p>\n            <p ng-message=\"required\">Article Text is required.</p>\n        </div>\n    </div>\n    <div class=\"submit-container\">\n        <a class=\"btn btn_link\" ui-sref=\"articles\">\n            <i class=\"fa fa-arrow-left\" aria-hidden=\"true\"></i>\n            Back\n        </a>\n        <input class=\"btn btn-fill\" type=\"submit\" value=\"{{$ctrl.submitType}} Article\" ng-disabled=\"articleForm.$invalid\">\n    </div>\n</form>\n";
+
+/***/ }),
+/* 120 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+var textareaValidator = function textareaValidator() {
+    return {
+        require: 'ngModel',
+        link: function link(scope, element, attributes, control) {
+            control.$validators.textareaValidator = function (modelValue) {
+                return control.$isEmpty(modelValue) || modelValue.length >= Number(attributes.textareaValidator);
+            };
+        }
+    };
+};
+
+exports.default = textareaValidator;
+
+/***/ }),
+/* 121 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(122);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {"hmr":true}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__(9)(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/less-loader/dist/cjs.js!./articleForm.less", function() {
+			var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/less-loader/dist/cjs.js!./articleForm.less");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 122 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(8)(false);
+// imports
+
+
+// module
+exports.push([module.i, "form label {\n  display: block;\n}\ninput[type=\"text\"],\ninput[type=\"search\"],\ninput[type=\"number\"],\ntextarea {\n  width: 100%;\n  height: 30px;\n  padding: 4px 10px 2px 10px;\n  border: none;\n  border-bottom: 1px solid rgba(0, 0, 0, 0.15);\n  outline: 0;\n  color: #343f6a;\n  font-size: 1.8rem;\n  line-height: 1.5;\n}\ninput[type=\"text\"]:focus,\ninput[type=\"search\"]:focus,\ninput[type=\"number\"]:focus,\ntextarea:focus {\n  border-bottom: 2px solid #343f6a;\n  padding-bottom: 1px;\n}\ntextarea {\n  font-family: 'Open Sans', Helvetica, sans-serif;\n  resize: none;\n}\ninput[type=\"search\"] {\n  padding-left: 30px;\n  background: none;\n  letter-spacing: 0.5px;\n}\nform label {\n  font-size: 1.6rem;\n  margin-bottom: 10px;\n  display: inline-block;\n}\n.tags-label {\n  margin-bottom: 20px;\n}\n.label-required::after {\n  content: \"*\";\n  padding-left: 5px;\n  color: crimson;\n}\n.row.row-flex {\n  display: flex;\n  justify-content: space-between;\n  margin-bottom: 20px;\n}\n.input-small-container label:first-of-type {\n  margin-right: 10px;\n}\n.input-container {\n  padding-bottom: 40px;\n}\ntextarea#article-preview {\n  min-height: 140px;\n}\ntextarea#article-text {\n  min-height: 490px;\n}\ntextarea#article-title {\n  min-height: 60px;\n}\ninput[type=\"checkbox\"] {\n  display: none;\n}\ninput[type=\"checkbox\"] + label {\n  display: inline-block;\n  border: 2px solid #4d80aa;\n  height: 24px;\n  width: 24px;\n  border-radius: 3px;\n  position: relative;\n}\ninput[type=\"checkbox\"]:checked + label {\n  background: #4d80aa;\n}\ninput {\n  background: none;\n}\ninput[type=\"checkbox\"] + label::before {\n  content: '';\n  position: absolute;\n}\ninput[type=\"checkbox\"]:checked + label::before {\n  font-family: \"FontAwesome\";\n  content: \"\\F00C\";\n  font-size: 1.6rem;\n  color: white;\n  left: 2px;\n  top: 2px;\n}\n.input-small-container {\n  display: flex;\n  align-items: center;\n}\n.submit-container {\n  display: flex;\n  justify-content: space-evenly;\n}\n.help-block.ng-active {\n  font-size: 1.3rem;\n  margin-top: 10px;\n  color: crimson;\n  position: absolute;\n}\n.btn.btn-fill:disabled {\n  opacity: 0.8;\n  cursor: not-allowed;\n}\n.btn.btn-fill:disabled:hover {\n  background: #4d80aa;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 123 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _angular = __webpack_require__(4);
+
+var _angular2 = _interopRequireDefault(_angular);
+
+var _header = __webpack_require__(124);
+
+var _header2 = _interopRequireDefault(_header);
+
+var _header3 = __webpack_require__(158);
+
+var _header4 = _interopRequireDefault(_header3);
+
+__webpack_require__(126);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var HeaderModule = _angular2.default.module('app.common.header', []).component('appHeader', _header2.default).service('HeaderService', _header4.default).name;
+
+exports.default = HeaderModule;
+
+/***/ }),
+/* 124 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _header = __webpack_require__(125);
+
+var _header2 = _interopRequireDefault(_header);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var ArticleFormComponent = {
+    bindings: {},
+    template: _header2.default,
+    controller: function () {
+        function ArticlesPage(HeaderService) {
+            'ngInject';
+
+            _classCallCheck(this, ArticlesPage);
+
+            this.HeaderService = HeaderService;
+        }
+
+        _createClass(ArticlesPage, [{
+            key: 'getState',
+            value: function getState() {
+                return this.HeaderService.getLinkState();
+            }
+        }]);
+
+        return ArticlesPage;
+    }()
+};
+
+exports.default = ArticleFormComponent;
+
+/***/ }),
+/* 125 */
+/***/ (function(module, exports) {
+
+module.exports = "<header>\n    <div class=\"container\">\n        <p>Awesome App header</p>\n        <a ng-if=\"$ctrl.getState() === 'articles'\" ui-sref=\"articles\">\n            <i class=\"fa fa-arrow-left\" aria-hidden=\"true\"></i>\n            Back\n        </a>\n        <a ng-if=\"$ctrl.getState() === 'addArticle'\" ui-sref=\"addArticle\">\n            Add article\n            <i class=\"fa fa-plus\" aria-hidden=\"true\"></i>\n        </a>\n    </div>\n</header>\n";
+
+/***/ }),
+/* 126 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(127);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {"hmr":true}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__(9)(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/less-loader/dist/cjs.js!./header.less", function() {
+			var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/less-loader/dist/cjs.js!./header.less");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 127 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(8)(false);
+// imports
+
+
+// module
+exports.push([module.i, "header {\n  position: fixed;\n  top: 0;\n  z-index: 1;\n  left: 0;\n  font-size: 2.2rem;\n  text-align: center;\n  width: 100%;\n  background: #4d80aa;\n  color: white;\n  height: 50px;\n  line-height: 50px;\n}\nheader .container {\n  margin: 0 auto;\n  max-width: 876px;\n  display: flex;\n  justify-content: space-between;\n  align-items: baseline;\n}\nheader a {\n  color: lightgrey;\n}\nheader a:hover {\n  text-decoration: underline;\n  color: lightgrey;\n}\nheader i.fa {\n  font-size: 1.4rem;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 128 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+var capitalizeFilter = function capitalizeFilter() {
+    return function (text) {
+        return text.charAt(0).toUpperCase() + text.slice(1);
+    };
+};
+
+exports.default = capitalizeFilter;
+
+/***/ }),
+/* 129 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+var AppComponent = {
+    template: "\n        <app-header></app-header>\n        <div>\n            <ui-view><ui-view>\n        </div>\n        <footer><p>Awesome footer, Copyright FrontCamp 2018.</p></footer>\n    "
+};
+
+exports.default = AppComponent;
+
+/***/ }),
+/* 130 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+function routing($urlRouterProvider, $stateProvider, $locationProvider) {
+    $stateProvider.state('articles', {
+        url: '/articles',
+        component: 'articles',
+        resolve: {
+            articles: function articles(ArticlesService) {
+                return ArticlesService.getArticles();
+            }
+        }
+    }).state('article', {
+        url: '/articles/:id',
+        name: 'article',
+        component: 'articlePage',
+        resolve: {
+            article: function article($stateParams, ArticlesService) {
+                return ArticlesService.getArticles().then(function (articles) {
+                    return articles.find(function (_ref) {
+                        var _id = _ref._id;
+                        return _id === $stateParams.id;
+                    });
+                }).then(function (article) {
+                    return Object.assign({}, article);
+                });
+            }
+        },
+        onEnter: function onEnter($state, article) {
+            if (article._id === undefined) {
+                $state.go('articles');
+            }
+        }
+    }).state('addArticle', {
+        url: '/add-article',
+        component: 'addArticle',
+        resolve: {
+            articles: function articles(ArticlesService) {
+                return ArticlesService.getArticles();
+            }
+        }
+    }).state('editArticle', {
+        url: '/edit-article/:id',
+        component: 'editArticle',
+        resolve: {
+            article: function article($stateParams, ArticlesService) {
+                return ArticlesService.getArticles().then(function () {
+                    return Object.assign({}, ArticlesService.getArticleById($stateParams.id));
+                });
+            }
+        },
+        onEnter: function onEnter($state, article) {
+            if (article._id === undefined) {
+                $state.go('articles');
+            }
+        }
+    });
+
+    $urlRouterProvider.otherwise('/articles');
+    $locationProvider.html5Mode(true);
+}
+
+routing.$inject = ['$urlRouterProvider', '$stateProvider', '$locationProvider'];
+
+exports.default = routing;
+
+/***/ }),
+/* 131 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(132);
+
+
+/***/ }),
+/* 132 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(133);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(141)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!./node_modules/css-loader/index.js!./node_modules/less-loader/index.js!./font-awesome-styles.loader.js!./font-awesome.config.js", function() {
+			var newContent = require("!!./node_modules/css-loader/index.js!./node_modules/less-loader/index.js!./font-awesome-styles.loader.js!./font-awesome.config.js");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 133 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(134)();
+// imports
+
+
+// module
+exports.push([module.i, ".fa-border {\n  padding: .2em .25em .15em;\n  border: solid 0.08em #eee;\n  border-radius: .1em;\n}\n.fa-pull-left {\n  float: left;\n}\n.fa-pull-right {\n  float: right;\n}\n.fa.fa-pull-left {\n  margin-right: .3em;\n}\n.fa.fa-pull-right {\n  margin-left: .3em;\n}\n/* Deprecated as of 4.4.0 */\n.pull-right {\n  float: right;\n}\n.pull-left {\n  float: left;\n}\n.fa.pull-left {\n  margin-right: .3em;\n}\n.fa.pull-right {\n  margin-left: .3em;\n}\n.fa {\n  display: inline-block;\n  font: normal normal normal 14px/1 FontAwesome;\n  font-size: inherit;\n  text-rendering: auto;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n}\n.fa-fw {\n  width: 1.28571429em;\n  text-align: center;\n}\n/* Font Awesome uses the Unicode Private Use Area (PUA) to ensure screen\n   readers do not read off random characters that represent icons */\n.fa-glass:before {\n  content: \"\\F000\";\n}\n.fa-music:before {\n  content: \"\\F001\";\n}\n.fa-search:before {\n  content: \"\\F002\";\n}\n.fa-envelope-o:before {\n  content: \"\\F003\";\n}\n.fa-heart:before {\n  content: \"\\F004\";\n}\n.fa-star:before {\n  content: \"\\F005\";\n}\n.fa-star-o:before {\n  content: \"\\F006\";\n}\n.fa-user:before {\n  content: \"\\F007\";\n}\n.fa-film:before {\n  content: \"\\F008\";\n}\n.fa-th-large:before {\n  content: \"\\F009\";\n}\n.fa-th:before {\n  content: \"\\F00A\";\n}\n.fa-th-list:before {\n  content: \"\\F00B\";\n}\n.fa-check:before {\n  content: \"\\F00C\";\n}\n.fa-remove:before,\n.fa-close:before,\n.fa-times:before {\n  content: \"\\F00D\";\n}\n.fa-search-plus:before {\n  content: \"\\F00E\";\n}\n.fa-search-minus:before {\n  content: \"\\F010\";\n}\n.fa-power-off:before {\n  content: \"\\F011\";\n}\n.fa-signal:before {\n  content: \"\\F012\";\n}\n.fa-gear:before,\n.fa-cog:before {\n  content: \"\\F013\";\n}\n.fa-trash-o:before {\n  content: \"\\F014\";\n}\n.fa-home:before {\n  content: \"\\F015\";\n}\n.fa-file-o:before {\n  content: \"\\F016\";\n}\n.fa-clock-o:before {\n  content: \"\\F017\";\n}\n.fa-road:before {\n  content: \"\\F018\";\n}\n.fa-download:before {\n  content: \"\\F019\";\n}\n.fa-arrow-circle-o-down:before {\n  content: \"\\F01A\";\n}\n.fa-arrow-circle-o-up:before {\n  content: \"\\F01B\";\n}\n.fa-inbox:before {\n  content: \"\\F01C\";\n}\n.fa-play-circle-o:before {\n  content: \"\\F01D\";\n}\n.fa-rotate-right:before,\n.fa-repeat:before {\n  content: \"\\F01E\";\n}\n.fa-refresh:before {\n  content: \"\\F021\";\n}\n.fa-list-alt:before {\n  content: \"\\F022\";\n}\n.fa-lock:before {\n  content: \"\\F023\";\n}\n.fa-flag:before {\n  content: \"\\F024\";\n}\n.fa-headphones:before {\n  content: \"\\F025\";\n}\n.fa-volume-off:before {\n  content: \"\\F026\";\n}\n.fa-volume-down:before {\n  content: \"\\F027\";\n}\n.fa-volume-up:before {\n  content: \"\\F028\";\n}\n.fa-qrcode:before {\n  content: \"\\F029\";\n}\n.fa-barcode:before {\n  content: \"\\F02A\";\n}\n.fa-tag:before {\n  content: \"\\F02B\";\n}\n.fa-tags:before {\n  content: \"\\F02C\";\n}\n.fa-book:before {\n  content: \"\\F02D\";\n}\n.fa-bookmark:before {\n  content: \"\\F02E\";\n}\n.fa-print:before {\n  content: \"\\F02F\";\n}\n.fa-camera:before {\n  content: \"\\F030\";\n}\n.fa-font:before {\n  content: \"\\F031\";\n}\n.fa-bold:before {\n  content: \"\\F032\";\n}\n.fa-italic:before {\n  content: \"\\F033\";\n}\n.fa-text-height:before {\n  content: \"\\F034\";\n}\n.fa-text-width:before {\n  content: \"\\F035\";\n}\n.fa-align-left:before {\n  content: \"\\F036\";\n}\n.fa-align-center:before {\n  content: \"\\F037\";\n}\n.fa-align-right:before {\n  content: \"\\F038\";\n}\n.fa-align-justify:before {\n  content: \"\\F039\";\n}\n.fa-list:before {\n  content: \"\\F03A\";\n}\n.fa-dedent:before,\n.fa-outdent:before {\n  content: \"\\F03B\";\n}\n.fa-indent:before {\n  content: \"\\F03C\";\n}\n.fa-video-camera:before {\n  content: \"\\F03D\";\n}\n.fa-photo:before,\n.fa-image:before,\n.fa-picture-o:before {\n  content: \"\\F03E\";\n}\n.fa-pencil:before {\n  content: \"\\F040\";\n}\n.fa-map-marker:before {\n  content: \"\\F041\";\n}\n.fa-adjust:before {\n  content: \"\\F042\";\n}\n.fa-tint:before {\n  content: \"\\F043\";\n}\n.fa-edit:before,\n.fa-pencil-square-o:before {\n  content: \"\\F044\";\n}\n.fa-share-square-o:before {\n  content: \"\\F045\";\n}\n.fa-check-square-o:before {\n  content: \"\\F046\";\n}\n.fa-arrows:before {\n  content: \"\\F047\";\n}\n.fa-step-backward:before {\n  content: \"\\F048\";\n}\n.fa-fast-backward:before {\n  content: \"\\F049\";\n}\n.fa-backward:before {\n  content: \"\\F04A\";\n}\n.fa-play:before {\n  content: \"\\F04B\";\n}\n.fa-pause:before {\n  content: \"\\F04C\";\n}\n.fa-stop:before {\n  content: \"\\F04D\";\n}\n.fa-forward:before {\n  content: \"\\F04E\";\n}\n.fa-fast-forward:before {\n  content: \"\\F050\";\n}\n.fa-step-forward:before {\n  content: \"\\F051\";\n}\n.fa-eject:before {\n  content: \"\\F052\";\n}\n.fa-chevron-left:before {\n  content: \"\\F053\";\n}\n.fa-chevron-right:before {\n  content: \"\\F054\";\n}\n.fa-plus-circle:before {\n  content: \"\\F055\";\n}\n.fa-minus-circle:before {\n  content: \"\\F056\";\n}\n.fa-times-circle:before {\n  content: \"\\F057\";\n}\n.fa-check-circle:before {\n  content: \"\\F058\";\n}\n.fa-question-circle:before {\n  content: \"\\F059\";\n}\n.fa-info-circle:before {\n  content: \"\\F05A\";\n}\n.fa-crosshairs:before {\n  content: \"\\F05B\";\n}\n.fa-times-circle-o:before {\n  content: \"\\F05C\";\n}\n.fa-check-circle-o:before {\n  content: \"\\F05D\";\n}\n.fa-ban:before {\n  content: \"\\F05E\";\n}\n.fa-arrow-left:before {\n  content: \"\\F060\";\n}\n.fa-arrow-right:before {\n  content: \"\\F061\";\n}\n.fa-arrow-up:before {\n  content: \"\\F062\";\n}\n.fa-arrow-down:before {\n  content: \"\\F063\";\n}\n.fa-mail-forward:before,\n.fa-share:before {\n  content: \"\\F064\";\n}\n.fa-expand:before {\n  content: \"\\F065\";\n}\n.fa-compress:before {\n  content: \"\\F066\";\n}\n.fa-plus:before {\n  content: \"\\F067\";\n}\n.fa-minus:before {\n  content: \"\\F068\";\n}\n.fa-asterisk:before {\n  content: \"\\F069\";\n}\n.fa-exclamation-circle:before {\n  content: \"\\F06A\";\n}\n.fa-gift:before {\n  content: \"\\F06B\";\n}\n.fa-leaf:before {\n  content: \"\\F06C\";\n}\n.fa-fire:before {\n  content: \"\\F06D\";\n}\n.fa-eye:before {\n  content: \"\\F06E\";\n}\n.fa-eye-slash:before {\n  content: \"\\F070\";\n}\n.fa-warning:before,\n.fa-exclamation-triangle:before {\n  content: \"\\F071\";\n}\n.fa-plane:before {\n  content: \"\\F072\";\n}\n.fa-calendar:before {\n  content: \"\\F073\";\n}\n.fa-random:before {\n  content: \"\\F074\";\n}\n.fa-comment:before {\n  content: \"\\F075\";\n}\n.fa-magnet:before {\n  content: \"\\F076\";\n}\n.fa-chevron-up:before {\n  content: \"\\F077\";\n}\n.fa-chevron-down:before {\n  content: \"\\F078\";\n}\n.fa-retweet:before {\n  content: \"\\F079\";\n}\n.fa-shopping-cart:before {\n  content: \"\\F07A\";\n}\n.fa-folder:before {\n  content: \"\\F07B\";\n}\n.fa-folder-open:before {\n  content: \"\\F07C\";\n}\n.fa-arrows-v:before {\n  content: \"\\F07D\";\n}\n.fa-arrows-h:before {\n  content: \"\\F07E\";\n}\n.fa-bar-chart-o:before,\n.fa-bar-chart:before {\n  content: \"\\F080\";\n}\n.fa-twitter-square:before {\n  content: \"\\F081\";\n}\n.fa-facebook-square:before {\n  content: \"\\F082\";\n}\n.fa-camera-retro:before {\n  content: \"\\F083\";\n}\n.fa-key:before {\n  content: \"\\F084\";\n}\n.fa-gears:before,\n.fa-cogs:before {\n  content: \"\\F085\";\n}\n.fa-comments:before {\n  content: \"\\F086\";\n}\n.fa-thumbs-o-up:before {\n  content: \"\\F087\";\n}\n.fa-thumbs-o-down:before {\n  content: \"\\F088\";\n}\n.fa-star-half:before {\n  content: \"\\F089\";\n}\n.fa-heart-o:before {\n  content: \"\\F08A\";\n}\n.fa-sign-out:before {\n  content: \"\\F08B\";\n}\n.fa-linkedin-square:before {\n  content: \"\\F08C\";\n}\n.fa-thumb-tack:before {\n  content: \"\\F08D\";\n}\n.fa-external-link:before {\n  content: \"\\F08E\";\n}\n.fa-sign-in:before {\n  content: \"\\F090\";\n}\n.fa-trophy:before {\n  content: \"\\F091\";\n}\n.fa-github-square:before {\n  content: \"\\F092\";\n}\n.fa-upload:before {\n  content: \"\\F093\";\n}\n.fa-lemon-o:before {\n  content: \"\\F094\";\n}\n.fa-phone:before {\n  content: \"\\F095\";\n}\n.fa-square-o:before {\n  content: \"\\F096\";\n}\n.fa-bookmark-o:before {\n  content: \"\\F097\";\n}\n.fa-phone-square:before {\n  content: \"\\F098\";\n}\n.fa-twitter:before {\n  content: \"\\F099\";\n}\n.fa-facebook-f:before,\n.fa-facebook:before {\n  content: \"\\F09A\";\n}\n.fa-github:before {\n  content: \"\\F09B\";\n}\n.fa-unlock:before {\n  content: \"\\F09C\";\n}\n.fa-credit-card:before {\n  content: \"\\F09D\";\n}\n.fa-feed:before,\n.fa-rss:before {\n  content: \"\\F09E\";\n}\n.fa-hdd-o:before {\n  content: \"\\F0A0\";\n}\n.fa-bullhorn:before {\n  content: \"\\F0A1\";\n}\n.fa-bell:before {\n  content: \"\\F0F3\";\n}\n.fa-certificate:before {\n  content: \"\\F0A3\";\n}\n.fa-hand-o-right:before {\n  content: \"\\F0A4\";\n}\n.fa-hand-o-left:before {\n  content: \"\\F0A5\";\n}\n.fa-hand-o-up:before {\n  content: \"\\F0A6\";\n}\n.fa-hand-o-down:before {\n  content: \"\\F0A7\";\n}\n.fa-arrow-circle-left:before {\n  content: \"\\F0A8\";\n}\n.fa-arrow-circle-right:before {\n  content: \"\\F0A9\";\n}\n.fa-arrow-circle-up:before {\n  content: \"\\F0AA\";\n}\n.fa-arrow-circle-down:before {\n  content: \"\\F0AB\";\n}\n.fa-globe:before {\n  content: \"\\F0AC\";\n}\n.fa-wrench:before {\n  content: \"\\F0AD\";\n}\n.fa-tasks:before {\n  content: \"\\F0AE\";\n}\n.fa-filter:before {\n  content: \"\\F0B0\";\n}\n.fa-briefcase:before {\n  content: \"\\F0B1\";\n}\n.fa-arrows-alt:before {\n  content: \"\\F0B2\";\n}\n.fa-group:before,\n.fa-users:before {\n  content: \"\\F0C0\";\n}\n.fa-chain:before,\n.fa-link:before {\n  content: \"\\F0C1\";\n}\n.fa-cloud:before {\n  content: \"\\F0C2\";\n}\n.fa-flask:before {\n  content: \"\\F0C3\";\n}\n.fa-cut:before,\n.fa-scissors:before {\n  content: \"\\F0C4\";\n}\n.fa-copy:before,\n.fa-files-o:before {\n  content: \"\\F0C5\";\n}\n.fa-paperclip:before {\n  content: \"\\F0C6\";\n}\n.fa-save:before,\n.fa-floppy-o:before {\n  content: \"\\F0C7\";\n}\n.fa-square:before {\n  content: \"\\F0C8\";\n}\n.fa-navicon:before,\n.fa-reorder:before,\n.fa-bars:before {\n  content: \"\\F0C9\";\n}\n.fa-list-ul:before {\n  content: \"\\F0CA\";\n}\n.fa-list-ol:before {\n  content: \"\\F0CB\";\n}\n.fa-strikethrough:before {\n  content: \"\\F0CC\";\n}\n.fa-underline:before {\n  content: \"\\F0CD\";\n}\n.fa-table:before {\n  content: \"\\F0CE\";\n}\n.fa-magic:before {\n  content: \"\\F0D0\";\n}\n.fa-truck:before {\n  content: \"\\F0D1\";\n}\n.fa-pinterest:before {\n  content: \"\\F0D2\";\n}\n.fa-pinterest-square:before {\n  content: \"\\F0D3\";\n}\n.fa-google-plus-square:before {\n  content: \"\\F0D4\";\n}\n.fa-google-plus:before {\n  content: \"\\F0D5\";\n}\n.fa-money:before {\n  content: \"\\F0D6\";\n}\n.fa-caret-down:before {\n  content: \"\\F0D7\";\n}\n.fa-caret-up:before {\n  content: \"\\F0D8\";\n}\n.fa-caret-left:before {\n  content: \"\\F0D9\";\n}\n.fa-caret-right:before {\n  content: \"\\F0DA\";\n}\n.fa-columns:before {\n  content: \"\\F0DB\";\n}\n.fa-unsorted:before,\n.fa-sort:before {\n  content: \"\\F0DC\";\n}\n.fa-sort-down:before,\n.fa-sort-desc:before {\n  content: \"\\F0DD\";\n}\n.fa-sort-up:before,\n.fa-sort-asc:before {\n  content: \"\\F0DE\";\n}\n.fa-envelope:before {\n  content: \"\\F0E0\";\n}\n.fa-linkedin:before {\n  content: \"\\F0E1\";\n}\n.fa-rotate-left:before,\n.fa-undo:before {\n  content: \"\\F0E2\";\n}\n.fa-legal:before,\n.fa-gavel:before {\n  content: \"\\F0E3\";\n}\n.fa-dashboard:before,\n.fa-tachometer:before {\n  content: \"\\F0E4\";\n}\n.fa-comment-o:before {\n  content: \"\\F0E5\";\n}\n.fa-comments-o:before {\n  content: \"\\F0E6\";\n}\n.fa-flash:before,\n.fa-bolt:before {\n  content: \"\\F0E7\";\n}\n.fa-sitemap:before {\n  content: \"\\F0E8\";\n}\n.fa-umbrella:before {\n  content: \"\\F0E9\";\n}\n.fa-paste:before,\n.fa-clipboard:before {\n  content: \"\\F0EA\";\n}\n.fa-lightbulb-o:before {\n  content: \"\\F0EB\";\n}\n.fa-exchange:before {\n  content: \"\\F0EC\";\n}\n.fa-cloud-download:before {\n  content: \"\\F0ED\";\n}\n.fa-cloud-upload:before {\n  content: \"\\F0EE\";\n}\n.fa-user-md:before {\n  content: \"\\F0F0\";\n}\n.fa-stethoscope:before {\n  content: \"\\F0F1\";\n}\n.fa-suitcase:before {\n  content: \"\\F0F2\";\n}\n.fa-bell-o:before {\n  content: \"\\F0A2\";\n}\n.fa-coffee:before {\n  content: \"\\F0F4\";\n}\n.fa-cutlery:before {\n  content: \"\\F0F5\";\n}\n.fa-file-text-o:before {\n  content: \"\\F0F6\";\n}\n.fa-building-o:before {\n  content: \"\\F0F7\";\n}\n.fa-hospital-o:before {\n  content: \"\\F0F8\";\n}\n.fa-ambulance:before {\n  content: \"\\F0F9\";\n}\n.fa-medkit:before {\n  content: \"\\F0FA\";\n}\n.fa-fighter-jet:before {\n  content: \"\\F0FB\";\n}\n.fa-beer:before {\n  content: \"\\F0FC\";\n}\n.fa-h-square:before {\n  content: \"\\F0FD\";\n}\n.fa-plus-square:before {\n  content: \"\\F0FE\";\n}\n.fa-angle-double-left:before {\n  content: \"\\F100\";\n}\n.fa-angle-double-right:before {\n  content: \"\\F101\";\n}\n.fa-angle-double-up:before {\n  content: \"\\F102\";\n}\n.fa-angle-double-down:before {\n  content: \"\\F103\";\n}\n.fa-angle-left:before {\n  content: \"\\F104\";\n}\n.fa-angle-right:before {\n  content: \"\\F105\";\n}\n.fa-angle-up:before {\n  content: \"\\F106\";\n}\n.fa-angle-down:before {\n  content: \"\\F107\";\n}\n.fa-desktop:before {\n  content: \"\\F108\";\n}\n.fa-laptop:before {\n  content: \"\\F109\";\n}\n.fa-tablet:before {\n  content: \"\\F10A\";\n}\n.fa-mobile-phone:before,\n.fa-mobile:before {\n  content: \"\\F10B\";\n}\n.fa-circle-o:before {\n  content: \"\\F10C\";\n}\n.fa-quote-left:before {\n  content: \"\\F10D\";\n}\n.fa-quote-right:before {\n  content: \"\\F10E\";\n}\n.fa-spinner:before {\n  content: \"\\F110\";\n}\n.fa-circle:before {\n  content: \"\\F111\";\n}\n.fa-mail-reply:before,\n.fa-reply:before {\n  content: \"\\F112\";\n}\n.fa-github-alt:before {\n  content: \"\\F113\";\n}\n.fa-folder-o:before {\n  content: \"\\F114\";\n}\n.fa-folder-open-o:before {\n  content: \"\\F115\";\n}\n.fa-smile-o:before {\n  content: \"\\F118\";\n}\n.fa-frown-o:before {\n  content: \"\\F119\";\n}\n.fa-meh-o:before {\n  content: \"\\F11A\";\n}\n.fa-gamepad:before {\n  content: \"\\F11B\";\n}\n.fa-keyboard-o:before {\n  content: \"\\F11C\";\n}\n.fa-flag-o:before {\n  content: \"\\F11D\";\n}\n.fa-flag-checkered:before {\n  content: \"\\F11E\";\n}\n.fa-terminal:before {\n  content: \"\\F120\";\n}\n.fa-code:before {\n  content: \"\\F121\";\n}\n.fa-mail-reply-all:before,\n.fa-reply-all:before {\n  content: \"\\F122\";\n}\n.fa-star-half-empty:before,\n.fa-star-half-full:before,\n.fa-star-half-o:before {\n  content: \"\\F123\";\n}\n.fa-location-arrow:before {\n  content: \"\\F124\";\n}\n.fa-crop:before {\n  content: \"\\F125\";\n}\n.fa-code-fork:before {\n  content: \"\\F126\";\n}\n.fa-unlink:before,\n.fa-chain-broken:before {\n  content: \"\\F127\";\n}\n.fa-question:before {\n  content: \"\\F128\";\n}\n.fa-info:before {\n  content: \"\\F129\";\n}\n.fa-exclamation:before {\n  content: \"\\F12A\";\n}\n.fa-superscript:before {\n  content: \"\\F12B\";\n}\n.fa-subscript:before {\n  content: \"\\F12C\";\n}\n.fa-eraser:before {\n  content: \"\\F12D\";\n}\n.fa-puzzle-piece:before {\n  content: \"\\F12E\";\n}\n.fa-microphone:before {\n  content: \"\\F130\";\n}\n.fa-microphone-slash:before {\n  content: \"\\F131\";\n}\n.fa-shield:before {\n  content: \"\\F132\";\n}\n.fa-calendar-o:before {\n  content: \"\\F133\";\n}\n.fa-fire-extinguisher:before {\n  content: \"\\F134\";\n}\n.fa-rocket:before {\n  content: \"\\F135\";\n}\n.fa-maxcdn:before {\n  content: \"\\F136\";\n}\n.fa-chevron-circle-left:before {\n  content: \"\\F137\";\n}\n.fa-chevron-circle-right:before {\n  content: \"\\F138\";\n}\n.fa-chevron-circle-up:before {\n  content: \"\\F139\";\n}\n.fa-chevron-circle-down:before {\n  content: \"\\F13A\";\n}\n.fa-html5:before {\n  content: \"\\F13B\";\n}\n.fa-css3:before {\n  content: \"\\F13C\";\n}\n.fa-anchor:before {\n  content: \"\\F13D\";\n}\n.fa-unlock-alt:before {\n  content: \"\\F13E\";\n}\n.fa-bullseye:before {\n  content: \"\\F140\";\n}\n.fa-ellipsis-h:before {\n  content: \"\\F141\";\n}\n.fa-ellipsis-v:before {\n  content: \"\\F142\";\n}\n.fa-rss-square:before {\n  content: \"\\F143\";\n}\n.fa-play-circle:before {\n  content: \"\\F144\";\n}\n.fa-ticket:before {\n  content: \"\\F145\";\n}\n.fa-minus-square:before {\n  content: \"\\F146\";\n}\n.fa-minus-square-o:before {\n  content: \"\\F147\";\n}\n.fa-level-up:before {\n  content: \"\\F148\";\n}\n.fa-level-down:before {\n  content: \"\\F149\";\n}\n.fa-check-square:before {\n  content: \"\\F14A\";\n}\n.fa-pencil-square:before {\n  content: \"\\F14B\";\n}\n.fa-external-link-square:before {\n  content: \"\\F14C\";\n}\n.fa-share-square:before {\n  content: \"\\F14D\";\n}\n.fa-compass:before {\n  content: \"\\F14E\";\n}\n.fa-toggle-down:before,\n.fa-caret-square-o-down:before {\n  content: \"\\F150\";\n}\n.fa-toggle-up:before,\n.fa-caret-square-o-up:before {\n  content: \"\\F151\";\n}\n.fa-toggle-right:before,\n.fa-caret-square-o-right:before {\n  content: \"\\F152\";\n}\n.fa-euro:before,\n.fa-eur:before {\n  content: \"\\F153\";\n}\n.fa-gbp:before {\n  content: \"\\F154\";\n}\n.fa-dollar:before,\n.fa-usd:before {\n  content: \"\\F155\";\n}\n.fa-rupee:before,\n.fa-inr:before {\n  content: \"\\F156\";\n}\n.fa-cny:before,\n.fa-rmb:before,\n.fa-yen:before,\n.fa-jpy:before {\n  content: \"\\F157\";\n}\n.fa-ruble:before,\n.fa-rouble:before,\n.fa-rub:before {\n  content: \"\\F158\";\n}\n.fa-won:before,\n.fa-krw:before {\n  content: \"\\F159\";\n}\n.fa-bitcoin:before,\n.fa-btc:before {\n  content: \"\\F15A\";\n}\n.fa-file:before {\n  content: \"\\F15B\";\n}\n.fa-file-text:before {\n  content: \"\\F15C\";\n}\n.fa-sort-alpha-asc:before {\n  content: \"\\F15D\";\n}\n.fa-sort-alpha-desc:before {\n  content: \"\\F15E\";\n}\n.fa-sort-amount-asc:before {\n  content: \"\\F160\";\n}\n.fa-sort-amount-desc:before {\n  content: \"\\F161\";\n}\n.fa-sort-numeric-asc:before {\n  content: \"\\F162\";\n}\n.fa-sort-numeric-desc:before {\n  content: \"\\F163\";\n}\n.fa-thumbs-up:before {\n  content: \"\\F164\";\n}\n.fa-thumbs-down:before {\n  content: \"\\F165\";\n}\n.fa-youtube-square:before {\n  content: \"\\F166\";\n}\n.fa-youtube:before {\n  content: \"\\F167\";\n}\n.fa-xing:before {\n  content: \"\\F168\";\n}\n.fa-xing-square:before {\n  content: \"\\F169\";\n}\n.fa-youtube-play:before {\n  content: \"\\F16A\";\n}\n.fa-dropbox:before {\n  content: \"\\F16B\";\n}\n.fa-stack-overflow:before {\n  content: \"\\F16C\";\n}\n.fa-instagram:before {\n  content: \"\\F16D\";\n}\n.fa-flickr:before {\n  content: \"\\F16E\";\n}\n.fa-adn:before {\n  content: \"\\F170\";\n}\n.fa-bitbucket:before {\n  content: \"\\F171\";\n}\n.fa-bitbucket-square:before {\n  content: \"\\F172\";\n}\n.fa-tumblr:before {\n  content: \"\\F173\";\n}\n.fa-tumblr-square:before {\n  content: \"\\F174\";\n}\n.fa-long-arrow-down:before {\n  content: \"\\F175\";\n}\n.fa-long-arrow-up:before {\n  content: \"\\F176\";\n}\n.fa-long-arrow-left:before {\n  content: \"\\F177\";\n}\n.fa-long-arrow-right:before {\n  content: \"\\F178\";\n}\n.fa-apple:before {\n  content: \"\\F179\";\n}\n.fa-windows:before {\n  content: \"\\F17A\";\n}\n.fa-android:before {\n  content: \"\\F17B\";\n}\n.fa-linux:before {\n  content: \"\\F17C\";\n}\n.fa-dribbble:before {\n  content: \"\\F17D\";\n}\n.fa-skype:before {\n  content: \"\\F17E\";\n}\n.fa-foursquare:before {\n  content: \"\\F180\";\n}\n.fa-trello:before {\n  content: \"\\F181\";\n}\n.fa-female:before {\n  content: \"\\F182\";\n}\n.fa-male:before {\n  content: \"\\F183\";\n}\n.fa-gittip:before,\n.fa-gratipay:before {\n  content: \"\\F184\";\n}\n.fa-sun-o:before {\n  content: \"\\F185\";\n}\n.fa-moon-o:before {\n  content: \"\\F186\";\n}\n.fa-archive:before {\n  content: \"\\F187\";\n}\n.fa-bug:before {\n  content: \"\\F188\";\n}\n.fa-vk:before {\n  content: \"\\F189\";\n}\n.fa-weibo:before {\n  content: \"\\F18A\";\n}\n.fa-renren:before {\n  content: \"\\F18B\";\n}\n.fa-pagelines:before {\n  content: \"\\F18C\";\n}\n.fa-stack-exchange:before {\n  content: \"\\F18D\";\n}\n.fa-arrow-circle-o-right:before {\n  content: \"\\F18E\";\n}\n.fa-arrow-circle-o-left:before {\n  content: \"\\F190\";\n}\n.fa-toggle-left:before,\n.fa-caret-square-o-left:before {\n  content: \"\\F191\";\n}\n.fa-dot-circle-o:before {\n  content: \"\\F192\";\n}\n.fa-wheelchair:before {\n  content: \"\\F193\";\n}\n.fa-vimeo-square:before {\n  content: \"\\F194\";\n}\n.fa-turkish-lira:before,\n.fa-try:before {\n  content: \"\\F195\";\n}\n.fa-plus-square-o:before {\n  content: \"\\F196\";\n}\n.fa-space-shuttle:before {\n  content: \"\\F197\";\n}\n.fa-slack:before {\n  content: \"\\F198\";\n}\n.fa-envelope-square:before {\n  content: \"\\F199\";\n}\n.fa-wordpress:before {\n  content: \"\\F19A\";\n}\n.fa-openid:before {\n  content: \"\\F19B\";\n}\n.fa-institution:before,\n.fa-bank:before,\n.fa-university:before {\n  content: \"\\F19C\";\n}\n.fa-mortar-board:before,\n.fa-graduation-cap:before {\n  content: \"\\F19D\";\n}\n.fa-yahoo:before {\n  content: \"\\F19E\";\n}\n.fa-google:before {\n  content: \"\\F1A0\";\n}\n.fa-reddit:before {\n  content: \"\\F1A1\";\n}\n.fa-reddit-square:before {\n  content: \"\\F1A2\";\n}\n.fa-stumbleupon-circle:before {\n  content: \"\\F1A3\";\n}\n.fa-stumbleupon:before {\n  content: \"\\F1A4\";\n}\n.fa-delicious:before {\n  content: \"\\F1A5\";\n}\n.fa-digg:before {\n  content: \"\\F1A6\";\n}\n.fa-pied-piper-pp:before {\n  content: \"\\F1A7\";\n}\n.fa-pied-piper-alt:before {\n  content: \"\\F1A8\";\n}\n.fa-drupal:before {\n  content: \"\\F1A9\";\n}\n.fa-joomla:before {\n  content: \"\\F1AA\";\n}\n.fa-language:before {\n  content: \"\\F1AB\";\n}\n.fa-fax:before {\n  content: \"\\F1AC\";\n}\n.fa-building:before {\n  content: \"\\F1AD\";\n}\n.fa-child:before {\n  content: \"\\F1AE\";\n}\n.fa-paw:before {\n  content: \"\\F1B0\";\n}\n.fa-spoon:before {\n  content: \"\\F1B1\";\n}\n.fa-cube:before {\n  content: \"\\F1B2\";\n}\n.fa-cubes:before {\n  content: \"\\F1B3\";\n}\n.fa-behance:before {\n  content: \"\\F1B4\";\n}\n.fa-behance-square:before {\n  content: \"\\F1B5\";\n}\n.fa-steam:before {\n  content: \"\\F1B6\";\n}\n.fa-steam-square:before {\n  content: \"\\F1B7\";\n}\n.fa-recycle:before {\n  content: \"\\F1B8\";\n}\n.fa-automobile:before,\n.fa-car:before {\n  content: \"\\F1B9\";\n}\n.fa-cab:before,\n.fa-taxi:before {\n  content: \"\\F1BA\";\n}\n.fa-tree:before {\n  content: \"\\F1BB\";\n}\n.fa-spotify:before {\n  content: \"\\F1BC\";\n}\n.fa-deviantart:before {\n  content: \"\\F1BD\";\n}\n.fa-soundcloud:before {\n  content: \"\\F1BE\";\n}\n.fa-database:before {\n  content: \"\\F1C0\";\n}\n.fa-file-pdf-o:before {\n  content: \"\\F1C1\";\n}\n.fa-file-word-o:before {\n  content: \"\\F1C2\";\n}\n.fa-file-excel-o:before {\n  content: \"\\F1C3\";\n}\n.fa-file-powerpoint-o:before {\n  content: \"\\F1C4\";\n}\n.fa-file-photo-o:before,\n.fa-file-picture-o:before,\n.fa-file-image-o:before {\n  content: \"\\F1C5\";\n}\n.fa-file-zip-o:before,\n.fa-file-archive-o:before {\n  content: \"\\F1C6\";\n}\n.fa-file-sound-o:before,\n.fa-file-audio-o:before {\n  content: \"\\F1C7\";\n}\n.fa-file-movie-o:before,\n.fa-file-video-o:before {\n  content: \"\\F1C8\";\n}\n.fa-file-code-o:before {\n  content: \"\\F1C9\";\n}\n.fa-vine:before {\n  content: \"\\F1CA\";\n}\n.fa-codepen:before {\n  content: \"\\F1CB\";\n}\n.fa-jsfiddle:before {\n  content: \"\\F1CC\";\n}\n.fa-life-bouy:before,\n.fa-life-buoy:before,\n.fa-life-saver:before,\n.fa-support:before,\n.fa-life-ring:before {\n  content: \"\\F1CD\";\n}\n.fa-circle-o-notch:before {\n  content: \"\\F1CE\";\n}\n.fa-ra:before,\n.fa-resistance:before,\n.fa-rebel:before {\n  content: \"\\F1D0\";\n}\n.fa-ge:before,\n.fa-empire:before {\n  content: \"\\F1D1\";\n}\n.fa-git-square:before {\n  content: \"\\F1D2\";\n}\n.fa-git:before {\n  content: \"\\F1D3\";\n}\n.fa-y-combinator-square:before,\n.fa-yc-square:before,\n.fa-hacker-news:before {\n  content: \"\\F1D4\";\n}\n.fa-tencent-weibo:before {\n  content: \"\\F1D5\";\n}\n.fa-qq:before {\n  content: \"\\F1D6\";\n}\n.fa-wechat:before,\n.fa-weixin:before {\n  content: \"\\F1D7\";\n}\n.fa-send:before,\n.fa-paper-plane:before {\n  content: \"\\F1D8\";\n}\n.fa-send-o:before,\n.fa-paper-plane-o:before {\n  content: \"\\F1D9\";\n}\n.fa-history:before {\n  content: \"\\F1DA\";\n}\n.fa-circle-thin:before {\n  content: \"\\F1DB\";\n}\n.fa-header:before {\n  content: \"\\F1DC\";\n}\n.fa-paragraph:before {\n  content: \"\\F1DD\";\n}\n.fa-sliders:before {\n  content: \"\\F1DE\";\n}\n.fa-share-alt:before {\n  content: \"\\F1E0\";\n}\n.fa-share-alt-square:before {\n  content: \"\\F1E1\";\n}\n.fa-bomb:before {\n  content: \"\\F1E2\";\n}\n.fa-soccer-ball-o:before,\n.fa-futbol-o:before {\n  content: \"\\F1E3\";\n}\n.fa-tty:before {\n  content: \"\\F1E4\";\n}\n.fa-binoculars:before {\n  content: \"\\F1E5\";\n}\n.fa-plug:before {\n  content: \"\\F1E6\";\n}\n.fa-slideshare:before {\n  content: \"\\F1E7\";\n}\n.fa-twitch:before {\n  content: \"\\F1E8\";\n}\n.fa-yelp:before {\n  content: \"\\F1E9\";\n}\n.fa-newspaper-o:before {\n  content: \"\\F1EA\";\n}\n.fa-wifi:before {\n  content: \"\\F1EB\";\n}\n.fa-calculator:before {\n  content: \"\\F1EC\";\n}\n.fa-paypal:before {\n  content: \"\\F1ED\";\n}\n.fa-google-wallet:before {\n  content: \"\\F1EE\";\n}\n.fa-cc-visa:before {\n  content: \"\\F1F0\";\n}\n.fa-cc-mastercard:before {\n  content: \"\\F1F1\";\n}\n.fa-cc-discover:before {\n  content: \"\\F1F2\";\n}\n.fa-cc-amex:before {\n  content: \"\\F1F3\";\n}\n.fa-cc-paypal:before {\n  content: \"\\F1F4\";\n}\n.fa-cc-stripe:before {\n  content: \"\\F1F5\";\n}\n.fa-bell-slash:before {\n  content: \"\\F1F6\";\n}\n.fa-bell-slash-o:before {\n  content: \"\\F1F7\";\n}\n.fa-trash:before {\n  content: \"\\F1F8\";\n}\n.fa-copyright:before {\n  content: \"\\F1F9\";\n}\n.fa-at:before {\n  content: \"\\F1FA\";\n}\n.fa-eyedropper:before {\n  content: \"\\F1FB\";\n}\n.fa-paint-brush:before {\n  content: \"\\F1FC\";\n}\n.fa-birthday-cake:before {\n  content: \"\\F1FD\";\n}\n.fa-area-chart:before {\n  content: \"\\F1FE\";\n}\n.fa-pie-chart:before {\n  content: \"\\F200\";\n}\n.fa-line-chart:before {\n  content: \"\\F201\";\n}\n.fa-lastfm:before {\n  content: \"\\F202\";\n}\n.fa-lastfm-square:before {\n  content: \"\\F203\";\n}\n.fa-toggle-off:before {\n  content: \"\\F204\";\n}\n.fa-toggle-on:before {\n  content: \"\\F205\";\n}\n.fa-bicycle:before {\n  content: \"\\F206\";\n}\n.fa-bus:before {\n  content: \"\\F207\";\n}\n.fa-ioxhost:before {\n  content: \"\\F208\";\n}\n.fa-angellist:before {\n  content: \"\\F209\";\n}\n.fa-cc:before {\n  content: \"\\F20A\";\n}\n.fa-shekel:before,\n.fa-sheqel:before,\n.fa-ils:before {\n  content: \"\\F20B\";\n}\n.fa-meanpath:before {\n  content: \"\\F20C\";\n}\n.fa-buysellads:before {\n  content: \"\\F20D\";\n}\n.fa-connectdevelop:before {\n  content: \"\\F20E\";\n}\n.fa-dashcube:before {\n  content: \"\\F210\";\n}\n.fa-forumbee:before {\n  content: \"\\F211\";\n}\n.fa-leanpub:before {\n  content: \"\\F212\";\n}\n.fa-sellsy:before {\n  content: \"\\F213\";\n}\n.fa-shirtsinbulk:before {\n  content: \"\\F214\";\n}\n.fa-simplybuilt:before {\n  content: \"\\F215\";\n}\n.fa-skyatlas:before {\n  content: \"\\F216\";\n}\n.fa-cart-plus:before {\n  content: \"\\F217\";\n}\n.fa-cart-arrow-down:before {\n  content: \"\\F218\";\n}\n.fa-diamond:before {\n  content: \"\\F219\";\n}\n.fa-ship:before {\n  content: \"\\F21A\";\n}\n.fa-user-secret:before {\n  content: \"\\F21B\";\n}\n.fa-motorcycle:before {\n  content: \"\\F21C\";\n}\n.fa-street-view:before {\n  content: \"\\F21D\";\n}\n.fa-heartbeat:before {\n  content: \"\\F21E\";\n}\n.fa-venus:before {\n  content: \"\\F221\";\n}\n.fa-mars:before {\n  content: \"\\F222\";\n}\n.fa-mercury:before {\n  content: \"\\F223\";\n}\n.fa-intersex:before,\n.fa-transgender:before {\n  content: \"\\F224\";\n}\n.fa-transgender-alt:before {\n  content: \"\\F225\";\n}\n.fa-venus-double:before {\n  content: \"\\F226\";\n}\n.fa-mars-double:before {\n  content: \"\\F227\";\n}\n.fa-venus-mars:before {\n  content: \"\\F228\";\n}\n.fa-mars-stroke:before {\n  content: \"\\F229\";\n}\n.fa-mars-stroke-v:before {\n  content: \"\\F22A\";\n}\n.fa-mars-stroke-h:before {\n  content: \"\\F22B\";\n}\n.fa-neuter:before {\n  content: \"\\F22C\";\n}\n.fa-genderless:before {\n  content: \"\\F22D\";\n}\n.fa-facebook-official:before {\n  content: \"\\F230\";\n}\n.fa-pinterest-p:before {\n  content: \"\\F231\";\n}\n.fa-whatsapp:before {\n  content: \"\\F232\";\n}\n.fa-server:before {\n  content: \"\\F233\";\n}\n.fa-user-plus:before {\n  content: \"\\F234\";\n}\n.fa-user-times:before {\n  content: \"\\F235\";\n}\n.fa-hotel:before,\n.fa-bed:before {\n  content: \"\\F236\";\n}\n.fa-viacoin:before {\n  content: \"\\F237\";\n}\n.fa-train:before {\n  content: \"\\F238\";\n}\n.fa-subway:before {\n  content: \"\\F239\";\n}\n.fa-medium:before {\n  content: \"\\F23A\";\n}\n.fa-yc:before,\n.fa-y-combinator:before {\n  content: \"\\F23B\";\n}\n.fa-optin-monster:before {\n  content: \"\\F23C\";\n}\n.fa-opencart:before {\n  content: \"\\F23D\";\n}\n.fa-expeditedssl:before {\n  content: \"\\F23E\";\n}\n.fa-battery-4:before,\n.fa-battery:before,\n.fa-battery-full:before {\n  content: \"\\F240\";\n}\n.fa-battery-3:before,\n.fa-battery-three-quarters:before {\n  content: \"\\F241\";\n}\n.fa-battery-2:before,\n.fa-battery-half:before {\n  content: \"\\F242\";\n}\n.fa-battery-1:before,\n.fa-battery-quarter:before {\n  content: \"\\F243\";\n}\n.fa-battery-0:before,\n.fa-battery-empty:before {\n  content: \"\\F244\";\n}\n.fa-mouse-pointer:before {\n  content: \"\\F245\";\n}\n.fa-i-cursor:before {\n  content: \"\\F246\";\n}\n.fa-object-group:before {\n  content: \"\\F247\";\n}\n.fa-object-ungroup:before {\n  content: \"\\F248\";\n}\n.fa-sticky-note:before {\n  content: \"\\F249\";\n}\n.fa-sticky-note-o:before {\n  content: \"\\F24A\";\n}\n.fa-cc-jcb:before {\n  content: \"\\F24B\";\n}\n.fa-cc-diners-club:before {\n  content: \"\\F24C\";\n}\n.fa-clone:before {\n  content: \"\\F24D\";\n}\n.fa-balance-scale:before {\n  content: \"\\F24E\";\n}\n.fa-hourglass-o:before {\n  content: \"\\F250\";\n}\n.fa-hourglass-1:before,\n.fa-hourglass-start:before {\n  content: \"\\F251\";\n}\n.fa-hourglass-2:before,\n.fa-hourglass-half:before {\n  content: \"\\F252\";\n}\n.fa-hourglass-3:before,\n.fa-hourglass-end:before {\n  content: \"\\F253\";\n}\n.fa-hourglass:before {\n  content: \"\\F254\";\n}\n.fa-hand-grab-o:before,\n.fa-hand-rock-o:before {\n  content: \"\\F255\";\n}\n.fa-hand-stop-o:before,\n.fa-hand-paper-o:before {\n  content: \"\\F256\";\n}\n.fa-hand-scissors-o:before {\n  content: \"\\F257\";\n}\n.fa-hand-lizard-o:before {\n  content: \"\\F258\";\n}\n.fa-hand-spock-o:before {\n  content: \"\\F259\";\n}\n.fa-hand-pointer-o:before {\n  content: \"\\F25A\";\n}\n.fa-hand-peace-o:before {\n  content: \"\\F25B\";\n}\n.fa-trademark:before {\n  content: \"\\F25C\";\n}\n.fa-registered:before {\n  content: \"\\F25D\";\n}\n.fa-creative-commons:before {\n  content: \"\\F25E\";\n}\n.fa-gg:before {\n  content: \"\\F260\";\n}\n.fa-gg-circle:before {\n  content: \"\\F261\";\n}\n.fa-tripadvisor:before {\n  content: \"\\F262\";\n}\n.fa-odnoklassniki:before {\n  content: \"\\F263\";\n}\n.fa-odnoklassniki-square:before {\n  content: \"\\F264\";\n}\n.fa-get-pocket:before {\n  content: \"\\F265\";\n}\n.fa-wikipedia-w:before {\n  content: \"\\F266\";\n}\n.fa-safari:before {\n  content: \"\\F267\";\n}\n.fa-chrome:before {\n  content: \"\\F268\";\n}\n.fa-firefox:before {\n  content: \"\\F269\";\n}\n.fa-opera:before {\n  content: \"\\F26A\";\n}\n.fa-internet-explorer:before {\n  content: \"\\F26B\";\n}\n.fa-tv:before,\n.fa-television:before {\n  content: \"\\F26C\";\n}\n.fa-contao:before {\n  content: \"\\F26D\";\n}\n.fa-500px:before {\n  content: \"\\F26E\";\n}\n.fa-amazon:before {\n  content: \"\\F270\";\n}\n.fa-calendar-plus-o:before {\n  content: \"\\F271\";\n}\n.fa-calendar-minus-o:before {\n  content: \"\\F272\";\n}\n.fa-calendar-times-o:before {\n  content: \"\\F273\";\n}\n.fa-calendar-check-o:before {\n  content: \"\\F274\";\n}\n.fa-industry:before {\n  content: \"\\F275\";\n}\n.fa-map-pin:before {\n  content: \"\\F276\";\n}\n.fa-map-signs:before {\n  content: \"\\F277\";\n}\n.fa-map-o:before {\n  content: \"\\F278\";\n}\n.fa-map:before {\n  content: \"\\F279\";\n}\n.fa-commenting:before {\n  content: \"\\F27A\";\n}\n.fa-commenting-o:before {\n  content: \"\\F27B\";\n}\n.fa-houzz:before {\n  content: \"\\F27C\";\n}\n.fa-vimeo:before {\n  content: \"\\F27D\";\n}\n.fa-black-tie:before {\n  content: \"\\F27E\";\n}\n.fa-fonticons:before {\n  content: \"\\F280\";\n}\n.fa-reddit-alien:before {\n  content: \"\\F281\";\n}\n.fa-edge:before {\n  content: \"\\F282\";\n}\n.fa-credit-card-alt:before {\n  content: \"\\F283\";\n}\n.fa-codiepie:before {\n  content: \"\\F284\";\n}\n.fa-modx:before {\n  content: \"\\F285\";\n}\n.fa-fort-awesome:before {\n  content: \"\\F286\";\n}\n.fa-usb:before {\n  content: \"\\F287\";\n}\n.fa-product-hunt:before {\n  content: \"\\F288\";\n}\n.fa-mixcloud:before {\n  content: \"\\F289\";\n}\n.fa-scribd:before {\n  content: \"\\F28A\";\n}\n.fa-pause-circle:before {\n  content: \"\\F28B\";\n}\n.fa-pause-circle-o:before {\n  content: \"\\F28C\";\n}\n.fa-stop-circle:before {\n  content: \"\\F28D\";\n}\n.fa-stop-circle-o:before {\n  content: \"\\F28E\";\n}\n.fa-shopping-bag:before {\n  content: \"\\F290\";\n}\n.fa-shopping-basket:before {\n  content: \"\\F291\";\n}\n.fa-hashtag:before {\n  content: \"\\F292\";\n}\n.fa-bluetooth:before {\n  content: \"\\F293\";\n}\n.fa-bluetooth-b:before {\n  content: \"\\F294\";\n}\n.fa-percent:before {\n  content: \"\\F295\";\n}\n.fa-gitlab:before {\n  content: \"\\F296\";\n}\n.fa-wpbeginner:before {\n  content: \"\\F297\";\n}\n.fa-wpforms:before {\n  content: \"\\F298\";\n}\n.fa-envira:before {\n  content: \"\\F299\";\n}\n.fa-universal-access:before {\n  content: \"\\F29A\";\n}\n.fa-wheelchair-alt:before {\n  content: \"\\F29B\";\n}\n.fa-question-circle-o:before {\n  content: \"\\F29C\";\n}\n.fa-blind:before {\n  content: \"\\F29D\";\n}\n.fa-audio-description:before {\n  content: \"\\F29E\";\n}\n.fa-volume-control-phone:before {\n  content: \"\\F2A0\";\n}\n.fa-braille:before {\n  content: \"\\F2A1\";\n}\n.fa-assistive-listening-systems:before {\n  content: \"\\F2A2\";\n}\n.fa-asl-interpreting:before,\n.fa-american-sign-language-interpreting:before {\n  content: \"\\F2A3\";\n}\n.fa-deafness:before,\n.fa-hard-of-hearing:before,\n.fa-deaf:before {\n  content: \"\\F2A4\";\n}\n.fa-glide:before {\n  content: \"\\F2A5\";\n}\n.fa-glide-g:before {\n  content: \"\\F2A6\";\n}\n.fa-signing:before,\n.fa-sign-language:before {\n  content: \"\\F2A7\";\n}\n.fa-low-vision:before {\n  content: \"\\F2A8\";\n}\n.fa-viadeo:before {\n  content: \"\\F2A9\";\n}\n.fa-viadeo-square:before {\n  content: \"\\F2AA\";\n}\n.fa-snapchat:before {\n  content: \"\\F2AB\";\n}\n.fa-snapchat-ghost:before {\n  content: \"\\F2AC\";\n}\n.fa-snapchat-square:before {\n  content: \"\\F2AD\";\n}\n.fa-pied-piper:before {\n  content: \"\\F2AE\";\n}\n.fa-first-order:before {\n  content: \"\\F2B0\";\n}\n.fa-yoast:before {\n  content: \"\\F2B1\";\n}\n.fa-themeisle:before {\n  content: \"\\F2B2\";\n}\n.fa-google-plus-circle:before,\n.fa-google-plus-official:before {\n  content: \"\\F2B3\";\n}\n.fa-fa:before,\n.fa-font-awesome:before {\n  content: \"\\F2B4\";\n}\n.fa-handshake-o:before {\n  content: \"\\F2B5\";\n}\n.fa-envelope-open:before {\n  content: \"\\F2B6\";\n}\n.fa-envelope-open-o:before {\n  content: \"\\F2B7\";\n}\n.fa-linode:before {\n  content: \"\\F2B8\";\n}\n.fa-address-book:before {\n  content: \"\\F2B9\";\n}\n.fa-address-book-o:before {\n  content: \"\\F2BA\";\n}\n.fa-vcard:before,\n.fa-address-card:before {\n  content: \"\\F2BB\";\n}\n.fa-vcard-o:before,\n.fa-address-card-o:before {\n  content: \"\\F2BC\";\n}\n.fa-user-circle:before {\n  content: \"\\F2BD\";\n}\n.fa-user-circle-o:before {\n  content: \"\\F2BE\";\n}\n.fa-user-o:before {\n  content: \"\\F2C0\";\n}\n.fa-id-badge:before {\n  content: \"\\F2C1\";\n}\n.fa-drivers-license:before,\n.fa-id-card:before {\n  content: \"\\F2C2\";\n}\n.fa-drivers-license-o:before,\n.fa-id-card-o:before {\n  content: \"\\F2C3\";\n}\n.fa-quora:before {\n  content: \"\\F2C4\";\n}\n.fa-free-code-camp:before {\n  content: \"\\F2C5\";\n}\n.fa-telegram:before {\n  content: \"\\F2C6\";\n}\n.fa-thermometer-4:before,\n.fa-thermometer:before,\n.fa-thermometer-full:before {\n  content: \"\\F2C7\";\n}\n.fa-thermometer-3:before,\n.fa-thermometer-three-quarters:before {\n  content: \"\\F2C8\";\n}\n.fa-thermometer-2:before,\n.fa-thermometer-half:before {\n  content: \"\\F2C9\";\n}\n.fa-thermometer-1:before,\n.fa-thermometer-quarter:before {\n  content: \"\\F2CA\";\n}\n.fa-thermometer-0:before,\n.fa-thermometer-empty:before {\n  content: \"\\F2CB\";\n}\n.fa-shower:before {\n  content: \"\\F2CC\";\n}\n.fa-bathtub:before,\n.fa-s15:before,\n.fa-bath:before {\n  content: \"\\F2CD\";\n}\n.fa-podcast:before {\n  content: \"\\F2CE\";\n}\n.fa-window-maximize:before {\n  content: \"\\F2D0\";\n}\n.fa-window-minimize:before {\n  content: \"\\F2D1\";\n}\n.fa-window-restore:before {\n  content: \"\\F2D2\";\n}\n.fa-times-rectangle:before,\n.fa-window-close:before {\n  content: \"\\F2D3\";\n}\n.fa-times-rectangle-o:before,\n.fa-window-close-o:before {\n  content: \"\\F2D4\";\n}\n.fa-bandcamp:before {\n  content: \"\\F2D5\";\n}\n.fa-grav:before {\n  content: \"\\F2D6\";\n}\n.fa-etsy:before {\n  content: \"\\F2D7\";\n}\n.fa-imdb:before {\n  content: \"\\F2D8\";\n}\n.fa-ravelry:before {\n  content: \"\\F2D9\";\n}\n.fa-eercast:before {\n  content: \"\\F2DA\";\n}\n.fa-microchip:before {\n  content: \"\\F2DB\";\n}\n.fa-snowflake-o:before {\n  content: \"\\F2DC\";\n}\n.fa-superpowers:before {\n  content: \"\\F2DD\";\n}\n.fa-wpexplorer:before {\n  content: \"\\F2DE\";\n}\n.fa-meetup:before {\n  content: \"\\F2E0\";\n}\n/* makes the font 33% larger relative to the icon container */\n.fa-lg {\n  font-size: 1.33333333em;\n  line-height: 0.75em;\n  vertical-align: -15%;\n}\n.fa-2x {\n  font-size: 2em;\n}\n.fa-3x {\n  font-size: 3em;\n}\n.fa-4x {\n  font-size: 4em;\n}\n.fa-5x {\n  font-size: 5em;\n}\n.fa-ul {\n  padding-left: 0;\n  margin-left: 2.14285714em;\n  list-style-type: none;\n}\n.fa-ul > li {\n  position: relative;\n}\n.fa-li {\n  position: absolute;\n  left: -2.14285714em;\n  width: 2.14285714em;\n  top: 0.14285714em;\n  text-align: center;\n}\n.fa-li.fa-lg {\n  left: -1.85714286em;\n}\n/* FONT PATH\n * -------------------------- */\n@font-face {\n  font-family: 'FontAwesome';\n  src: url(" + __webpack_require__(135) + ");\n  src: url(" + __webpack_require__(136) + "?#iefix&v=4.7.0) format('embedded-opentype'), url(" + __webpack_require__(137) + ") format('woff2'), url(" + __webpack_require__(138) + ") format('woff'), url(" + __webpack_require__(139) + ") format('truetype'), url(" + __webpack_require__(140) + "#fontawesomeregular) format('svg');\n  font-weight: normal;\n  font-style: normal;\n}\n.fa-rotate-90 {\n  -ms-filter: \"progid:DXImageTransform.Microsoft.BasicImage(rotation=1)\";\n  -webkit-transform: rotate(90deg);\n  -ms-transform: rotate(90deg);\n  transform: rotate(90deg);\n}\n.fa-rotate-180 {\n  -ms-filter: \"progid:DXImageTransform.Microsoft.BasicImage(rotation=2)\";\n  -webkit-transform: rotate(180deg);\n  -ms-transform: rotate(180deg);\n  transform: rotate(180deg);\n}\n.fa-rotate-270 {\n  -ms-filter: \"progid:DXImageTransform.Microsoft.BasicImage(rotation=3)\";\n  -webkit-transform: rotate(270deg);\n  -ms-transform: rotate(270deg);\n  transform: rotate(270deg);\n}\n.fa-flip-horizontal {\n  -ms-filter: \"progid:DXImageTransform.Microsoft.BasicImage(rotation=0, mirror=1)\";\n  -webkit-transform: scale(-1, 1);\n  -ms-transform: scale(-1, 1);\n  transform: scale(-1, 1);\n}\n.fa-flip-vertical {\n  -ms-filter: \"progid:DXImageTransform.Microsoft.BasicImage(rotation=2, mirror=1)\";\n  -webkit-transform: scale(1, -1);\n  -ms-transform: scale(1, -1);\n  transform: scale(1, -1);\n}\n:root .fa-rotate-90,\n:root .fa-rotate-180,\n:root .fa-rotate-270,\n:root .fa-flip-horizontal,\n:root .fa-flip-vertical {\n  filter: none;\n}\n.fa-spin {\n  -webkit-animation: fa-spin 2s infinite linear;\n  animation: fa-spin 2s infinite linear;\n}\n.fa-pulse {\n  -webkit-animation: fa-spin 1s infinite steps(8);\n  animation: fa-spin 1s infinite steps(8);\n}\n@-webkit-keyframes fa-spin {\n  0% {\n    -webkit-transform: rotate(0deg);\n    transform: rotate(0deg);\n  }\n  100% {\n    -webkit-transform: rotate(359deg);\n    transform: rotate(359deg);\n  }\n}\n@keyframes fa-spin {\n  0% {\n    -webkit-transform: rotate(0deg);\n    transform: rotate(0deg);\n  }\n  100% {\n    -webkit-transform: rotate(359deg);\n    transform: rotate(359deg);\n  }\n}\n.fa-stack {\n  position: relative;\n  display: inline-block;\n  width: 2em;\n  height: 2em;\n  line-height: 2em;\n  vertical-align: middle;\n}\n.fa-stack-1x,\n.fa-stack-2x {\n  position: absolute;\n  left: 0;\n  width: 100%;\n  text-align: center;\n}\n.fa-stack-1x {\n  line-height: inherit;\n}\n.fa-stack-2x {\n  font-size: 2em;\n}\n.fa-inverse {\n  color: #fff;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 134 */
+/***/ (function(module, exports) {
+
+/*
+	MIT License http://www.opensource.org/licenses/mit-license.php
+	Author Tobias Koppers @sokra
+*/
+// css base code, injected by the css-loader
+module.exports = function() {
+	var list = [];
+
+	// return the list of modules as css string
+	list.toString = function toString() {
+		var result = [];
+		for(var i = 0; i < this.length; i++) {
+			var item = this[i];
+			if(item[2]) {
+				result.push("@media " + item[2] + "{" + item[1] + "}");
+			} else {
+				result.push(item[1]);
+			}
+		}
+		return result.join("");
+	};
+
+	// import a list of modules into the list
+	list.i = function(modules, mediaQuery) {
+		if(typeof modules === "string")
+			modules = [[null, modules, ""]];
+		var alreadyImportedModules = {};
+		for(var i = 0; i < this.length; i++) {
+			var id = this[i][0];
+			if(typeof id === "number")
+				alreadyImportedModules[id] = true;
+		}
+		for(i = 0; i < modules.length; i++) {
+			var item = modules[i];
+			// skip already imported module
+			// this implementation is not 100% perfect for weird media query combinations
+			//  when a module is imported multiple times with different media queries.
+			//  I hope this will never occur (Hey this way we have smaller bundles)
+			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
+				if(mediaQuery && !item[2]) {
+					item[2] = mediaQuery;
+				} else if(mediaQuery) {
+					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
+				}
+				list.push(item);
+			}
+		}
+	};
+	return list;
+};
+
+
+/***/ }),
+/* 135 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "674f50d287a8c48dc19ba404d20fe713.eot";
+
+/***/ }),
+/* 136 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "674f50d287a8c48dc19ba404d20fe713.eot";
+
+/***/ }),
+/* 137 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "af7ae505a9eed503f8b8e6982036873e.woff2";
+
+/***/ }),
+/* 138 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "fee66e712a8a08eef5805a46892932ad.woff";
+
+/***/ }),
+/* 139 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "b06871f281fee6b241d60582ae9369b9.ttf";
+
+/***/ }),
+/* 140 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "912ec66d7572ff821749319396470bde.svg";
+
+/***/ }),
+/* 141 */
+/***/ (function(module, exports) {
+
+/*
+	MIT License http://www.opensource.org/licenses/mit-license.php
+	Author Tobias Koppers @sokra
+*/
+var stylesInDom = {},
+	memoize = function(fn) {
+		var memo;
+		return function () {
+			if (typeof memo === "undefined") memo = fn.apply(this, arguments);
+			return memo;
+		};
+	},
+	isOldIE = memoize(function() {
+		return /msie [6-9]\b/.test(self.navigator.userAgent.toLowerCase());
+	}),
+	getHeadElement = memoize(function () {
+		return document.head || document.getElementsByTagName("head")[0];
+	}),
+	singletonElement = null,
+	singletonCounter = 0,
+	styleElementsInsertedAtTop = [];
+
+module.exports = function(list, options) {
+	if(typeof DEBUG !== "undefined" && DEBUG) {
+		if(typeof document !== "object") throw new Error("The style-loader cannot be used in a non-browser environment");
+	}
+
+	options = options || {};
+	// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
+	// tags it will allow on a page
+	if (typeof options.singleton === "undefined") options.singleton = isOldIE();
+
+	// By default, add <style> tags to the bottom of <head>.
+	if (typeof options.insertAt === "undefined") options.insertAt = "bottom";
+
+	var styles = listToStyles(list);
+	addStylesToDom(styles, options);
+
+	return function update(newList) {
+		var mayRemove = [];
+		for(var i = 0; i < styles.length; i++) {
+			var item = styles[i];
+			var domStyle = stylesInDom[item.id];
+			domStyle.refs--;
+			mayRemove.push(domStyle);
+		}
+		if(newList) {
+			var newStyles = listToStyles(newList);
+			addStylesToDom(newStyles, options);
+		}
+		for(var i = 0; i < mayRemove.length; i++) {
+			var domStyle = mayRemove[i];
+			if(domStyle.refs === 0) {
+				for(var j = 0; j < domStyle.parts.length; j++)
+					domStyle.parts[j]();
+				delete stylesInDom[domStyle.id];
+			}
+		}
+	};
+}
+
+function addStylesToDom(styles, options) {
+	for(var i = 0; i < styles.length; i++) {
+		var item = styles[i];
+		var domStyle = stylesInDom[item.id];
+		if(domStyle) {
+			domStyle.refs++;
+			for(var j = 0; j < domStyle.parts.length; j++) {
+				domStyle.parts[j](item.parts[j]);
+			}
+			for(; j < item.parts.length; j++) {
+				domStyle.parts.push(addStyle(item.parts[j], options));
+			}
+		} else {
+			var parts = [];
+			for(var j = 0; j < item.parts.length; j++) {
+				parts.push(addStyle(item.parts[j], options));
+			}
+			stylesInDom[item.id] = {id: item.id, refs: 1, parts: parts};
+		}
+	}
+}
+
+function listToStyles(list) {
+	var styles = [];
+	var newStyles = {};
+	for(var i = 0; i < list.length; i++) {
+		var item = list[i];
+		var id = item[0];
+		var css = item[1];
+		var media = item[2];
+		var sourceMap = item[3];
+		var part = {css: css, media: media, sourceMap: sourceMap};
+		if(!newStyles[id])
+			styles.push(newStyles[id] = {id: id, parts: [part]});
+		else
+			newStyles[id].parts.push(part);
+	}
+	return styles;
+}
+
+function insertStyleElement(options, styleElement) {
+	var head = getHeadElement();
+	var lastStyleElementInsertedAtTop = styleElementsInsertedAtTop[styleElementsInsertedAtTop.length - 1];
+	if (options.insertAt === "top") {
+		if(!lastStyleElementInsertedAtTop) {
+			head.insertBefore(styleElement, head.firstChild);
+		} else if(lastStyleElementInsertedAtTop.nextSibling) {
+			head.insertBefore(styleElement, lastStyleElementInsertedAtTop.nextSibling);
+		} else {
+			head.appendChild(styleElement);
+		}
+		styleElementsInsertedAtTop.push(styleElement);
+	} else if (options.insertAt === "bottom") {
+		head.appendChild(styleElement);
+	} else {
+		throw new Error("Invalid value for parameter 'insertAt'. Must be 'top' or 'bottom'.");
+	}
+}
+
+function removeStyleElement(styleElement) {
+	styleElement.parentNode.removeChild(styleElement);
+	var idx = styleElementsInsertedAtTop.indexOf(styleElement);
+	if(idx >= 0) {
+		styleElementsInsertedAtTop.splice(idx, 1);
+	}
+}
+
+function createStyleElement(options) {
+	var styleElement = document.createElement("style");
+	styleElement.type = "text/css";
+	insertStyleElement(options, styleElement);
+	return styleElement;
+}
+
+function createLinkElement(options) {
+	var linkElement = document.createElement("link");
+	linkElement.rel = "stylesheet";
+	insertStyleElement(options, linkElement);
+	return linkElement;
+}
+
+function addStyle(obj, options) {
+	var styleElement, update, remove;
+
+	if (options.singleton) {
+		var styleIndex = singletonCounter++;
+		styleElement = singletonElement || (singletonElement = createStyleElement(options));
+		update = applyToSingletonTag.bind(null, styleElement, styleIndex, false);
+		remove = applyToSingletonTag.bind(null, styleElement, styleIndex, true);
+	} else if(obj.sourceMap &&
+		typeof URL === "function" &&
+		typeof URL.createObjectURL === "function" &&
+		typeof URL.revokeObjectURL === "function" &&
+		typeof Blob === "function" &&
+		typeof btoa === "function") {
+		styleElement = createLinkElement(options);
+		update = updateLink.bind(null, styleElement);
+		remove = function() {
+			removeStyleElement(styleElement);
+			if(styleElement.href)
+				URL.revokeObjectURL(styleElement.href);
+		};
+	} else {
+		styleElement = createStyleElement(options);
+		update = applyToTag.bind(null, styleElement);
+		remove = function() {
+			removeStyleElement(styleElement);
+		};
+	}
+
+	update(obj);
+
+	return function updateStyle(newObj) {
+		if(newObj) {
+			if(newObj.css === obj.css && newObj.media === obj.media && newObj.sourceMap === obj.sourceMap)
+				return;
+			update(obj = newObj);
+		} else {
+			remove();
+		}
+	};
+}
+
+var replaceText = (function () {
+	var textStore = [];
+
+	return function (index, replacement) {
+		textStore[index] = replacement;
+		return textStore.filter(Boolean).join('\n');
+	};
+})();
+
+function applyToSingletonTag(styleElement, index, remove, obj) {
+	var css = remove ? "" : obj.css;
+
+	if (styleElement.styleSheet) {
+		styleElement.styleSheet.cssText = replaceText(index, css);
+	} else {
+		var cssNode = document.createTextNode(css);
+		var childNodes = styleElement.childNodes;
+		if (childNodes[index]) styleElement.removeChild(childNodes[index]);
+		if (childNodes.length) {
+			styleElement.insertBefore(cssNode, childNodes[index]);
+		} else {
+			styleElement.appendChild(cssNode);
+		}
+	}
+}
+
+function applyToTag(styleElement, obj) {
+	var css = obj.css;
+	var media = obj.media;
+
+	if(media) {
+		styleElement.setAttribute("media", media)
+	}
+
+	if(styleElement.styleSheet) {
+		styleElement.styleSheet.cssText = css;
+	} else {
+		while(styleElement.firstChild) {
+			styleElement.removeChild(styleElement.firstChild);
+		}
+		styleElement.appendChild(document.createTextNode(css));
+	}
+}
+
+function updateLink(linkElement, obj) {
+	var css = obj.css;
+	var sourceMap = obj.sourceMap;
+
+	if(sourceMap) {
+		// http://stackoverflow.com/a/26603875
+		css += "\n/*# sourceMappingURL=data:application/json;base64," + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + " */";
+	}
+
+	var blob = new Blob([css], { type: "text/css" });
+
+	var oldSrc = linkElement.href;
+
+	linkElement.href = URL.createObjectURL(blob);
+
+	if(oldSrc)
+		URL.revokeObjectURL(oldSrc);
+}
+
+
+/***/ }),
+/* 142 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(143);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {"hmr":true}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__(9)(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../node_modules/css-loader/index.js!../node_modules/less-loader/dist/cjs.js!./app.less", function() {
+			var newContent = require("!!../node_modules/css-loader/index.js!../node_modules/less-loader/dist/cjs.js!./app.less");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 143 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(8)(false);
+// imports
+
+
+// module
+exports.push([module.i, "/* ===== reset.css ===== */\ntable,\ntbody,\ntfoot,\nthead,\ntr,\nth,\ntd {\n  background: transparent;\n  font-size: 100%;\n  margin: 0;\n  outline: 0;\n  vertical-align: baseline;\n}\nhtml,\nbody,\ndiv,\nspan,\napplet,\nobject,\niframe,\nh1,\nh2,\nh3,\nh4,\nh5,\nh6,\np,\nblockquote,\npre,\na,\nabbr,\nacronym,\naddress,\nbig,\ncite,\ncode,\ndel,\ndfn,\nem,\nfont,\nimg,\nins,\nkbd,\nq,\ns,\nsamp,\nsmall,\nstrike,\nstrong,\nsub,\nsup,\ntt,\nvar,\nb,\nu,\ni,\ncenter,\ndl,\ndt,\ndd,\nol,\nul,\nli,\nfieldset,\nform,\nlabel,\nlegend,\ncaption {\n  background: transparent;\n  border: 0;\n  font-size: 100%;\n  margin: 0;\n  outline: 0;\n  padding: 0;\n  vertical-align: baseline;\n}\nbody {\n  line-height: 1;\n}\nol,\nul {\n  list-style: none;\n}\nblockquote,\nq {\n  quotes: none;\n}\nblockquote:before,\nblockquote:after,\nq:before,\nq:after {\n  content: none;\n}\n:focus {\n  outline: 0;\n}\nins {\n  text-decoration: none;\n}\ndel {\n  text-decoration: line-through;\n}\ntable {\n  border-collapse: collapse;\n  border-spacing: 0;\n}\nh1,\nh2,\nh3,\nh4,\nh5,\nh6 {\n  font-weight: normal;\n}\ninput[type=\"search\"]::-webkit-search-decoration,\ninput[type=\"search\"]::-webkit-search-cancel-button,\ninput[type=\"search\"]::-webkit-search-results-button,\ninput[type=\"search\"]::-webkit-search-results-decoration {\n  display: none;\n}\nbody:not(.cq-wcm-edit) input,\nbody:not(.cq-wcm-edit) input[type=\"text\"],\nbody:not(.cq-wcm-edit) input[type=\"email\"],\nbody:not(.cq-wcm-edit) input[type=\"search\"],\nbody:not(.cq-wcm-edit) input[type=\"password\"],\nbody:not(.cq-wcm-edit) textarea {\n  box-shadow: 0;\n  background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(255, 255, 255, 0)), to(rgba(255, 255, 255, 0))) !important;\n  background-image: -webkit-linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0)) !important;\n}\n::-ms-clear,\n::-ms-reveal {\n  display: none;\n  width: 0;\n  height: 0;\n  visibility: hidden;\n}\nbutton {\n  border: none;\n  background: none;\n  cursor: pointer;\n}\n* {\n  box-sizing: border-box;\n}\n/* ===== commmon styles ===== */\nhtml {\n  font-size: 10px;\n  height: 100%;\n}\nbody {\n  font-family: 'Muli', sans-serif;\n  display: flex;\n  flex-direction: column;\n  position: relative;\n  margin: 0 auto;\n  color: #333333;\n  min-height: 100%;\n}\nfooter {\n  left: 0;\n  font-size: 2.2rem;\n  text-align: center;\n  width: 100%;\n  background: #4d80aa;\n  color: white;\n  height: 50px;\n  line-height: 50px;\n  position: absolute;\n  bottom: 0;\n}\nfooter p {\n  margin: 0 auto;\n  max-width: 876px;\n}\na {\n  color: #4d80aa;\n  text-decoration: none;\n  font-size: 1.6rem;\n}\na:hover {\n  color: #4d80aa;\n  text-decoration: underline;\n}\n.btn {\n  color: #4d80aa;\n  padding: 8px 16px;\n  border: 2px solid #4d80aa;\n  border-radius: 3px;\n  transition: all 0.2s ease;\n  font-size: 1.4rem;\n  cursor: pointer;\n}\n.btn i {\n  font-size: 1.6rem;\n}\n.btn.btn-fill {\n  background: #4d80aa;\n  color: white;\n}\n.btn.btn-fill:hover {\n  background: #3f729c;\n}\n.btn:hover {\n  color: white;\n  background: #4d80aa;\n  text-decoration: none;\n}\napp > div {\n  max-width: 876px;\n  margin: 0 auto;\n  padding: 80px 0;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 144 */,
+/* 145 */,
+/* 146 */,
+/* 147 */,
+/* 148 */,
+/* 149 */,
+/* 150 */,
+/* 151 */,
+/* 152 */,
+/* 153 */,
+/* 154 */,
+/* 155 */,
+/* 156 */,
+/* 157 */,
+/* 158 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var HeaderService = function () {
+    function HeaderService() {
+        _classCallCheck(this, HeaderService);
+
+        this.state = 'articles';
+        this.isArticlesLoaded = false;
+    }
+
+    _createClass(HeaderService, [{
+        key: 'setLinkState',
+        value: function setLinkState(state) {
+            this.state = state;
+        }
+    }, {
+        key: 'getLinkState',
+        value: function getLinkState() {
+            return this.isArticlesLoaded ? this.state : '';
+        }
+    }, {
+        key: 'setArticlesLoaded',
+        value: function setArticlesLoaded() {
+            this.isArticlesLoaded = true;
+        }
+    }]);
+
+    return HeaderService;
+}();
+
+exports.default = HeaderService;
 
 /***/ })
 /******/ ]);
