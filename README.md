@@ -30,4 +30,4 @@ Task 2
 5)	To have more experience: *
     - Create pagination component and use it to display a list of articles;
     - List of numbers for pagination buttons on should be generated using custom;
-    - * Making  #5 without part (b) can be also considered as "excellent"
+    - `*` Making  #5 without part (b) can be also considered as "excellent"
