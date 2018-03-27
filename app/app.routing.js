@@ -1,3 +1,5 @@
+import PaginationService from "./components/articles/pagination/pagination.service";
+
 function routing($urlRouterProvider, $stateProvider, $locationProvider) {
     $stateProvider
         .state('articles', {
@@ -8,6 +10,14 @@ function routing($urlRouterProvider, $stateProvider, $locationProvider) {
                      return ArticlesService.getArticles();
                 },
             },
+        })
+        .state('articles.page', {
+            name: 'articles.page',
+            url: '/page/:page',
+            title: 'asd',
+            onEnter($stateParams, PaginationService) {
+                PaginationService.setCurrentPage($stateParams.page);
+            }
         })
         .state('article', {
             url: '/articles/:id',
@@ -51,7 +61,7 @@ function routing($urlRouterProvider, $stateProvider, $locationProvider) {
             },
         });
 
-    $urlRouterProvider.otherwise('/articles');
+    // $urlRouterProvider.otherwise('/articles');
     $locationProvider.html5Mode(true);
 }
 

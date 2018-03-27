@@ -6,12 +6,17 @@ const ArticlesPageComponent = {
     },
     template: articlesPageMarkup,
     controller: class ArticlesPage {
-        constructor(HeaderService) {
-            this.articlesPerPage = 3;
+        constructor(HeaderService, PaginationService, $stateParams) {
+            this.$stateParams = $stateParams;
             this.HeaderService = HeaderService;
+            this.PaginationService = PaginationService;
+            this.articlesPerPage = 2;
         }
+
         $onInit() {
             this.HeaderService.setLinkState('addArticle');
+            this.PaginationService.setNumberOfArticles(this.articlesPerPage);
+            this.PaginationService.setCurrentPage(this.$stateParams.page || 1);
         }
 
         $onDestroy() {

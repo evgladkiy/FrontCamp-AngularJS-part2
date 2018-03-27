@@ -19,10 +19,9 @@ const PaginationComponent = {
                 .fill(null)
                 .map((item, index) => index +1);
 
-            this.PaginationSetvice.setNumberOfArticles(this.articlesOnPage);
             this.firstButtonValue = this.PaginationSetvice.getFirstButtonValue();
-            this.activeBtnIndex = this.PaginationSetvice.getCurrentPage() - 1;
-            this.pagesAmount = this.PaginationSetvice.getPagesAmout();
+            this.activeBtnIndex = this.PaginationSetvice.getActiveBtnIndex();
+            this.pagesAmount = this.PaginationSetvice.getPagesAmount();
         }
 
         setCurrentActiveBtn(firstButtonValue, activeBtnIndex) {

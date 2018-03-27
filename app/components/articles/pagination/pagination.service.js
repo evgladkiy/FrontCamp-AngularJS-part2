@@ -1,17 +1,14 @@
 class PaginationService {
     constructor(ArticlesService) {
+        this.acticleAmount = ArticlesService.getArticlesAmount();
         this.firstButtonValue = 1;
         this.numberOfArticlesPerPage = null;
-        this.currentPage = 1;
-        this.ArticlesService = ArticlesService;
+        this.currentPage = null;
+        this.buttonsAmout = 5;
     }
 
     getFirstButtonValue() {
         return this.firstButtonValue;
-    }
-
-    setCurrentPage(page) {
-        this.currentPage = page;
     }
 
     getCurrentPage() {
@@ -22,9 +19,8 @@ class PaginationService {
         this.firstButtonValue = value;
     }
 
-    getPagesAmout() {
-        const acticleAmount = this.ArticlesService.getArticlesAmount();
-        const pages = acticleAmount / this.numberOfArticlesPerPage;
+    getPagesAmount() {
+        const pages = this.acticleAmount / this.numberOfArticlesPerPage;
 
         return Math.ceil(pages);
     }
@@ -35,6 +31,30 @@ class PaginationService {
 
     setNumberOfArticles(number) {
         this.numberOfArticlesPerPage = number;
+    }
+
+    setCurrentPage(page) {
+        const pagesAmount = this.getPagesAmount();
+
+        if (page <= 3) {
+            this.firstButtonValue = 1;
+        } else if (page > pagesAmount - 2) {
+            this.firstButtonValue = pagesAmount - (this.buttonsAmout - 1);
+        } else {
+            this.firstButtonValue = page - 2;
+        }
+
+        this.currentPage = page;
+    }
+
+    getActiveBtnIndex() {
+        if (this.currentPage < 3) {
+            return this.currentPage - 1;
+        } else if (this.getPagesAmount() - this.currentPage < 2) {
+            return (this.buttonsAmout - 1) - (this.getPagesAmount() - this.currentPage);
+        }
+        return 2;
+
     }
 }
 
