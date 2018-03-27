@@ -19,9 +19,10 @@
     }
 
     &__tags-container {
-        margin: 15px 0;
         display: flex;
         justify-content: space-between;
+        margin: 15px 0;
+
         & .edit-link {
             font-size: 20px;
         }
@@ -39,6 +40,7 @@
     &__text {
         font-size: 1.8rem;
         line-height: 24px;
+
         &:not(:last-of-type) {
             margin-bottom: 10px;
         }
@@ -56,28 +58,29 @@
 
     &__counters-container {
         display: flex;
+        padding: 0 25px;
         border: 1px solid #d5dddf;
         line-height: 36px;
         font-size: 16px;
-        padding: 0 25px;
     }
 
     &__footer-item {
         font-size: 1.8rem;
         color: #657786;
+
         &:not(:last-of-type) {
             margin-right: 20px;
         }
+
         & i.fa {
+            padding-right: 5px;
             color: #4d80aa;
             font-size: 2rem;
-            padding-right: 5px;
         }
 
         & i.fa-long-arrow-down {
             padding-left: 5px;
             padding-right: 0;
-
         }
     }
 }

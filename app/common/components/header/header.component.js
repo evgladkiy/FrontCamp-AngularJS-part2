@@ -1,10 +1,8 @@
 import HeaderMarkup from './header.html';
 
-const ArticleFormComponent = {
-    bindings: {
-    },
+const HeaderComponent = {
     template: HeaderMarkup,
-    controller: class ArticlesPage {
+    controller: class Header {
         constructor(HeaderService) {
             'ngInject';
             this.HeaderService = HeaderService;
@@ -16,4 +14,4 @@ const ArticleFormComponent = {
     }
 };
 
-export default ArticleFormComponent;
+export default HeaderComponent;

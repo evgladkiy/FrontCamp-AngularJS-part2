@@ -5,14 +5,6 @@ const ArticleComponent = {
         article: '<',
     },
     template: articleMarkup,
-    controller: class Article {
-        constructor() {
-
-        }
-        $onInit() {
-
-        }
-    }
 };
 
 export default ArticleComponent;

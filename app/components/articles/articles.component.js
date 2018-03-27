@@ -6,11 +6,12 @@ const ArticlesPageComponent = {
     },
     template: articlesPageMarkup,
     controller: class ArticlesPage {
-        constructor(HeaderService, PaginationService, $stateParams) {
+        constructor($stateParams, HeaderService, PaginationService) {
+            'ngInject';
             this.$stateParams = $stateParams;
             this.HeaderService = HeaderService;
             this.PaginationService = PaginationService;
-            this.articlesPerPage = 2;
+            this.articlesPerPage = 4;
         }
 
         $onInit() {

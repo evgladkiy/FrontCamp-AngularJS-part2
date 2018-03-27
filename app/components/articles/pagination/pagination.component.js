@@ -7,21 +7,22 @@ const PaginationComponent = {
     template: paginationMarkup,
     controller: class Pagination {
         constructor(PaginationService) {
+            'ngInject';
             this.PaginationSetvice = PaginationService;
-            this.buttonsAmout = 5;
+            this.buttonsAmout = null;
             this.firstButtonValue = null;
             this.pagesAmount = null;
             this.activeBtnIndex = null;
         }
 
         $onInit() {
-            this.btns = Array(this.buttonsAmout)
-                .fill(null)
-                .map((item, index) => index +1);
-
+            this.buttonsAmout = this.PaginationSetvice.getButtonsAmount();
             this.firstButtonValue = this.PaginationSetvice.getFirstButtonValue();
             this.activeBtnIndex = this.PaginationSetvice.getActiveBtnIndex();
             this.pagesAmount = this.PaginationSetvice.getPagesAmount();
+            this.btns = Array(this.buttonsAmout)
+                .fill(null)
+                .map((item, index) => index +1);
         }
 
         setCurrentActiveBtn(firstButtonValue, activeBtnIndex) {
@@ -29,7 +30,6 @@ const PaginationComponent = {
             this.activeBtnIndex = activeBtnIndex;
             this.PaginationSetvice.setFirstButtonValue(firstButtonValue);
             this.PaginationSetvice.setCurrentPage(activeBtnIndex + firstButtonValue);
-
         }
 
         changeCurrentActiveBtn(index) {
@@ -65,6 +65,7 @@ const PaginationComponent = {
                         this.firstButtonValue = this.firstButtonValue + (index - 2);
                     }
                 }
+
                 this.PaginationSetvice.setFirstButtonValue(this.firstButtonValue);
                 this.PaginationSetvice.setCurrentPage(this.activeBtnIndex + this.firstButtonValue);
             }

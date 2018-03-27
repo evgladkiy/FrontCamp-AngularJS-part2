@@ -14,10 +14,6 @@ function routing($urlRouterProvider, $stateProvider, $locationProvider) {
         .state('articles.page', {
             name: 'articles.page',
             url: '/page/:page',
-            title: 'asd',
-            onEnter($stateParams, PaginationService) {
-                PaginationService.setCurrentPage($stateParams.page);
-            }
         })
         .state('article', {
             url: '/articles/:id',
@@ -26,8 +22,7 @@ function routing($urlRouterProvider, $stateProvider, $locationProvider) {
             resolve: {
                 article: function($stateParams, ArticlesService) {
                     return ArticlesService.getArticles()
-                        .then(articles => articles.find(({ _id }) => _id === $stateParams.id))
-                        .then(article => Object.assign({}, article))
+                        .then(() => ArticlesService.getArticleById($stateParams.id));
                 },
             },
             onEnter($state, article) {
@@ -61,7 +56,7 @@ function routing($urlRouterProvider, $stateProvider, $locationProvider) {
             },
         });
 
-    // $urlRouterProvider.otherwise('/articles');
+    $urlRouterProvider.otherwise('/articles');
     $locationProvider.html5Mode(true);
 }
 

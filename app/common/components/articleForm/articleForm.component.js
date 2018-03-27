@@ -7,11 +7,11 @@ const ArticleFormComponent = {
         article: '<'
     },
     template: articleFormMarkup,
-    controller: class ArticlesPage {
+    controller: class ArticleForm {
         constructor(ArticlesService, $scope) {
             'ngInject';
-            this.ArticlesService = ArticlesService;
             this.$scope = $scope;
+            this.ArticlesService = ArticlesService;
             this.tags = null
             this.articleTags = null;
         }
@@ -20,6 +20,7 @@ const ArticleFormComponent = {
             this.tags = this.ArticlesService.getArticlesTags();
             this.articleTags = this.tags.reduce((acc, item) => {
                 acc[item] = this.article.tags.indexOf(item) >= 0;
+
                 return acc;
             },{});
         }
@@ -31,6 +32,7 @@ const ArticleFormComponent = {
 
         submit(e) {
             e.preventDefault();
+
             if (this.$scope.articleForm.$valid) {
                 const tags = Object.keys(this.articleTags)
                     .filter(tag => this.articleTags[tag]);

@@ -3,11 +3,11 @@ import lodash from 'lodash';
 class ArticlesService {
     constructor($http, $q, HeaderService) {
         'ngInject';
-        this.HeaderService = HeaderService;
         this.$q = $q;
         this.$http = $http;
-        this.articles = null;
+        this.HeaderService = HeaderService;
         this.tags = [];
+        this.articles = null;
     }
 
     fillArticlesTags(articles) {
@@ -27,6 +27,7 @@ class ArticlesService {
                 this.HeaderService.setArticlesLoaded();
                 this.articles = res.data;
                 this.fillArticlesTags(this.articles);
+
                 return this.articles;
             });
     }
@@ -68,7 +69,6 @@ class ArticlesService {
     getArticlesAmount() {
         return this.articles.length;
     }
-
 }
 
 export default ArticlesService;

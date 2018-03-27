@@ -1,5 +1,6 @@
 class PaginationService {
     constructor(ArticlesService) {
+        'ngInject';
         this.acticleAmount = ArticlesService.getArticlesAmount();
         this.firstButtonValue = 1;
         this.numberOfArticlesPerPage = null;
@@ -9,6 +10,10 @@ class PaginationService {
 
     getFirstButtonValue() {
         return this.firstButtonValue;
+    }
+
+    getButtonsAmount() {
+        return this.buttonsAmout;
     }
 
     getCurrentPage() {
@@ -53,6 +58,7 @@ class PaginationService {
         } else if (this.getPagesAmount() - this.currentPage < 2) {
             return (this.buttonsAmout - 1) - (this.getPagesAmount() - this.currentPage);
         }
+        
         return 2;
 
     }

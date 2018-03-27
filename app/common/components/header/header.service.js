@@ -3,6 +3,7 @@ class HeaderService {
         this.state = 'articles';
         this.isArticlesLoaded = false;
     }
+
     setLinkState(state) {
         this.state = state;
     }

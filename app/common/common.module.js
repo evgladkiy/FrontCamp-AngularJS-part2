@@ -6,7 +6,10 @@ import HeaderModule from './components/header/header.module';
 import capitalizeFilter from './filters/capitalizeFilter';
 
 const CommonModule = angular
-    .module('app.common', [ArticleFormModule, HeaderModule])
+    .module('app.common', [
+        ArticleFormModule,
+        HeaderModule
+     ])
     .service('ArticlesService', ArticlesService)
     .filter('capitalize', capitalizeFilter)
     .name;

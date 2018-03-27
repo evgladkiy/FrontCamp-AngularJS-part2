@@ -5,11 +5,11 @@ const EditArticlePageComponent = {
         article: '<'
     },
     template: editArticleMarkup,
-    controller: class EditArticlePage {
+    controller: class EditArticle {
         constructor(ArticlesService, $state) {
             'ngInject';
-            this.ArticlesService = ArticlesService;
             this.$state = $state;
+            this.ArticlesService = ArticlesService;
             this.submitType = 'Edit';
             this.submitHandler = this.submitHandler.bind(this);
         }

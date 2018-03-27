@@ -5,8 +5,6 @@ import PaginationModule from './pagination/pagination.module';
 import ArticlesPageComponent from './articles.component';
 import articlesPaginationFilter from './articles.filter';
 
-import './articles.less';
-
 const ArticlesPageModule = angular
     .module('app.articles', [
         ArticleModule,
@@ -16,4 +14,4 @@ const ArticlesPageModule = angular
     .filter('paginationFilter', articlesPaginationFilter)
     .name;
 
-export default ArticlesPageModule
+export default ArticlesPageModule;

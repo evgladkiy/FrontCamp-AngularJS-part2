@@ -2,7 +2,7 @@ import angular from 'angular';
 import ngMessages from 'angular-messages';
 
 import ArticleFormComponent from './articleForm.component';
-import textareaValidator from './articleForm.validator'
+import textareaValidator from './articleForm.validator';
 
 import './articleForm.less'
 
